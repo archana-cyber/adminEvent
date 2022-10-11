@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/adminEvent/static/css/main.7c836c8a.css",
+    "main.js": "/adminEvent/static/js/main.3073abeb.js",
+    "static/media/avibraLogo.svg": "/adminEvent/static/media/avibraLogo.eadc43cc0f815599031d54a6a52925c1.svg",
+    "index.html": "/adminEvent/index.html",
+    "main.7c836c8a.css.map": "/adminEvent/static/css/main.7c836c8a.css.map",
+    "main.3073abeb.js.map": "/adminEvent/static/js/main.3073abeb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7c836c8a.css",
+    "static/js/main.3073abeb.js"
+  ]
+}
