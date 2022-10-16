@@ -1,14 +1,15 @@
 {
   "files": {
-    "main.css": "/adminEvent/static/css/main.7c836c8a.css",
-    "main.js": "/adminEvent/static/js/main.3073abeb.js",
-    "static/media/avibraLogo.svg": "/adminEvent/static/media/avibraLogo.eadc43cc0f815599031d54a6a52925c1.svg",
+    "main.css": "/adminEvent/static/css/main.27987664.css",
+    "main.js": "/adminEvent/static/js/main.7056b5e9.js",
+    "static/media/eventlogo1.png": "/adminEvent/static/media/eventlogo1.61a30d6c84ea25945ab4.png",
+    "static/media/eventlogo.png": "/adminEvent/static/media/eventlogo.f113e91987bfbbe6dda1.png",
     "index.html": "/adminEvent/index.html",
-    "main.7c836c8a.css.map": "/adminEvent/static/css/main.7c836c8a.css.map",
-    "main.3073abeb.js.map": "/adminEvent/static/js/main.3073abeb.js.map"
+    "main.27987664.css.map": "/adminEvent/static/css/main.27987664.css.map",
+    "main.7056b5e9.js.map": "/adminEvent/static/js/main.7056b5e9.js.map"
   },
   "entrypoints": [
-    "static/css/main.7c836c8a.css",
-    "static/js/main.3073abeb.js"
+    "static/css/main.27987664.css",
+    "static/js/main.7056b5e9.js"
   ]
 }
