@@ -1,5 +1,5 @@
 import React from 'react'
-import avibraLogo from "../../../images/avibraLogo.svg"
+import logo from "../../../images/eventlogo1.png"
 import { Link,useHistory } from 'react-router-dom'
 
 const Header = () => {
@@ -14,7 +14,7 @@ const Header = () => {
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <Link class="navbar-brand" to="/">Event</Link>
+          <Link class="navbar-brand" to="/">Conlux </Link>
         </div>
         <ul class="nav navbar-nav">
           <li onClick={logoutHandler}><Link to='/login'>Logout</Link></li>

@@ -52,7 +52,7 @@ const genderOptions = {
         pointFormat: '<span >{point.name}</span>: <b>{point.y:.2f}%</b> <br/>'
     },
     //colors:[],
-   colors:["#93C572","#B4C424"],
+   colors:["#48557f","#6867b3"],
     // series:[],
     series: [
       {
@@ -174,7 +174,7 @@ const genderOptions = {
         pointFormat: '<span >{point.name}</span>: <b>{point.y:.2f}%</b> <br/>'
     },
     //colors:[],
-   colors:["#04AA6D","#037c2e","#76FF7A"],
+   colors:["#c6d5ff","#48557f","#6867b3"],
     // series:[],
     series: [
       {
@@ -274,7 +274,7 @@ const genderOptions = {
   
       line:{
         // color:"",
-       color:"#04AA6D",
+       color:"#6867b3",
      
       }
       // series: {

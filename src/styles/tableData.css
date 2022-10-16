@@ -260,7 +260,7 @@ button:focus {
 }
 
 .table-heading {
-    color: #04AA6D !important;
+    color: #6867b3 !important;
     font-size: 15px !important;
 }
 .comment-table-heading {
@@ -757,14 +757,14 @@ table.table th, table.table tr, table.table td {
 
 
 button.btn.btn-secondary {
-    background-color: #04AA6D;
+    background-color: #6867b3;
     border: 0;
     font-size: 14px;
 }
 
 
 button.btn.btn-primary {
-    background-color: #04AA6D;
+    background-color: #6867b3;
     border: 0;
 }
 
@@ -1050,7 +1050,8 @@ body  .confirmModal{
     max-width: 210px;
     min-height: 120px;
     /* text-align: center; */
-    background-image: linear-gradient(to right top, #04aa6d, #23aa66, #34a960, #40a959, #4ba853);
+    background: #6867b3;
+    /* background-image: linear-gradient(to right top, #6867b3, #23aa66, #34a960, #40a959, #4ba853); */
     /* background-image: linear-gradient(to right top, #74f86e, #7ef676, #87f47e, #8ff286, #97f08e); */
     /* background: linear-gradient(to right top, #50d5b7, #40bea3, #30a88f, #1e927b, #067d68); */
     /* linear-gradient(90deg, hsla(152, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%); */

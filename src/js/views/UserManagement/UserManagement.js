@@ -15,7 +15,7 @@ const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
 const ButtonPagination = ({ value, isActive, disabled, onClick, className }) => (
     <button
-        style={isActive ? { backgroundColor: '#04AA6D', color: '#ffffff' } : null}
+        style={isActive ? { backgroundColor: '#6867b3', color: '#ffffff' } : null}
         onClick={onClick}
         disabled={disabled}
         className={className + " custom-pagination-tab"}
