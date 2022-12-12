@@ -7,6 +7,9 @@ import ContactUs from "./views/ContactUs/ContactUs";
 import AboutUs from "./views/AboutUs/AboutUs";
 import BookMark from "./views/BookMark/BookMark";
 import Category from "./views/Category/Category";
+import SubCategory from "./views/SubCategory/SubCategory";
+import Post from "./views/Post/Post";
+
 import Subscriber from "./views/Subscriber/Subscriber"
 import UserManagement from "./views/UserManagement/UserManagement";
 
@@ -21,6 +24,10 @@ const EventDashbard = () => {
            <PrivateRoute exact path='/about' component={AboutUs}/>
            <PrivateRoute exact path='/book-mark' component={BookMark}/>
            <PrivateRoute exact path='/category' component={Category}/>
+           <PrivateRoute exact path='/post' component={Post}/>
+
+           <PrivateRoute exact path='/sub-category' component={SubCategory}/>
+
            <PrivateRoute exact path='/subscriber' component={Subscriber}/>
            <PrivateRoute exact path='/user-management' component={UserManagement}/>
           </div> 

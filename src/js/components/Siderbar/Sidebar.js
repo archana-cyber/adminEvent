@@ -10,6 +10,9 @@ const Sidebar = () => {
     <div class="sidebar">
         <Link to='/' className={`${location.pathname=='/'?'active':''}`}><i className="fa fa-home"></i><span className='icon-text'>Home</span></Link>
         <Link to='/category' className={`${location.pathname=='/category'?'active':''}`}><i className="fa fa-th-large"></i><span className='icon-text'>Category</span></Link>
+        <Link to='/sub-category' className={`${location.pathname=='/sub-category'?'active':''}`}><i className="fa fa-th-large"></i><span className='icon-text'>Sub Category</span></Link>
+        <Link to='/post' className={`${location.pathname=='/post'?'active':''}`}><i className="fa fa-th-large"></i><span className='icon-text'>Post</span></Link>
+        
         <Link to='/user-management' className={`${location.pathname=='/user-management'?'active':''}`}><i className="fa fa-users"></i><span className='icon-text'>User Management</span></Link>
         <Link to='/book-mark' className={`${location.pathname=='/book-mark'?'active':''}`}><i className="fa fa-map-pin"></i><span className='icon-text'>Book Mark</span></Link>
         <Link to='/subscriber' className={`${location.pathname=='/subscriber'?'active':''}`}><i className="fa fa-user"></i><span className='icon-text'>Subscriber</span></Link>

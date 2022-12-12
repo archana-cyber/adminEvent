@@ -8,13 +8,10 @@ import {matchSorter} from 'match-sorter';
 import moment from 'moment'
 import "../../../styles/tableData.css"
 import CreateEventModal from "../../components/CreateEventModal";
-import CategoryAdd from "./CategoryAdd";
+import SubCategoryAdd from "./SubCategoryAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
-import CategoryView from "./CategoryView";
-import { AddCategory,GetCategory,DeleteCategory } from "../../actions/categoryAction";
-import { connect } from 'react-redux'
-
+import SubCategoryView from "./SubCategoryView";
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -40,170 +37,188 @@ const PaginatedPage = createUltimatePagination({
 });
 const dummydata=[{
     "id": 1,
-    "name": "Peter",
-    "image": "Delgaty",
-    "status": "true",
-    "is_subcategory": true,
-    "created_at": "5/22/2022",
-    "updated_at": "8/8/2022"
+    "name": "Hugues",
+    "image": "Eastes",
+    "status": true,
+    "created_at": "12/25/2021",
+    "updated_at": "6/26/2022",
+    "category_id": "b88170c8-1cbb-47c6-86b6-004ca00eeafb",
+    "is_video": "Weber-Farrell"
   }, {
     "id": 2,
-    "name": "Cchaddie",
-    "image": "Corser",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "6/4/2022",
-    "updated_at": "6/7/2022"
+    "name": "Bianca",
+    "image": "Cardello",
+    "status": false,
+    "created_at": "6/25/2022",
+    "updated_at": "10/20/2022",
+    "category_id": "48a40ca6-e5a4-44c4-b9aa-7719fc318893",
+    "is_video": "Schoen, Maggio and Frami"
   }, {
     "id": 3,
-    "name": "Hortense",
-    "image": "Broadnicke",
+    "name": "Gwyneth",
+    "image": "Turbill",
     "status": false,
-    "is_subcategory": false,
-    "created_at": "3/17/2022",
-    "updated_at": "6/20/2022"
+    "created_at": "7/17/2022",
+    "updated_at": "3/30/2022",
+    "category_id": "6ef33f33-41ce-4024-8962-36173e722d15",
+    "is_video": "Oberbrunner, Wuckert and Weimann"
   }, {
     "id": 4,
-    "name": "Bamby",
-    "image": "Ewols",
+    "name": "Jamie",
+    "image": "Rahl",
     "status": false,
-    "is_subcategory": true,
-    "created_at": "2/23/2022",
-    "updated_at": "9/4/2022"
+    "created_at": "5/5/2022",
+    "updated_at": "3/8/2022",
+    "category_id": "eebe421a-bb10-4ae8-866f-464bcece56ee",
+    "is_video": "Stokes, Deckow and Witting"
   }, {
     "id": 5,
-    "name": "Em",
-    "image": "Scouse",
+    "name": "Didi",
+    "image": "Skocroft",
     "status": true,
-    "is_subcategory": true,
-    "created_at": "4/10/2022",
-    "updated_at": "2/23/2022"
+    "created_at": "1/17/2022",
+    "updated_at": "2/21/2022",
+    "category_id": "143f6375-9d8c-4308-8382-10ad1811c478",
+    "is_video": "Larkin Group"
   }, {
     "id": 6,
-    "name": "Jena",
-    "image": "Danilchev",
+    "name": "Darrell",
+    "image": "Smaling",
     "status": true,
-    "is_subcategory": false,
-    "created_at": "12/16/2021",
-    "updated_at": "11/9/2022"
+    "created_at": "7/29/2022",
+    "updated_at": "7/23/2022",
+    "category_id": "7a517b34-d3c8-489b-bb02-9720feb87af0",
+    "is_video": "Prosacco, Heaney and Casper"
   }, {
     "id": 7,
-    "name": "Nealy",
-    "image": "Garretson",
-    "status": true,
-    "is_subcategory": true,
-    "created_at": "5/22/2022",
-    "updated_at": "1/27/2022"
+    "name": "Hayes",
+    "image": "Gibbs",
+    "status": false,
+    "created_at": "9/21/2022",
+    "updated_at": "7/1/2022",
+    "category_id": "641428fb-0bcb-4059-926e-409c9f7ef246",
+    "is_video": "Beahan LLC"
   }, {
     "id": 8,
-    "name": "Riva",
-    "image": "Denkin",
+    "name": "Mal",
+    "image": "Ivashkov",
     "status": false,
-    "is_subcategory": false,
-    "created_at": "5/14/2022",
-    "updated_at": "8/13/2022"
+    "created_at": "12/22/2021",
+    "updated_at": "8/20/2022",
+    "category_id": "3731c4c0-eb3a-4dd9-b052-a90d5ea3dd7c",
+    "is_video": "Rippin Inc"
   }, {
     "id": 9,
-    "name": "Marley",
-    "image": "Gatchell",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "10/6/2022",
-    "updated_at": "8/16/2022"
+    "name": "Ailene",
+    "image": "Tirrey",
+    "status": true,
+    "created_at": "10/28/2022",
+    "updated_at": "12/17/2021",
+    "category_id": "1698945c-54bd-4729-9c12-3a4a85ca9e39",
+    "is_video": "Gottlieb and Sons"
   }, {
     "id": 10,
-    "name": "Kathi",
-    "image": "Blaxall",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "9/6/2022",
-    "updated_at": "3/13/2022"
+    "name": "Kerry",
+    "image": "Le Marquis",
+    "status": true,
+    "created_at": "9/14/2022",
+    "updated_at": "2/22/2022",
+    "category_id": "6c92ee87-2a5e-44c5-8961-0018718a1c80",
+    "is_video": "Kuhlman-Legros"
   }, {
     "id": 11,
-    "name": "Roxie",
-    "image": "Sandeland",
+    "name": "Kathryn",
+    "image": "Nail",
     "status": true,
-    "is_subcategory": false,
-    "created_at": "5/9/2022",
-    "updated_at": "1/21/2022"
+    "created_at": "1/25/2022",
+    "updated_at": "10/29/2022",
+    "category_id": "d0dbf596-7c6c-4eef-9652-c46f2ba90fea",
+    "is_video": "Funk-Ullrich"
   }, {
     "id": 12,
-    "name": "Ingrid",
-    "image": "Ellingworth",
+    "name": "Pearl",
+    "image": "Tathacott",
     "status": false,
-    "is_subcategory": false,
-    "created_at": "9/15/2022",
-    "updated_at": "9/3/2022"
+    "created_at": "3/25/2022",
+    "updated_at": "2/5/2022",
+    "category_id": "1fcf3c06-ddf4-4d58-b4d0-87e8ae315242",
+    "is_video": "Daniel LLC"
   }, {
     "id": 13,
-    "name": "Nikola",
-    "image": "Braben",
-    "status": true,
-    "is_subcategory": true,
-    "created_at": "5/25/2022",
-    "updated_at": "11/3/2022"
+    "name": "Lucretia",
+    "image": "O'Reilly",
+    "status": false,
+    "created_at": "11/22/2022",
+    "updated_at": "6/14/2022",
+    "category_id": "908def96-8399-4136-a7fd-ac6d546ade67",
+    "is_video": "Kozey-Kihn"
   }, {
     "id": 14,
-    "name": "Kaylil",
-    "image": "Wainscoat",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "12/18/2021",
-    "updated_at": "2/27/2022"
+    "name": "Venita",
+    "image": "Lillistone",
+    "status": true,
+    "created_at": "6/13/2022",
+    "updated_at": "10/31/2022",
+    "category_id": "23add2a5-9e68-4176-8a9d-5aaec6aff04f",
+    "is_video": "Heidenreich-Carter"
   }, {
     "id": 15,
-    "name": "Geri",
-    "image": "Pilmore",
+    "name": "Durante",
+    "image": "Cale",
     "status": true,
-    "is_subcategory": false,
-    "created_at": "7/25/2022",
-    "updated_at": "11/14/2022"
+    "created_at": "11/29/2022",
+    "updated_at": "6/17/2022",
+    "category_id": "feceb9cd-e05b-4d21-8f2c-7403ffc6556c",
+    "is_video": "McDermott-Kunze"
   }, {
     "id": 16,
-    "name": "Brennan",
-    "image": "Savill",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "7/18/2022",
-    "updated_at": "4/29/2022"
+    "name": "Andee",
+    "image": "Juorio",
+    "status": true,
+    "created_at": "10/31/2022",
+    "updated_at": "4/13/2022",
+    "category_id": "83a8cb9c-0192-43fe-a5f1-aa99182fb5c8",
+    "is_video": "Romaguera Inc"
   }, {
     "id": 17,
-    "name": "Teresina",
-    "image": "Bannerman",
+    "name": "Dall",
+    "image": "Shayler",
     "status": false,
-    "is_subcategory": true,
-    "created_at": "10/31/2022",
-    "updated_at": "7/18/2022"
+    "created_at": "8/3/2022",
+    "updated_at": "12/18/2021",
+    "category_id": "408b55c8-9b33-4fdc-b469-14a7445a502a",
+    "is_video": "Wolff-Monahan"
   }, {
     "id": 18,
-    "name": "Aile",
-    "image": "Burrells",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "9/17/2022",
-    "updated_at": "2/9/2022"
+    "name": "Alexina",
+    "image": "Sibley",
+    "status": true,
+    "created_at": "4/10/2022",
+    "updated_at": "8/11/2022",
+    "category_id": "ab84b380-8e16-47ba-a3a8-ba7f4bb0603d",
+    "is_video": "Jacobi-Barton"
   }, {
     "id": 19,
-    "name": "Darbee",
-    "image": "Trowell",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "10/11/2022",
-    "updated_at": "3/26/2022"
+    "name": "Palm",
+    "image": "Aupol",
+    "status": false,
+    "created_at": "3/5/2022",
+    "updated_at": "10/20/2022",
+    "category_id": "d3518faa-719f-46eb-8167-ad1dc0519fd9",
+    "is_video": "Homenick, Schoen and Gaylord"
   }, {
     "id": 20,
-    "name": "Libbie",
-    "image": "Kieff",
+    "name": "Doyle",
+    "image": "Brabham",
     "status": true,
-    "is_subcategory": false,
-    "created_at": "7/1/2022",
-    "updated_at": "11/10/2022"
+    "created_at": "4/9/2022",
+    "updated_at": "8/24/2022",
+    "category_id": "75eec67d-b0f4-4fa2-827a-abc1bd3eab4d",
+    "is_video": "Zieme-Hahn"
   }]
-const Category = (props) => {
+const Category = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }) => {
 
-   const  { categoryList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }= props
-   const profileData=categoryList 
-   const [currentPage, setCurrentPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
       data: null,
@@ -222,8 +237,7 @@ const Category = (props) => {
   const [updateList, setUpdateList] = useState('')
   const [eventModal, setEventModal] = useState(false)
   const [eventDeleteModal, setEventDeleteModal] = useState(false)
-  const [deleteValue, setDeleteValue] = useState('')
-  const [getDeleteId, setGetDeleteId] = useState('')
+
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
   // useEffect(() => {
@@ -269,38 +283,19 @@ const Category = (props) => {
          
   // },[updateScheduler,updateList])
 
-   console.log('categoryList000', props.categoryList)
-  useEffect(()=>{
-    // props.AddCategory()
-    props.GetCategory()
-  },[])
-
-  useEffect(()=>{
-    
-    if(deleteValue=='yes'){
-        props.DeleteCategory(getDeleteId)
-    }
-  },[deleteValue])
-
-  const editModalHandler=(e,rowData)=>{
-    console.log('rowData', rowData,rowData.status)
-    e.preventDefault()
-    e.stopPropagation();
+  const editModalHandler=(rowData)=>{
+    // e.preventDefault()
+    // e.stopPropagation();
     setEditModal(rowData)
     setEventModal(!eventModal)
   }
-  const deleteModalHandler=(e,rowData)=>{
+  const deleteModalHandler=(e)=>{
     e.preventDefault()
-    e.stopPropagation()
+    e.stopPropagation();
     eventDeleteToggle()
-    setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
     setEventModal(!eventModal)
-  }
-  const createCategoryHandler=()=>{
-    eventToggle();
-    setEditModal({})
   }
   const eventDeleteToggle=()=>{
     setEventDeleteModal(!eventDeleteModal)
@@ -403,7 +398,7 @@ const Category = (props) => {
               // Or, override the default text filter to use
               // "startWith"
               text: (rows, id, filterValue) => {
-                  return rows?.filter(row => {
+                  return rows.filter(row => {
                       const rowValue = row.values[id]
                       return rowValue !== undefined
                           ? String(rowValue)
@@ -447,7 +442,7 @@ const Category = (props) => {
       } = useTable(
           {
               columns,
-              data  ,
+              data,
               defaultColumn, // Be sure to pass the defaultColumn option
               filterTypes,
               autoResetRowState: false,
@@ -480,7 +475,15 @@ const Category = (props) => {
           <div>
            
              
-            
+              <div className="row">
+
+                 <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                 <h1 class="Profiles-title">Sub Category Details</h1>
+                 </div>
+                 <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                 <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Sub Category</button>
+                 </div>
+              </div>
               <Table bordered={false} hover size="sm" responsive {...getTableProps()} className="partnerList">
                   <thead>
                       {headerGroups.filter((data, index) => index > 0).map(headerGroup => (
@@ -531,10 +534,9 @@ const Category = (props) => {
                               })}
                           </tbody>
                           : <tbody>
-                             <tr>
-                                <td colSpan={headerGroups[1].headers.length} style={{textAlign:"center"}}>No data found </td>
-                             </tr>
-                             
+                              <Card style={{ width: '130%', border:"none" }}>
+                                  <h5>No results found</h5>
+                              </Card>
                           </tbody>
 
                   }
@@ -620,12 +622,12 @@ const Category = (props) => {
   // Logic for pagination
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-//   let scheduleList=[...profileData]
-//   let scheduleLists=[];
-//   scheduleList.map((e)=>{
-//   scheduleLists.push({...e,['scheduledAt']:moment(e.scheduledAt).format('MMMM Do YYYY, h:mm:ss a')})})
-//    console.log('scheduleData@@@' ,scheduleLists)
-//   const currentProfileList = scheduleLists;
+  let scheduleList=[...profileData]
+  let scheduleLists=[];
+  scheduleList.map((e)=>{
+  scheduleLists.push({...e,['scheduledAt']:moment(e.scheduledAt).format('MMMM Do YYYY, h:mm:ss a')})})
+   console.log('scheduleData@@@' ,scheduleLists)
+  const currentProfileList = scheduleLists;
   // Logic for displaying page numbers
   const pageNumbers = []; 
 
@@ -665,28 +667,23 @@ const Category = (props) => {
                       filter: "fuzzyText"
                      
                   },
-                 
-                {
-                    Header:"Status",
-                    accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.status==true ? 'Active' : 'Not Active' }
-                      </div>),
-                  disableFilters: true
-                  },
                   {
-                    Header:"Is Subcategory",
-                    accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.isSubCategory==true ? 'Yes' : 'No' }
-                      </div>),
-                  disableFilters: true
-                  },
-
+                    Header: "Status",
+                    accessor: "status",
+                    filter: "fuzzyText"
+                   
+                },
+                {
+                  Header: "Is Video",
+                  accessor: "is_video",
+                  filter: "fuzzyText"
+                },
               {
                 Header:"Action",
                 accessor: (originalRow) => (<div className="action-wrp">
-                  <div className='trash-btn'><i className="fa fa-edit" onClick={(e)=>editModalHandler(e,originalRow)}></i></div>
+                  <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
                   <div onClick={(e) => {
-                    deleteModalHandler(e,originalRow)
+                    deleteModalHandler(e)
                   //e.stopPropagation();
                  // toggleModal(!modal);
                  // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
@@ -706,50 +703,37 @@ const Category = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(props.loader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
-             
-            <>
-                  
-                  <div className="row">
+          {(loader || isLoading) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+              <Row>
 
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    <h1 class="Profiles-title">Category Details</h1>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <button type="button" class="secondary-btn btn btn-secondary" onClick={createCategoryHandler}>Create Category</button>
-                    </div>
-                    </div>
-                        <Row>  
-                        <Col>
-                            {(profileData.length) ?
-                                <OptimizedComponent
-                                    columns={columns}
-                                    data={profileData}
-                                    currentPage={currentPage}
-                                    setCurrentPage={setCurrentPage}
-                                    filterVal={filterVal}
-                                    setFilterVal={setFilterVal} />
-                              : <Card className="empty-box">
-                                  <h5>No results found</h5>
-                              </Card>
-                                   } 
+                  <Col>
+                      {(currentProfileList.length)
+                          ? <OptimizedComponent
+                              columns={columns}
+                              data={currentProfileList}
+                              currentPage={currentPage}
+                              setCurrentPage={setCurrentPage}
+                              filterVal={filterVal}
+                              setFilterVal={setFilterVal} />
+                          : <Card className="empty-box">
+                              <h5>No results found</h5>
+                          </Card>}
 
-                        </Col>
-                    </Row>
-              </>
+                  </Col>
+              </Row>
           }
          
           <Row>
               <Col>
                   <Table>
                      { console.log('isOpenDetail@@',isOpenDetail )}
-                      {isOpenDetail.isOpen && isOpenDetail?.data  ?
+                      {isOpenDetail.isOpen && isOpenDetail.data ?
                           <tbody>
                               <tr className="detail-box">
                                   <td colSpan="6" className="details-div">
                                       <Collapse isOpen={isOpenDetail.isOpen}>
                                           <Fragment>
-                                          <CategoryView data={isOpenDetail?.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})}/>
+                                          <SubCategoryView data={isOpenDetail.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})}/>
                                                   {/* <ScheduleDetails data={isOpenDetail.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})} allData={profileData} updateData={(data)=>setUpdateList(data)}/> */}
                                           </Fragment>
                                       </Collapse>
@@ -762,19 +746,11 @@ const Category = (props) => {
               </Col>
           </Row>
 
-          {eventModal && <CategoryAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
-          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle} setDeleteValue={(value)=>setDeleteValue(value)}/>}
+          {eventModal && <SubCategoryAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
+          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle}/>}
 
       </div>
   )
 }
 
-// export default Category
-
-const mapStateToProps = state =>{
-   
-    const {categoryList,loader}  = state.categoryReducer;
-    return {categoryList,loader};
-  }
-  export default connect(mapStateToProps,{AddCategory,DeleteCategory,GetCategory})(Category);
-  
+export default Category

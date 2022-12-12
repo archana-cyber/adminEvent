@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import { Spinner, Button, Modal, Input, ModalBody, ModalHeader,FormGroup ,Label,Table} from "reactstrap"
 
 
-const  DeleteConfirmModal= ({toggleEvent,showModalEvent}) => {
+const  DeleteConfirmModal= ({toggleEvent,showModalEvent,setDeleteValue}) => {
 
     const [modal, setmodal] = useState(false)
     const toggle=() =>{
@@ -26,8 +26,8 @@ const  DeleteConfirmModal= ({toggleEvent,showModalEvent}) => {
                 </div>
             
                  <div className='delete-btn-wrp'>
-                   <button type="button" class="secondary-btn btn btn-secondary" >Yes</button>
-                   <button type="button" class="secondary-btn btn btn-secondary" >No</button>
+                   <button type="button" class="secondary-btn btn btn-secondary" onClick={()=>setDeleteValue('yes')}>Yes</button>
+                   <button type="button" class="secondary-btn btn btn-secondary" onClick={()=>setDeleteValue('no')}>No</button>
                  </div>
               {/* <div className="text-right mt-2 ml-2">
                     <Button> {false ? (

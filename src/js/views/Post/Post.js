@@ -8,13 +8,10 @@ import {matchSorter} from 'match-sorter';
 import moment from 'moment'
 import "../../../styles/tableData.css"
 import CreateEventModal from "../../components/CreateEventModal";
-import CategoryAdd from "./CategoryAdd";
+import PostAdd from "./PostAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
-import CategoryView from "./CategoryView";
-import { AddCategory,GetCategory,DeleteCategory } from "../../actions/categoryAction";
-import { connect } from 'react-redux'
-
+import PostView from "./PostView";
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -40,170 +37,268 @@ const PaginatedPage = createUltimatePagination({
 });
 const dummydata=[{
     "id": 1,
-    "name": "Peter",
-    "image": "Delgaty",
-    "status": "true",
-    "is_subcategory": true,
-    "created_at": "5/22/2022",
-    "updated_at": "8/8/2022"
+    "title": "Freddy",
+    "description": "Gledhill",
+    "media": "imgur.com",
+    "created_at": "12/9/2021",
+    "updated_at": "8/31/2022",
+    "category_id": "63bf77e1-6ffb-4232-853d-6fdd676cb98f",
+    "subcategory_id": "63e31824-2688-4597-9f72-b5195f1e01d2",
+    "city": "Bouarouss",
+    "map_link": "Photobean",
+    "travel_awaits": "Geba",
+    "multiple_image": "Gabspot"
   }, {
     "id": 2,
-    "name": "Cchaddie",
-    "image": "Corser",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "6/4/2022",
-    "updated_at": "6/7/2022"
+    "title": "Dora",
+    "description": "Klausen",
+    "media": "liveinternet.ru",
+    "created_at": "8/12/2022",
+    "updated_at": "4/25/2022",
+    "category_id": "fbb61f4b-477c-4e91-a3e9-d6bab63c2296",
+    "subcategory_id": "37cc5fc1-d1e8-40d9-9c41-8a7711f326ba",
+    "city": "Jibu Hulangtu",
+    "map_link": "Livefish",
+    "travel_awaits": "Jabbercube",
+    "multiple_image": "Leenti"
   }, {
     "id": 3,
-    "name": "Hortense",
-    "image": "Broadnicke",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "3/17/2022",
-    "updated_at": "6/20/2022"
+    "title": "Emmery",
+    "description": "Overton",
+    "media": "shop-pro.jp",
+    "created_at": "8/1/2022",
+    "updated_at": "5/23/2022",
+    "category_id": "7c3b760a-58e5-4f94-8c4a-458c271dc92a",
+    "subcategory_id": "143cedb6-3401-4cd6-a3bf-5dc12f3b14aa",
+    "city": "Lubango",
+    "map_link": "Jabbertype",
+    "travel_awaits": "Geba",
+    "multiple_image": "Avavee"
   }, {
     "id": 4,
-    "name": "Bamby",
-    "image": "Ewols",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "2/23/2022",
-    "updated_at": "9/4/2022"
+    "title": "Gaven",
+    "description": "Claasen",
+    "media": "aol.com",
+    "created_at": "4/17/2022",
+    "updated_at": "3/24/2022",
+    "category_id": "b172af99-db76-423e-ab52-0e80daad2df9",
+    "subcategory_id": "e4eb7f5d-aedd-4715-a38c-2ef0c91aafad",
+    "city": "Niulanshan",
+    "map_link": "Yakitri",
+    "travel_awaits": "Oyonder",
+    "multiple_image": "Zoomzone"
   }, {
     "id": 5,
-    "name": "Em",
-    "image": "Scouse",
-    "status": true,
-    "is_subcategory": true,
-    "created_at": "4/10/2022",
-    "updated_at": "2/23/2022"
+    "title": "Haleigh",
+    "description": "Feake",
+    "media": "china.com.cn",
+    "created_at": "9/12/2022",
+    "updated_at": "4/6/2022",
+    "category_id": "e220816f-f06f-4b02-b6ca-266b8dd5d7f3",
+    "subcategory_id": "f77d3cf7-daa7-43fa-98d8-58d2852297d2",
+    "city": "Jinghai",
+    "map_link": "Roomm",
+    "travel_awaits": "Meevee",
+    "multiple_image": "Brainlounge"
   }, {
     "id": 6,
-    "name": "Jena",
-    "image": "Danilchev",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "12/16/2021",
-    "updated_at": "11/9/2022"
+    "title": "Anallese",
+    "description": "Dunn",
+    "media": "fastcompany.com",
+    "created_at": "8/15/2022",
+    "updated_at": "9/2/2022",
+    "category_id": "d62826e2-9130-470e-9e5f-32df637916fb",
+    "subcategory_id": "13af9660-775b-45cb-84ea-91aaadda73dc",
+    "city": "Bimbo",
+    "map_link": "Demivee",
+    "travel_awaits": "Skinte",
+    "multiple_image": "Voonyx"
   }, {
     "id": 7,
-    "name": "Nealy",
-    "image": "Garretson",
-    "status": true,
-    "is_subcategory": true,
-    "created_at": "5/22/2022",
-    "updated_at": "1/27/2022"
+    "title": "Mathew",
+    "description": "holmes",
+    "media": "pagesperso-orange.fr",
+    "created_at": "1/26/2022",
+    "updated_at": "12/2/2022",
+    "category_id": "b40c5838-319b-4ce0-93d2-8e2d7be16d7f",
+    "subcategory_id": "ee9b9b9b-46b6-494e-a46b-c62572257b90",
+    "city": "Huping",
+    "map_link": "Meedoo",
+    "travel_awaits": "Jabberstorm",
+    "multiple_image": "Linkbuzz"
   }, {
     "id": 8,
-    "name": "Riva",
-    "image": "Denkin",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "5/14/2022",
-    "updated_at": "8/13/2022"
+    "title": "Myrvyn",
+    "description": "Averill",
+    "media": "samsung.com",
+    "created_at": "12/4/2022",
+    "updated_at": "10/21/2022",
+    "category_id": "72e98ffd-8485-4081-beed-ccda95f4d96f",
+    "subcategory_id": "0a19a4a8-b365-40e9-a9f3-cfe2d0d534e4",
+    "city": "Akunk’",
+    "map_link": "Jabbersphere",
+    "travel_awaits": "Brainverse",
+    "multiple_image": "Plajo"
   }, {
     "id": 9,
-    "name": "Marley",
-    "image": "Gatchell",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "10/6/2022",
-    "updated_at": "8/16/2022"
+    "title": "Derry",
+    "description": "Millions",
+    "media": "npr.org",
+    "created_at": "7/22/2022",
+    "updated_at": "4/28/2022",
+    "category_id": "e278e346-26a2-4738-b274-f4f0d7c333a2",
+    "subcategory_id": "4876f4fa-3dab-4520-88c4-07d6fc5effe0",
+    "city": "Balqash",
+    "map_link": "Gigabox",
+    "travel_awaits": "Skaboo",
+    "multiple_image": "Devpoint"
   }, {
     "id": 10,
-    "name": "Kathi",
-    "image": "Blaxall",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "9/6/2022",
-    "updated_at": "3/13/2022"
+    "title": "Shaylah",
+    "description": "Ferenczy",
+    "media": "cmu.edu",
+    "created_at": "3/12/2022",
+    "updated_at": "2/8/2022",
+    "category_id": "c785d4c0-9255-4c7a-83dc-0d3a23bbc007",
+    "subcategory_id": "8803aa19-75a2-4f79-807f-0760cd9378bc",
+    "city": "Tampa",
+    "map_link": "Twinte",
+    "travel_awaits": "Buzzdog",
+    "multiple_image": "Lajo"
   }, {
     "id": 11,
-    "name": "Roxie",
-    "image": "Sandeland",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "5/9/2022",
-    "updated_at": "1/21/2022"
+    "title": "Colly",
+    "description": "Milvarnie",
+    "media": "sbwire.com",
+    "created_at": "6/5/2022",
+    "updated_at": "3/23/2022",
+    "category_id": "a0362078-b052-4def-b1a6-c45a9b0e3b54",
+    "subcategory_id": "28b9d2e0-0277-4766-bb5e-8536e1212e58",
+    "city": "Shouxihu",
+    "map_link": "Cogibox",
+    "travel_awaits": "Yakijo",
+    "multiple_image": "Flipbug"
   }, {
     "id": 12,
-    "name": "Ingrid",
-    "image": "Ellingworth",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "9/15/2022",
-    "updated_at": "9/3/2022"
+    "title": "Donny",
+    "description": "Guidetti",
+    "media": "icio.us",
+    "created_at": "11/5/2022",
+    "updated_at": "8/8/2022",
+    "category_id": "b8383d0d-77e5-4cfc-9c2a-71cf4db43254",
+    "subcategory_id": "c99706d4-5ee7-4abd-b9e6-78805d77fc83",
+    "city": "Vallegrande",
+    "map_link": "Skalith",
+    "travel_awaits": "Wordpedia",
+    "multiple_image": "Zoombox"
   }, {
     "id": 13,
-    "name": "Nikola",
-    "image": "Braben",
-    "status": true,
-    "is_subcategory": true,
-    "created_at": "5/25/2022",
-    "updated_at": "11/3/2022"
+    "title": "Hy",
+    "description": "Albutt",
+    "media": "dyndns.org",
+    "created_at": "4/18/2022",
+    "updated_at": "5/19/2022",
+    "category_id": "98967eb9-8ebb-4763-89c9-8c74511e5441",
+    "subcategory_id": "1361f8d5-ab25-430d-b376-2c5e1ec8c692",
+    "city": "Sirnasari",
+    "map_link": "Avamba",
+    "travel_awaits": "Wordtune",
+    "multiple_image": "Shuffletag"
   }, {
     "id": 14,
-    "name": "Kaylil",
-    "image": "Wainscoat",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "12/18/2021",
-    "updated_at": "2/27/2022"
+    "title": "Mylo",
+    "description": "Neild",
+    "media": "diigo.com",
+    "created_at": "11/28/2022",
+    "updated_at": "7/29/2022",
+    "category_id": "460d005e-557a-4cab-8773-0e1828af71a6",
+    "subcategory_id": "98d6d4b0-c5a8-4063-a0b5-4208b73d8ef6",
+    "city": "Benito Juarez",
+    "map_link": "Fadeo",
+    "travel_awaits": "Twitternation",
+    "multiple_image": "Skipstorm"
   }, {
     "id": 15,
-    "name": "Geri",
-    "image": "Pilmore",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "7/25/2022",
-    "updated_at": "11/14/2022"
+    "title": "Verney",
+    "description": "Leale",
+    "media": "wisc.edu",
+    "created_at": "7/11/2022",
+    "updated_at": "10/15/2022",
+    "category_id": "8ebb88d4-66ba-4e93-9caf-0743c7672d41",
+    "subcategory_id": "24a327a3-0682-47c8-b606-0d01993f9ca0",
+    "city": "Yixingfu",
+    "map_link": "Flipbug",
+    "travel_awaits": "Dabtype",
+    "multiple_image": "Yata"
   }, {
     "id": 16,
-    "name": "Brennan",
-    "image": "Savill",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "7/18/2022",
-    "updated_at": "4/29/2022"
+    "title": "Lothario",
+    "description": "Saines",
+    "media": "mlb.com",
+    "created_at": "8/7/2022",
+    "updated_at": "3/6/2022",
+    "category_id": "b0d5b810-4401-4af8-b956-ca66da456819",
+    "subcategory_id": "0461cd8e-9027-413e-8631-f021ef76b34e",
+    "city": "Az Zulfi",
+    "map_link": "Skyble",
+    "travel_awaits": "Aimbu",
+    "multiple_image": "Voomm"
   }, {
     "id": 17,
-    "name": "Teresina",
-    "image": "Bannerman",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "10/31/2022",
-    "updated_at": "7/18/2022"
+    "title": "Wally",
+    "description": "Dodle",
+    "media": "creativecommons.org",
+    "created_at": "6/24/2022",
+    "updated_at": "8/28/2022",
+    "category_id": "0b8b0c59-9863-4cf7-bd16-65c9aa3d1352",
+    "subcategory_id": "9a5dd70f-39b2-4394-8652-8809ab1f9a03",
+    "city": "Nepeña",
+    "map_link": "Tagfeed",
+    "travel_awaits": "Voonder",
+    "multiple_image": "Tanoodle"
   }, {
     "id": 18,
-    "name": "Aile",
-    "image": "Burrells",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "9/17/2022",
-    "updated_at": "2/9/2022"
+    "title": "Jenica",
+    "description": "Do Rosario",
+    "media": "yolasite.com",
+    "created_at": "3/29/2022",
+    "updated_at": "3/27/2022",
+    "category_id": "5d83330f-ed5a-468d-84db-6d9e17bd1e5e",
+    "subcategory_id": "d261a954-9e93-41bc-8409-c2814ce6b67c",
+    "city": "Briceni",
+    "map_link": "Yodel",
+    "travel_awaits": "Topiclounge",
+    "multiple_image": "Babblestorm"
   }, {
     "id": 19,
-    "name": "Darbee",
-    "image": "Trowell",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "10/11/2022",
-    "updated_at": "3/26/2022"
+    "title": "Aindrea",
+    "description": "Dalling",
+    "media": "gizmodo.com",
+    "created_at": "10/15/2022",
+    "updated_at": "1/5/2022",
+    "category_id": "c34db8f9-3148-40ff-b652-16dead635c56",
+    "subcategory_id": "1cae16fd-0f26-4a13-87b7-84ff0f060993",
+    "city": "Nelson",
+    "map_link": "Yata",
+    "travel_awaits": "Bluezoom",
+    "multiple_image": "Skinix"
   }, {
     "id": 20,
-    "name": "Libbie",
-    "image": "Kieff",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "7/1/2022",
-    "updated_at": "11/10/2022"
+    "title": "Wake",
+    "description": "Stuke",
+    "media": "fastcompany.com",
+    "created_at": "3/3/2022",
+    "updated_at": "4/20/2022",
+    "category_id": "09abd57c-949e-45b5-b88c-c33a9060f45a",
+    "subcategory_id": "dfec0c95-6e27-4647-9829-e6fb504c25d5",
+    "city": "Shangxian",
+    "map_link": "Dynava",
+    "travel_awaits": "Feedmix",
+    "multiple_image": "Jaloo"
   }]
-const Category = (props) => {
+const Post = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }) => {
 
-   const  { categoryList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }= props
-   const profileData=categoryList 
-   const [currentPage, setCurrentPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
       data: null,
@@ -222,8 +317,7 @@ const Category = (props) => {
   const [updateList, setUpdateList] = useState('')
   const [eventModal, setEventModal] = useState(false)
   const [eventDeleteModal, setEventDeleteModal] = useState(false)
-  const [deleteValue, setDeleteValue] = useState('')
-  const [getDeleteId, setGetDeleteId] = useState('')
+
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
   // useEffect(() => {
@@ -269,38 +363,19 @@ const Category = (props) => {
          
   // },[updateScheduler,updateList])
 
-   console.log('categoryList000', props.categoryList)
-  useEffect(()=>{
-    // props.AddCategory()
-    props.GetCategory()
-  },[])
-
-  useEffect(()=>{
-    
-    if(deleteValue=='yes'){
-        props.DeleteCategory(getDeleteId)
-    }
-  },[deleteValue])
-
-  const editModalHandler=(e,rowData)=>{
-    console.log('rowData', rowData,rowData.status)
-    e.preventDefault()
-    e.stopPropagation();
+  const editModalHandler=(rowData)=>{
+    // e.preventDefault()
+    // e.stopPropagation();
     setEditModal(rowData)
     setEventModal(!eventModal)
   }
-  const deleteModalHandler=(e,rowData)=>{
+  const deleteModalHandler=(e)=>{
     e.preventDefault()
-    e.stopPropagation()
+    e.stopPropagation();
     eventDeleteToggle()
-    setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
     setEventModal(!eventModal)
-  }
-  const createCategoryHandler=()=>{
-    eventToggle();
-    setEditModal({})
   }
   const eventDeleteToggle=()=>{
     setEventDeleteModal(!eventDeleteModal)
@@ -403,7 +478,7 @@ const Category = (props) => {
               // Or, override the default text filter to use
               // "startWith"
               text: (rows, id, filterValue) => {
-                  return rows?.filter(row => {
+                  return rows.filter(row => {
                       const rowValue = row.values[id]
                       return rowValue !== undefined
                           ? String(rowValue)
@@ -447,7 +522,7 @@ const Category = (props) => {
       } = useTable(
           {
               columns,
-              data  ,
+              data,
               defaultColumn, // Be sure to pass the defaultColumn option
               filterTypes,
               autoResetRowState: false,
@@ -480,7 +555,15 @@ const Category = (props) => {
           <div>
            
              
-            
+              <div className="row">
+
+                 <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                 <h1 class="Profiles-title">Post Details</h1>
+                 </div>
+                 <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                 <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Sub Category</button>
+                 </div>
+              </div>
               <Table bordered={false} hover size="sm" responsive {...getTableProps()} className="partnerList">
                   <thead>
                       {headerGroups.filter((data, index) => index > 0).map(headerGroup => (
@@ -531,10 +614,9 @@ const Category = (props) => {
                               })}
                           </tbody>
                           : <tbody>
-                             <tr>
-                                <td colSpan={headerGroups[1].headers.length} style={{textAlign:"center"}}>No data found </td>
-                             </tr>
-                             
+                              <Card style={{ width: '130%', border:"none" }}>
+                                  <h5>No results found</h5>
+                              </Card>
                           </tbody>
 
                   }
@@ -620,12 +702,12 @@ const Category = (props) => {
   // Logic for pagination
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-//   let scheduleList=[...profileData]
-//   let scheduleLists=[];
-//   scheduleList.map((e)=>{
-//   scheduleLists.push({...e,['scheduledAt']:moment(e.scheduledAt).format('MMMM Do YYYY, h:mm:ss a')})})
-//    console.log('scheduleData@@@' ,scheduleLists)
-//   const currentProfileList = scheduleLists;
+  let scheduleList=[...profileData]
+  let scheduleLists=[];
+  scheduleList.map((e)=>{
+  scheduleLists.push({...e,['scheduledAt']:moment(e.scheduledAt).format('MMMM Do YYYY, h:mm:ss a')})})
+   console.log('scheduleData@@@' ,scheduleLists)
+  const currentProfileList = scheduleLists;
   // Logic for displaying page numbers
   const pageNumbers = []; 
 
@@ -655,38 +737,33 @@ const Category = (props) => {
                  
                   
                   {
-                      Header: "Name",
-                      accessor: "name",
+                      Header: "Title",
+                      accessor: "title",
                       filter: "fuzzyText"
                   },
                   {
-                      Header: "Image",
-                      accessor: "image",
+                      Header: "Media",
+                      accessor: "media",
                       filter: "fuzzyText"
                      
                   },
-                 
-                {
-                    Header:"Status",
-                    accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.status==true ? 'Active' : 'Not Active' }
-                      </div>),
-                  disableFilters: true
-                  },
                   {
-                    Header:"Is Subcategory",
-                    accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.isSubCategory==true ? 'Yes' : 'No' }
-                      </div>),
-                  disableFilters: true
-                  },
-
+                    Header: "City",
+                    accessor: "city",
+                    filter: "fuzzyText"
+                   
+                },
+                {
+                  Header: "Map Link",
+                  accessor: "map_link",
+                  filter: "fuzzyText"
+                },
               {
                 Header:"Action",
                 accessor: (originalRow) => (<div className="action-wrp">
-                  <div className='trash-btn'><i className="fa fa-edit" onClick={(e)=>editModalHandler(e,originalRow)}></i></div>
+                  <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
                   <div onClick={(e) => {
-                    deleteModalHandler(e,originalRow)
+                    deleteModalHandler(e)
                   //e.stopPropagation();
                  // toggleModal(!modal);
                  // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
@@ -706,50 +783,37 @@ const Category = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(props.loader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
-             
-            <>
-                  
-                  <div className="row">
+          {(loader || isLoading) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+              <Row>
 
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                    <h1 class="Profiles-title">Category Details</h1>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <button type="button" class="secondary-btn btn btn-secondary" onClick={createCategoryHandler}>Create Category</button>
-                    </div>
-                    </div>
-                        <Row>  
-                        <Col>
-                            {(profileData.length) ?
-                                <OptimizedComponent
-                                    columns={columns}
-                                    data={profileData}
-                                    currentPage={currentPage}
-                                    setCurrentPage={setCurrentPage}
-                                    filterVal={filterVal}
-                                    setFilterVal={setFilterVal} />
-                              : <Card className="empty-box">
-                                  <h5>No results found</h5>
-                              </Card>
-                                   } 
+                  <Col>
+                      {(currentProfileList.length)
+                          ? <OptimizedComponent
+                              columns={columns}
+                              data={currentProfileList}
+                              currentPage={currentPage}
+                              setCurrentPage={setCurrentPage}
+                              filterVal={filterVal}
+                              setFilterVal={setFilterVal} />
+                          : <Card className="empty-box">
+                              <h5>No results found</h5>
+                          </Card>}
 
-                        </Col>
-                    </Row>
-              </>
+                  </Col>
+              </Row>
           }
          
           <Row>
               <Col>
                   <Table>
                      { console.log('isOpenDetail@@',isOpenDetail )}
-                      {isOpenDetail.isOpen && isOpenDetail?.data  ?
+                      {isOpenDetail.isOpen && isOpenDetail.data ?
                           <tbody>
                               <tr className="detail-box">
                                   <td colSpan="6" className="details-div">
                                       <Collapse isOpen={isOpenDetail.isOpen}>
                                           <Fragment>
-                                          <CategoryView data={isOpenDetail?.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})}/>
+                                          <PostView data={isOpenDetail.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})}/>
                                                   {/* <ScheduleDetails data={isOpenDetail.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})} allData={profileData} updateData={(data)=>setUpdateList(data)}/> */}
                                           </Fragment>
                                       </Collapse>
@@ -762,19 +826,11 @@ const Category = (props) => {
               </Col>
           </Row>
 
-          {eventModal && <CategoryAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
-          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle} setDeleteValue={(value)=>setDeleteValue(value)}/>}
+          {eventModal && <PostAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
+          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle}/>}
 
       </div>
   )
 }
 
-// export default Category
-
-const mapStateToProps = state =>{
-   
-    const {categoryList,loader}  = state.categoryReducer;
-    return {categoryList,loader};
-  }
-  export default connect(mapStateToProps,{AddCategory,DeleteCategory,GetCategory})(Category);
-  
+export default Post

@@ -17,6 +17,8 @@ const ShowDetailsModal = ({data,closeDetails}) => {
         }
         return value;
     }
+
+    console.log('data3333', data)
     return (
         <div className="profileDetails-container partnerDetails">
             <Row>
@@ -24,6 +26,7 @@ const ShowDetailsModal = ({data,closeDetails}) => {
                     <h3 tabIndex="-1" id="mainForm" className="table-sub-title typo-h3">Single record details</h3><button className="cross-btn" onClick={() => closeDetails()}><i className="fa fa-times"></i></button>
                     <Table id="Summary" bordered={true} hover size="sm" responsive className='summary-detail-first'>
                         <tbody>
+                            
                             {/* <tr>
                                 <td>
                                     <p className='form-label-title'>ProfileId</p>
