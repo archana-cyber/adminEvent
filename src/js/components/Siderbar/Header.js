@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../../../images/eventlogo1.png"
+// import logo from "../../../images/eventlogo1.png"
 import { Link,useHistory } from 'react-router-dom'
 
 const Header = () => {

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import "../../../styles/login.css"
 import "../../../styles/col.css"
-import logo from "../../../../src/images/eventLogo.png"
+// import logo from "../../../../src/images/eventLogo.png"
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import { AuthLogin } from '../../actions/authAction'
 
 class Login extends Component {
     state = {
@@ -56,8 +57,9 @@ class Login extends Component {
         this.setState({errors:error});
         if(!Object.keys(error).length){
            console.log('submit')
-           localStorage.setItem("authData",btoa(JSON.stringify(data)))
-           this.props.history.push('/')
+           console.log('this.state.data444', this.state.data)
+          //  localStorage.setItem("authData",btoa(JSON.stringify(data)))
+          //  this.props.history.push('/')
         }
       }
   render() {
@@ -175,4 +177,11 @@ class Login extends Component {
   }
 }
 
-export default Login
+// export default Login
+
+const mapStateToProps = state =>{
+   
+  const {categoryList,loader}  = state.categoryReducer;
+  return {categoryList,loader};
+}
+export default connect(mapStateToProps,{AuthLogin})(Login);
