@@ -3,7 +3,7 @@ import { CustomInput, Spinner } from 'reactstrap';
 // import headLogo from './../../../../source/images/icon-cobranding.png';
 import headLogo from "../../images/avibraLogo.svg"
 
-class UploadLogo extends Component {
+class UploadVideo extends Component {
 
     constructor(props) {
         super(props);
@@ -43,7 +43,7 @@ class UploadLogo extends Component {
         if (fsize >= 1024) {
             file_size = Math.round((fsize / 1024));
 
-            if (file_size <= 150) {
+            if (file_size <= 20000) {
                 event.preventDefault();
                 let file = event.target.files[0];
                 let reader = new FileReader();
@@ -77,26 +77,15 @@ class UploadLogo extends Component {
                     {logoUrl ? <img src={logoUrl} height="35" /> : null}
                 </div> */}
                 <div>
-                <div style={{ display: showLogoPreview ? 'block' : 'none' }}>
-                        {(selectedImage == '' && logoUrl == '') ? null :
-                            <div style={styles.previewUpdateLogo}>
-                                <h6 style={{ color: 'grey' }}>Preview</h6>
-                                <div style={{ width: '300px', margin: '0 auto' }}>
-                                    <div style={{ float: 'left', width: '130px', height: "35px", textAlign: 'right' }}><img src={selectedImage || logoUrl + "?time=" + new Date()} className="img-preview" height="35" style={{ maxWidth: '130px' }} /></div>
-                                        {/* <div style={{ float: 'left', width: '15px', height: "35px", fontWeight: 'bold', paddingTop: '10px', marginLeft: '10px', marginRight: '10px' }}>+</div> */}
-                                        {/* <div style={{ float: 'left', width: '130px', height: "35px", textAlign: 'left' }}><img src={headLogo} height="35" /></div> */}
-                                </div>
-                            </div>
-                        }
-                    </div>
+                
                     <CustomInput key={id} type="file" id="agencyLogoFileBrowser" name="agencyLogo" label="Upload your Logo"
-                        onChange={(e) => this.onFileImgSelect(e, 'agencyLogo')} onClick={e => (e.target.value = null)} accept=".jpeg, .png, .jpg" />
+                        onChange={(e) => this.onFileImgSelect(e, 'agencyLogo')} onClick={e => (e.target.value = null)} accept=".mp4" />
                    
                     <div style={{ marginTop: '3px' }}>
                         {/*logoUploading ? <div><Spinner color="secondary" style={{width:'15px',height:'15px'}} /> Uploding...</div> : null*/}
                         {/* {updateLogoStatus == 'updated' && logoUpdateSuccessfully ? <div style={{ color: 'green' }}>Logo updated Successfully.</div> : null}
                         {updateLogoStatus == 'failed' && logoUpdateSuccessfully ? <div style={{ color: 'red' }}>Logo upload failed.</div> : null} */}
-                        {logoUpdateError ? <div style={{ color: 'red' }}>Image file size must be less than 150kb.</div> : null}
+                        {logoUpdateError ? <div style={{ color: 'red' }}>Image file size must be less than 20mb.</div> : null}
                     </div>
                    
                 </div>
@@ -112,4 +101,4 @@ const styles = {
     }
 }
 
-export default UploadLogo;
+export default UploadVideo;

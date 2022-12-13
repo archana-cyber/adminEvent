@@ -7,7 +7,15 @@ import { connect } from 'react-redux'
 import UploadLogo from '../../components/UploadLogo';
 import avibraLogo from '../../../images/avibraLogo.svg'
 import Select from 'react-select';
+import FormData from "form-data"
 
+
+const errorMsgs = {
+    "name":"Please enter a valid name",
+    "status":"Please enter a valid status",
+    "image":"Please upload image",
+    "is_sub_category":"Please select anyone from the above"
+    }
 const CategoryAdd = (props) => {
 
     const {toggleEvent,showModalEvent,data={},loader=false}=props
@@ -15,6 +23,8 @@ const CategoryAdd = (props) => {
     // const [,] = useState(second)
     const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
+        name:'',
+        status:'',
         image:"",
         is_sub_category:"",
     })
@@ -25,6 +35,7 @@ const CategoryAdd = (props) => {
        
     }
 
+    console.log('formData444', formData)
     useEffect(()=>{
       if(Object.keys(data).length){
         if(data?.is_sub_category==true || data?.is_sub_category=='true')
@@ -45,10 +56,10 @@ const CategoryAdd = (props) => {
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Required'),
-    // image :  Yup.string()
-    // .min(2, 'Too Short!')
-    // .max(50, 'Too Long!')
-    // .required('Required'),
+    image :  Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
    
     is_sub_category: Yup.string()
         .min(2, 'Too Short!')
@@ -69,7 +80,7 @@ const CategoryAdd = (props) => {
             }
             // console.log(`obj.${prop} = ${obj[prop]}`);
         }
-        setFormData(formData)
+        setFormData({formData})
         if(submitForm){
                 if(data?.id){
                     props.UpdateCategory(data.id,values)
@@ -87,6 +98,49 @@ const CategoryAdd = (props) => {
        console.log('values', values)
     }
 
+    const validateAll=()=>{
+        let errors={},isFormValid=true;
+        let fileds={...formData}
+        for (let type  in fileds){
+            console.log('filedsif',fileds, formData[type])
+           if(!fileds[type]){
+            console.log('fileds[type]',type,fileds, fileds[type])
+            isFormValid=false
+              errors[type]=errorMsgs[type]
+           }
+        }
+        console.log('errors444', errors)
+        setFormError({...errors})
+        return isFormValid
+    }
+    console.log('formError', formError)
+    const formSubmitHandler=()=>{
+       if(validateAll()){
+
+        let generateFormData = new FormData();
+        // generateFormData.append('name',formData['name'])
+        for (let type  in formData){
+            console.log('formData44434',type,formData )
+            if(type!='is_sub_category')
+             generateFormData.append(type,formData[type])
+        }
+        generateFormData.append('is_sub_category',formData['is_sub_category'].value)
+
+         console.log('generateFormData333', generateFormData)
+         
+            if(data?.id){
+                props.UpdateCategory(data.id,generateFormData)
+                toggleEvent()
+                // edit api call
+            }else{
+                props.AddCategory(generateFormData)
+                toggleEvent()
+                //add call
+            }
+       }else{
+        console.log('form has error')
+       }
+    }
     const options = [
         { value: 'true', label: 'True' },
         { value: 'false', label: 'False' },
@@ -94,9 +148,24 @@ const CategoryAdd = (props) => {
 
     const handleSubcategory=(selectedOption)=>{
         //   formData()
+            let errors= {...formError}
+            delete errors['is_sub_category']
+            setFormError({...errors})
           setFormData({...formData,is_sub_category:selectedOption})
     } 
-    
+    const onChangeHandler=(e)=>{
+        console.log('dsgfdsvgfsd', e)
+        let errors= {...formError}
+        delete errors[e.target.name]
+        setFormError({...errors})
+        setFormData({...formData,[e.target.name]:e.target.value})
+    }
+    const handleImage=(value)=>{
+        let errors= {...formError}
+        delete errors['image']
+        setFormError({...errors})
+        setFormData({...formData,image:value}) 
+    }
     // handleChange = (selectedOption) => {
     //     this.setState({ selectedOption }, () =>
     //       console.log(`Option selected:`, this.state.selectedOption)
@@ -117,7 +186,7 @@ const CategoryAdd = (props) => {
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
-                  <Formik
+                  {/* <Formik
                     initialValues={{
                         name:data?.name ? data.name :'',
                         // name:data?.isSubCategory,
@@ -132,37 +201,41 @@ const CategoryAdd = (props) => {
                         // same shape as initial values
                         console.log("vLUES99",values);
                     }}
-                    >
-                    {({ errors, touched }) => (
-                        <Form>
+                    > */}
+                    {/* {({ errors, touched }) => ( */}
+                        {/* <Form> */}
                         <div className='p-3'>
                             <p className="form-label-title">Name </p>
-                            <Field name="name" className="form-control"/>
-                            {errors.name && touched.name ? (
-                                <div className='text-danger'>{errors.name}</div>
-                            ) : null}
+                            <Input name="name" onChange={(e)=>onChangeHandler(e)}/>
+                            {formError?.name ? <div className='text-danger'>
+                              {formError?.name}
+                            </div> : null}
+
                        </div>
 
                        <div className='p-3'>
                       <p className="form-label-title">Image </p>
                         {/* <Field name="image" className="form-control" /> */}
+                        {/* setImageData(value) */}
                         <div>
                             <UploadLogo
                                 id={'image'}
                                 logoUrl={''}
-                                setSelectedLogoImage={(value) => setImageData(value)}
+                                setSelectedLogoImage={(value) =>handleImage(value) }
                                 // disabled={field.disabled}
                                 name='image'
                             />
                         </div>
-                        {/* {errors.image && touched.image ? (
-                            <div className='text-danger'>{errors.image}</div>
-                        ) : null} */}
+                        {formError?.image ? (
+                            <div className='text-danger'>{formError?.image}</div>
+                        ) : null}
+                        {/* {errors.image && touched.image  ? <div className='text-danger'>{errors.image}</div> : null} */}
+
                       </div>
                         <div className='p-3'>
                       <p className="form-label-title">Status </p>
-                        <Field name="status" type="text" className="form-control"/>
-                        {errors.status && touched.status ? <div className='text-danger'>{errors.status}</div> : null}
+                        <Input name="status" type="text" className="form-control" onChange={onChangeHandler} />
+                        {formError.status ? <div className='text-danger'>{formError.status}</div> : null}
                         </div>
 
                         <div className='p-3'>
@@ -172,29 +245,23 @@ const CategoryAdd = (props) => {
                             value={formData?.is_sub_category }
                             onChange={handleSubcategory}
                             options={options}
+                            name="is_sub_category"
                         />
-                        {formData?.is_sub_category ? <div className='text-danger'>{formData?.is_sub_category}</div> : null}
+                        {formError?.is_sub_category ? <div className='text-danger'>{formError?.is_sub_category}</div> : null}
 
-                        {/* <Field as='select' name="is_sub_category" type="text" className="form-control">
-                        <option value=''>Select</option>
-
-                        <option value="true" selected={true}>true</option>
-                        <option value="false" >false</option>
-                        </Field>
-                        {errors.is_sub_category && touched.is_sub_category  ? <div className='text-danger'>{errors.is_sub_category}</div> : null} */}
-                        </div>
+                       </div>
                         
                        
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
-                            <Button type='submit'> {loader ? (
+                            <Button type='submit' onClick={formSubmitHandler}> {loader ? (
                                 <div style={{ padding: '0px 6px' }}><Spinner color="light" size="sm" /></div>
                             ) : "Submit"}
                             </Button>
                         </div>
-                        </Form>
-                    )}
-                    </Formik>
+                        {/* </Form> */}
+                     {/* )}
+                    </Formik> */}
                     </div>
                   
              

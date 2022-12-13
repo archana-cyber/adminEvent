@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import "../../../styles/login.css"
 import "../../../styles/col.css"
-import logo from "../../../../src/images/eventlogo.png"
+import logo from "../../../../src/images/eventLogo.png"
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
@@ -165,7 +165,7 @@ class Login extends Component {
               <div className="col-md-6 right-side">
                 <div className="icon__svg">
                  {/* <h1>Logo</h1> */}
-                  <img src={logo} />
+                  {/* <img src={logo} /> */}
                 </div>
               </div>
             </div>

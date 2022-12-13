@@ -14,7 +14,7 @@ import ShowDetailsModal from "../../components/ShowDetailsModal";
 import CategoryView from "./CategoryView";
 import { AddCategory,GetCategory,DeleteCategory } from "../../actions/categoryAction";
 import { connect } from 'react-redux'
-
+import imageholder from "../../../images/imageholder.png"
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -202,7 +202,7 @@ const dummydata=[{
 const Category = (props) => {
 
    const  { categoryList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }= props
-   const profileData=categoryList 
+   const profileData=dummydata 
    const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -653,18 +653,27 @@ const Category = (props) => {
               Header: "Profile List",
               columns: [
                  
-                  
+                {
+                    Header:"Image",
+                    accessor: (originalRow) => (<div className="image-wrapper">
+                        {originalRow.image ? <div>
+                            <img src={imageholder}/>
+                        </div> :
+                        <div><img src={imageholder}/></div>}
+                      </div>),
+                  disableFilters: true
+                  },
                   {
                       Header: "Name",
                       accessor: "name",
                       filter: "fuzzyText"
                   },
-                  {
-                      Header: "Image",
-                      accessor: "image",
-                      filter: "fuzzyText"
+                //   {
+                //       Header: "Image",
+                //       accessor: "image",
+                //       filter: "fuzzyText"
                      
-                  },
+                //   },
                  
                 {
                     Header:"Status",

@@ -1,16 +1,61 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Spinner, Button, Modal, Input, ModalBody, ModalHeader,FormGroup ,Label,Table} from "reactstrap"
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { AddSubCategory,UpdateSubCategory } from '../../actions/subcategoryAction';
 import { connect } from 'react-redux'
+import UploadVideo from '../../components/UploadVideo';
+import UploadLogo from '../../components/UploadLogo';
 
+import Select from 'react-select';
 
+const errorMsgs = {
+    "name":"Please enter a valid name",
+    "status":"Please enter a valid status",
+    "image":"Please upload image",
+    "video":"Please upload video",
+    "category_id":"Please select anyone from the above"
+    }
+
+const dumData=[{
+    "id": 1,
+    "name": "Peter",
+    "image": "Delgaty",
+    "status": "true",
+    "is_subcategory": true,
+    "created_at": "5/22/2022",
+    "updated_at": "8/8/2022"
+  }, {
+    "id": 2,
+    "name": "Cchaddie",
+    "image": "Corser",
+    "status": true,
+    "is_subcategory": false,
+    "created_at": "6/4/2022",
+    "updated_at": "6/7/2022"
+  }, {
+    "id": 3,
+    "name": "Hortense",
+    "image": "Broadnicke",
+    "status": false,
+    "is_subcategory": false,
+    "created_at": "3/17/2022",
+    "updated_at": "6/20/2022"
+  }, {
+    "id": 4,
+    "name": "Bamby",
+    "image": "Ewols",
+    "status": false,
+    "is_subcategory": true,
+    "created_at": "2/23/2022",
+    "updated_at": "9/4/2022"
+  }]
 const SubCategoryAdd = (props) => {
 
     const {toggleEvent,showModalEvent,data={},loader=false}=props
-
+    const [getCategory, setGetCategory] = useState([])
     const [modal, setmodal] = useState(false)
+    const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
         name:"",
         image:"",
@@ -19,36 +64,23 @@ const SubCategoryAdd = (props) => {
         category_id:""
     })
    
+    useEffect(()=>{
+        let arrayData=[];
+        // let listdata=props.categoryList || dumData
+        let listdata=dumData
+        Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+           arrayData.push({label:item.name,value:item.id})
+        })
+        setGetCategory(arrayData)
+    },[])
+
     const toggle=() =>{
         setmodal(!modal)
        
     }
 
     console.log('data={isOpenDetail.data}', data)
-    const SignupSchema = Yup.object().shape({
-    name: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    status: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    image :  Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-   
-    is_video: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-
-    category_id: Yup.string()
-    .min(1, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-    });
+  
     
     const submitHandler=(values)=>{
         if(data?.id){
@@ -62,6 +94,77 @@ const SubCategoryAdd = (props) => {
        console.log('values', values)
     }
 
+    const handleImage=(value)=>{
+        let errors= {...formError}
+        delete errors['image']
+        setFormError({...errors})
+        setFormData({...formData,image:value}) 
+    }
+    const handleVideo=(value)=>{
+        let errors= {...formError}
+        delete errors['video']
+        setFormError({...errors})
+        setFormData({...formData,video:value}) 
+    }
+    const handleSubcategory=(selectedOption)=>{
+        //   formData()
+            let errors= {...formError}
+            delete errors['category_id']
+            setFormError({...errors})
+          setFormData({...formData,category_id:selectedOption})
+    } 
+
+    const onChangeHandler=(e)=>{
+        console.log('dsgfdsvgfsd', e)
+        let errors= {...formError}
+        delete errors[e.target.name]
+        setFormError({...errors})
+        setFormData({...formData,[e.target.name]:e.target.value})
+    }
+    const validateAll=()=>{
+        let errors={},isFormValid=true;
+        let fileds={...formData}
+        for (let type  in fileds){
+            console.log('filedsif',fileds, formData[type])
+           if(!fileds[type]){
+            console.log('fileds[type]',type,fileds, fileds[type])
+            isFormValid=false
+              errors[type]=errorMsgs[type]
+           }
+        }
+        console.log('errors444', errors)
+        setFormError({...errors})
+        return isFormValid
+    }
+    console.log('formError', formError)
+
+    const formSubmitHandler=()=>{
+       if(validateAll()){
+
+        let generateFormData = new FormData();
+        // generateFormData.append('name',formData['name'])
+        for (let type  in formData){
+            console.log('formData44434',type,formData )
+            if(type!='category_id')
+             generateFormData.append(type,formData[type])
+        }
+        generateFormData.append('category_id',formData['category_id'].value)
+
+         console.log('generateFormData333', generateFormData)
+         
+            if(data?.id){
+                props.UpdateSubCategory(data.id,generateFormData)
+                toggleEvent()
+                // edit api call
+            }else{
+                props.AddSubCategory(generateFormData)
+                toggleEvent()
+                //add call
+            }
+       }else{
+        console.log('form has error')
+       }
+    }
     return (
         <div>
           {/* <Button color="danger" onClick={toggle}>{props.buttonLabel}</Button> */}
@@ -77,67 +180,72 @@ const SubCategoryAdd = (props) => {
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
-                  <Formik
-                    initialValues={{
-                        name:data?.name ? data.name :'',
-                        image:data?.image ? data.image :'',
-                        status:data?.status ? data.status :'',
-                        is_video:data?.is_video ? data.is_video :'',
-                        category_id:data?.category_id ? data.category_id :'',
-
-                    }}
-                    validationSchema={SignupSchema}
-                    onSubmit={values => {
-                        submitHandler(values)
-                        // same shape as initial values
-                        console.log(values);
-                    }}
-                    >
-                    {({ errors, touched }) => (
-                        <Form>
+                 
                         <div className='p-3'>
                             <p className="form-label-title">Name </p>
-                            <Field name="name" className="form-control"/>
-                            {errors.name && touched.name ? (
-                                <div className='text-danger'>{errors.name}</div>
+                            <Input name="name" className="form-control" onChange={onChangeHandler}/>
+                            {formError.name  ? (
+                                <div className='text-danger'>{formError.name}</div>
                             ) : null}
                        </div>
 
                        <div className='p-3'>
                       <p className="form-label-title">Image </p>
-                        <Field name="image" className="form-control" />
-                        {errors.image && touched.image ? (
-                            <div className='text-danger'>{errors.image}</div>
+                      <div>
+                            <UploadLogo
+                                id={'image'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) =>handleImage(value) }
+                                // disabled={field.disabled}
+                                name='image'
+                            />
+                        </div>
+                       
+                        {formError.image ? (
+                            <div className='text-danger'>{formError.image}</div>
                         ) : null}
                       </div>
                         <div className='p-3'>
                       <p className="form-label-title">Status </p>
-                        <Field name="status" type="text" className="form-control"/>
-                        {errors.status && touched.status ? <div className='text-danger'>{errors.status}</div> : null}
+                        <Input name="status" type="text" className="form-control" onChange={onChangeHandler}/>
+                        {formError.status ? <div className='text-danger'>{formError.status}</div> : null}
                         </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Is Video</p>
-                        <Field name="is_video" type="text" className="form-control"/>
-                        {errors.is_video && touched.is_video ? <div className='text-danger'>{errors.is_video}</div> : null}
+                        <div>
+                            <UploadVideo
+                                id={'video'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) =>handleVideo(value) }
+                                // disabled={field.disabled}
+                                name='video'
+                            />
+                        </div>
+                        {formError.is_video ? <div className='text-danger'>{formError.is_video}</div> : null}
                         </div>
                         
                         <div className='p-3'>
                         <p className="form-label-title">Category</p>
-                        <Field name="category_id" type="text" className="form-control"/>
-                        {errors.category_id && touched.category_id ? <div className='text-danger'>{errors.category_id}</div> : null}
+                        <Select
+                            value={formData?.category_id }
+                            onChange={handleSubcategory}
+                            options={getCategory}
+                            name="category_id"
+                        />
+                        {/* <Input name="category_id" type="text" className="form-control"/> */}
+                        {formError.category_id ? <div className='text-danger'>{formError.category_id}</div> : null}
                         </div>
                         
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
-                            <Button type='submit'> {false ? (
+                            <Button type='submit' onClick={formSubmitHandler}> {false ? (
                                 <div style={{ padding: '0px 6px' }}><Spinner color="light" size="sm" /></div>
                             ) : "Submit"}
                             </Button>
                         </div>
-                        </Form>
-                    )}
-                    </Formik>
+                        
+                   
                     </div>
                   
              
@@ -154,8 +262,8 @@ const SubCategoryAdd = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {loader,subcategoryList}  = state.categoryReducer;
-    return {subcategoryList,loader};
+    const {loader,categoryList,subcategoryList}  = state.categoryReducer;
+    return {subcategoryList,categoryList,loader};
   }
 export default connect(mapStateToProps,{AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
   

@@ -1077,3 +1077,9 @@ body  .confirmModal{
     display: flex;
     justify-content: center;
 }
+.image-wrapper img{
+  max-width: 50px;
+}
+.view-img-wrp{
+    padding-left: 20px;
+}
