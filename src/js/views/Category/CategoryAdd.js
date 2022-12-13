@@ -4,27 +4,38 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { AddCategory,UpdateCategory } from '../../actions/categoryAction';
 import { connect } from 'react-redux'
-
+import UploadLogo from '../../components/UploadLogo';
+import avibraLogo from '../../../images/avibraLogo.svg'
+import Select from 'react-select';
 
 const CategoryAdd = (props) => {
 
     const {toggleEvent,showModalEvent,data={},loader=false}=props
     const [modal, setmodal] = useState(false)
+    // const [,] = useState(second)
     const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
-        name:"",
-        // image:"",
-        status:"",
+        image:"",
         is_sub_category:"",
     })
-   
+
+   const [imageData, setImageData] = useState()
     const toggle=() =>{
         setmodal(!modal)
        
     }
 
-   
-    console.log('data={isOpenDetail.data}', data)
+    useEffect(()=>{
+      if(Object.keys(data).length){
+        if(data?.is_sub_category==true || data?.is_sub_category=='true')
+         setFormData({...formData,is_sub_category: { value: 'true', label: 'True' }})
+
+        if(data?.is_sub_category==false || data?.is_sub_category=='false')
+        setFormData({...formData,is_sub_category: { value: 'false', label: 'False' }}) 
+      }
+    },[data])
+
+    console.log('data={isOpenDetail.data}',formData.is_sub_category, data)
     const SignupSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Too Short!')
@@ -47,23 +58,50 @@ const CategoryAdd = (props) => {
     
     const submitHandler=(values)=>{
         const payload={}
-        let error=[];
-    //   if(formData.is_sub_category){
-        if(data?.id){
-            props.UpdateCategory(data.id,values)
-            // edit api call
-           }else{
-            props.AddCategory(values)
-            toggleEvent()
-            //add call
-           }
-    //   } else{
+        let error=[],submitForm=true;
+        let {is_sub_category}=formData;
+
+        for (const prop in formData) {
+
+            if(formData.prop==''){
+                submitForm=false
+                error.push('This field is required')
+            }
+            // console.log(`obj.${prop} = ${obj[prop]}`);
+        }
+        setFormData(formData)
+        if(submitForm){
+                if(data?.id){
+                    props.UpdateCategory(data.id,values)
+                    // edit api call
+                }else{
+                    props.AddCategory(values)
+                    toggleEvent()
+                    //add call
+                }
+        } 
+    //   else{
     //     setFormError({is_sub_category:"This field is required"})
     //   } 
       
        console.log('values', values)
     }
 
+    const options = [
+        { value: 'true', label: 'True' },
+        { value: 'false', label: 'False' },
+      ];
+
+    const handleSubcategory=(selectedOption)=>{
+        //   formData()
+          setFormData({...formData,is_sub_category:selectedOption})
+    } 
+    
+    // handleChange = (selectedOption) => {
+    //     this.setState({ selectedOption }, () =>
+    //       console.log(`Option selected:`, this.state.selectedOption)
+    //     );
+    // };
     return (
         <div>
           {/* <Button color="danger" onClick={toggle}>{props.buttonLabel}</Button> */}
@@ -105,13 +143,22 @@ const CategoryAdd = (props) => {
                             ) : null}
                        </div>
 
-                       {/* <div className='p-3'>
+                       <div className='p-3'>
                       <p className="form-label-title">Image </p>
-                        <Field name="image" className="form-control" />
-                        {errors.image && touched.image ? (
+                        {/* <Field name="image" className="form-control" /> */}
+                        <div>
+                            <UploadLogo
+                                id={'image'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) => setImageData(value)}
+                                // disabled={field.disabled}
+                                name='image'
+                            />
+                        </div>
+                        {/* {errors.image && touched.image ? (
                             <div className='text-danger'>{errors.image}</div>
-                        ) : null}
-                      </div> */}
+                        ) : null} */}
+                      </div>
                         <div className='p-3'>
                       <p className="form-label-title">Status </p>
                         <Field name="status" type="text" className="form-control"/>
@@ -120,20 +167,21 @@ const CategoryAdd = (props) => {
 
                         <div className='p-3'>
                         <p className="form-label-title">Is Subcategory</p>
-                        {/* <select name="is_sub_category" className="form-control" value={data?.is_sub_category ? data.is_sub_category :''}>
-                            <option value=''>Select</option>
+                        
+                        <Select
+                            value={formData?.is_sub_category }
+                            onChange={handleSubcategory}
+                            options={options}
+                        />
+                        {formData?.is_sub_category ? <div className='text-danger'>{formData?.is_sub_category}</div> : null}
 
-                            <option value="true" selected>true</option>
-                            <option value="false" >false</option>
-                            
-                        </select> */}
-                        <Field as='select' name="is_sub_category" type="text" className="form-control">
+                        {/* <Field as='select' name="is_sub_category" type="text" className="form-control">
                         <option value=''>Select</option>
 
                         <option value="true" selected={true}>true</option>
                         <option value="false" >false</option>
                         </Field>
-                        {errors.is_sub_category && touched.is_sub_category  ? <div className='text-danger'>{errors.is_sub_category}</div> : null}
+                        {errors.is_sub_category && touched.is_sub_category  ? <div className='text-danger'>{errors.is_sub_category}</div> : null} */}
                         </div>
                         
                        
