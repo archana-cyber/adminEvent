@@ -102,9 +102,9 @@ const SubCategoryAdd = (props) => {
     }
     const handleVideo=(value)=>{
         let errors= {...formError}
-        delete errors['video']
+        delete errors['is_video']
         setFormError({...errors})
-        setFormData({...formData,video:value}) 
+        setFormData({...formData,is_video:value}) 
     }
     const handleSubcategory=(selectedOption)=>{
         //   formData()

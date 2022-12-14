@@ -302,7 +302,7 @@ span.swal2-x-mark {
 }
 .icon__eye {
     position: absolute;
-    top: 36%;
+    top: 28px;
     right: 15px;
     transform: translatey(-50%);
 }

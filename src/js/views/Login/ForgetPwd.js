@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import "../../../styles/login.css"
 import "../../../styles/col.css"
+import { ForgetPasswordAction } from '../../actions/authAction'
+import { connect } from 'react-redux'
 
 
 class ForgetPwd extends Component {
@@ -51,15 +53,18 @@ class ForgetPwd extends Component {
         this.setState({errors:error});
         if(!Object.keys(error).length){
            console.log('submit')
+           this.props.ForgetPasswordAction(data)
         //    localStorage.setItem("authData",btoa(JSON.stringify(data)))
-           this.props.history.push('/verify-email')
+          //  this.props.history.push('/verify-email')
         }
       }
   render() {
 
     console.log('this.state.data', this.state)
     const { errors, isDenied, isShow } = this.state;
-
+    const {loader,forgotpswd={}}=this.props 
+    const {message=''}=forgotpswd
+    console.log('forgotpswd555', forgotpswd)
     return (
       <div className='login-container'>
           <div className=" h-100 login-page">
@@ -86,6 +91,14 @@ class ForgetPwd extends Component {
                              {errors.email}
                             </div>
                             {/* <div className="error__msg">lorem</div> */}
+                          </div>
+                          <div
+                            className={`error text-danger `}
+                          >
+                            <div className="error__text">
+                             {message}
+                            </div>
+                          
                           </div>
                         </div>
                       </div>
@@ -119,8 +132,9 @@ class ForgetPwd extends Component {
                                         <a>Sign Up</a>
                                     </div> */}
                   </div>
+
                 </div>
-                {/* <AccessDenied isOpen={isDenied} onRequestClose={this.onClose} /> */}
+               
               </div>
               <div className="col-md-6 right-side">
                 <div className="icon__svg">
@@ -135,4 +149,11 @@ class ForgetPwd extends Component {
   }
 }
 
-export default ForgetPwd
+
+const mapStateToProps = state =>{
+
+  const {forgotpswd,loader}  = state.authReducer;
+
+  return {forgotpswd,loader};
+}
+export default connect(mapStateToProps,{ForgetPasswordAction})(ForgetPwd);

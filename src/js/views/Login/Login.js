@@ -5,6 +5,8 @@ import "../../../styles/col.css"
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { AuthLogin } from '../../actions/authAction'
+import { connect } from 'react-redux'
+import ReactLoading from "react-loading"
 
 class Login extends Component {
     state = {
@@ -58,15 +60,21 @@ class Login extends Component {
         if(!Object.keys(error).length){
            console.log('submit')
            console.log('this.state.data444', this.state.data)
-          //  localStorage.setItem("authData",btoa(JSON.stringify(data)))
-          //  this.props.history.push('/')
+           this.props.AuthLogin(this.state.data,(userData)=>{
+              if(Object.keys(userData).length){
+                localStorage.setItem("authData",btoa(JSON.stringify(userData)))
+                this.props.history.push('/')
+              }
+           })
+           
         }
       }
   render() {
 
     console.log('this.state.data', this.state)
     const { errors, isDenied, isShow } = this.state;
-
+    const {loader,userInfo={}}=this.props 
+    const {message=''}=userInfo
     return (
       <div className='login-container'>
           <div className=" h-100 login-page">
@@ -89,7 +97,7 @@ class Login extends Component {
                           <div
                             className={`error text-danger `}
                           >
-                            <div className="error__text pl-3 mb-4">
+                            <div className="error__text mb-4">
                              {errors.email}
                             </div>
                             {/* <div className="error__msg">lorem</div> */}
@@ -125,9 +133,12 @@ class Login extends Component {
                           <div
                             className={`error  `}
                           >
-                            <div className="error__text pl-3 mb-4 text-danger">
-                              {errors.password}
+                            <div className="error__text  mb-4 text-danger">
+                              {errors.password}       
                             </div>
+                           {message && <div className="error__text text-danger">
+                              {message}       
+                            </div>}
                             <div className="error__msg mr-1"><Link to='/forget-password'>Forget password?</Link></div>
                           </div>
                         </div>
@@ -139,8 +150,8 @@ class Login extends Component {
                         type="submit"
                        onClick={this.formLogin}
                       >
-                          Login
-                        {/* {loading ? (
+                          
+                        {loader ? (
                           <ReactLoading
                             type={"spin"}
                             color={"white"}
@@ -153,7 +164,7 @@ class Login extends Component {
                           />
                         ) : (
                           "Log in"
-                        )} */}
+                        )}
                       </button>
                     </div>
                     {/* <div className="login_link">
@@ -180,8 +191,9 @@ class Login extends Component {
 // export default Login
 
 const mapStateToProps = state =>{
-   
-  const {categoryList,loader}  = state.categoryReducer;
-  return {categoryList,loader};
+
+  const {userInfo,loader}  = state.authReducer;
+
+  return {userInfo,loader};
 }
 export default connect(mapStateToProps,{AuthLogin})(Login);

@@ -12,6 +12,7 @@ import SubCategoryAdd from "./SubCategoryAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import SubCategoryView from "./SubCategoryView";
+import imageholder from "../../../images/imageholder.png"
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -655,29 +656,36 @@ const Category = ({ profileData=dummydata, tableClass,updateScheduleList, toggle
               Header: "Profile List",
               columns: [
                  
+                {
+                    Header:"Image",
+                    accessor: (originalRow) => (<div className="image-wrapper">
+                        {originalRow.image ? <div>
+                            <img src={imageholder}/>
+                        </div> :
+                        <div><img src={imageholder}/></div>}
+                      </div>),
+                  disableFilters: true
+                  },
                   
                   {
                       Header: "Name",
                       accessor: "name",
                       filter: "fuzzyText"
                   },
-                  {
-                      Header: "Image",
-                      accessor: "image",
-                      filter: "fuzzyText"
+                //   {
+                //       Header: "Image",
+                //       accessor: "image",
+                //       filter: "fuzzyText"
                      
-                  },
-                  {
-                    Header: "Status",
-                    accessor: "status",
-                    filter: "fuzzyText"
-                   
-                },
+                //   },
                 {
-                  Header: "Is Video",
-                  accessor: "is_video",
-                  filter: "fuzzyText"
-                },
+                    Header:"Status",
+                    accessor: (originalRow) => (<div className="action-wrp">
+                        {originalRow.status==true ? 'Active' : 'Not Active' }
+                      </div>),
+                  disableFilters: true
+                  },
+                
               {
                 Header:"Action",
                 accessor: (originalRow) => (<div className="action-wrp">

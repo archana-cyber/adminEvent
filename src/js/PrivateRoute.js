@@ -11,7 +11,7 @@ export default function PrivateRoute({component:Component, ...rest}) {
         console.log('first',localStorage.getItem('authData') )
         if(localStorage.getItem('authData')){
             const data=JSON.parse(atob( localStorage.getItem( "authData")))
-            console.log('first',data,Object.keys(data).length)
+            // console.log('first',data,Object.keys(data).length)
              setUser(Object.keys(data).length)
         }
     },[localStorage.getItem('authData')])

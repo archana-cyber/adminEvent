@@ -653,6 +653,7 @@ const Category = (props) => {
               Header: "Profile List",
               columns: [
                  
+                
                 {
                     Header:"Image",
                     accessor: (originalRow) => (<div className="image-wrapper">
