@@ -23,10 +23,10 @@ const CategoryAdd = (props) => {
     // const [,] = useState(second)
     const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
-        name:'',
-        status:'',
+        name:data.name,
+        status:data.status,
         image:"",
-        is_sub_category:"",
+        is_sub_category: '',
     })
 
    const [imageData, setImageData] = useState()
@@ -35,18 +35,19 @@ const CategoryAdd = (props) => {
        
     }
 
-    console.log('formData444', formData)
+    console.log('formData444',data, formData)
     useEffect(()=>{
       if(Object.keys(data).length){
-        if(data?.is_sub_category==true || data?.is_sub_category=='true')
+        console.log('data8899', data)
+        if(data?.is_subcategory==true || data?.is_subcategory=='true')
          setFormData({...formData,is_sub_category: { value: 'true', label: 'True' }})
 
-        if(data?.is_sub_category==false || data?.is_sub_category=='false')
+        if(data?.is_subcategory==false || data?.is_subcategory=='false')
         setFormData({...formData,is_sub_category: { value: 'false', label: 'False' }}) 
       }
     },[data])
 
-    console.log('data={isOpenDetail.data}',formData.is_sub_category, data)
+    console.log('data={isOpenDetail.data}',formData,"data",data)
     const SignupSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Too Short!')
@@ -206,7 +207,7 @@ const CategoryAdd = (props) => {
                         {/* <Form> */}
                         <div className='p-3'>
                             <p className="form-label-title">Name </p>
-                            <Input name="name" onChange={(e)=>onChangeHandler(e)}/>
+                            <Input name="name" onChange={(e)=>onChangeHandler(e)} value={formData.name}/>
                             {formError?.name ? <div className='text-danger'>
                               {formError?.name}
                             </div> : null}
@@ -234,7 +235,7 @@ const CategoryAdd = (props) => {
                       </div>
                         <div className='p-3'>
                       <p className="form-label-title">Status </p>
-                        <Input name="status" type="text" className="form-control" onChange={onChangeHandler} />
+                        <Input name="status" type="text" className="form-control" onChange={onChangeHandler} value={formData.status}/>
                         {formError.status ? <div className='text-danger'>{formError.status}</div> : null}
                         </div>
 

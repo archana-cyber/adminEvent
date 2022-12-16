@@ -1,11 +1,64 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Spinner, Button, Modal, Input, ModalBody, ModalHeader,FormGroup ,Label,Table} from "reactstrap"
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import Select from 'react-select';
+import FormData from "form-data"
+import { AddPostAction } from '../../actions/postAction'; 
+import { connect } from 'react-redux'
 
-const PostAdd = ({toggleEvent,showModalEvent,data={}}) => {
 
+const errorMsgs = {
+    title:"Please enter a valid title",
+    description:"Please enter a valid description",
+    media:"Please enter a valid media",
+    multiple_image:"Please select image ",
+    city:"Please enter a valid city",
+    map_link:"Please enter a valid link",
+    travel_awaits:"Please enter a valid tavel link",
+    category_id:"Please enter a valid category",
+    subcategory_id:"Please enter a valid sub category",
+    }
+const dumData=[{
+    "id": 1,
+    "name": "Peter",
+    "image": "Delgaty",
+    "status": "true",
+    "is_subcategory": true,
+    "created_at": "5/22/2022",
+    "updated_at": "8/8/2022"
+    }, {
+    "id": 2,
+    "name": "Cchaddie",
+    "image": "Corser",
+    "status": true,
+    "is_subcategory": false,
+    "created_at": "6/4/2022",
+    "updated_at": "6/7/2022"
+    }, {
+    "id": 3,
+    "name": "Hortense",
+    "image": "Broadnicke",
+    "status": false,
+    "is_subcategory": false,
+    "created_at": "3/17/2022",
+    "updated_at": "6/20/2022"
+    }, {
+    "id": 4,
+    "name": "Bamby",
+    "image": "Ewols",
+    "status": false,
+    "is_subcategory": true,
+    "created_at": "2/23/2022",
+    "updated_at": "9/4/2022"
+    }]
+const PostAdd = (props) => {
+ 
+    const {toggleEvent,showModalEvent,data={},loader=false} =props
     const [modal, setmodal] = useState(false)
+    const [getCategory, setGetCategory] = useState([])
+
+    const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
         title:"",
         description:"",
@@ -19,9 +72,89 @@ const PostAdd = ({toggleEvent,showModalEvent,data={}}) => {
 
     })
    
+   
+
     const toggle=() =>{
         setmodal(!modal)
        
+    }
+    useEffect(()=>{
+        let arrayData=[];
+        // let listdata=props.categoryList || dumData
+        let listdata=dumData
+        Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+           arrayData.push({label:item.name,value:item.id})
+        })
+        setGetCategory(arrayData)
+    },[])
+
+    const validateAll=()=>{
+        let errors={},isFormValid=true;
+        let fileds={...formData}
+        for (let type  in fileds){
+            console.log('filedsif',fileds, formData[type])
+           if(!fileds[type]){
+            console.log('fileds[type]',type,fileds, fileds[type])
+            isFormValid=false
+              errors[type]=errorMsgs[type]
+           }
+        }
+        console.log('errors444', errors)
+        setFormError({...errors})
+        return isFormValid
+    }
+    console.log('formError', formError)
+
+    const handleSubCategory=(selectedOption)=>{
+        //   formData()
+            let errors= {...formError}
+            delete errors['subcategory_id']
+            setFormError({...errors})
+            setFormData({...formData,subcategory_id:selectedOption})
+    } 
+    const handleCategory=(selectedOption)=>{
+        //   formData()
+            let errors= {...formError}
+            delete errors['category_id']
+            setFormError({...errors})
+          setFormData({...formData,category_id:selectedOption})
+    } 
+    const handleSelectOption=(selectedOption)=>{
+        //   formData()
+            let errors= {...formError}
+            delete errors['city']
+            setFormError({...errors})
+          setFormData({...formData,'city':selectedOption})
+    } 
+
+    const formSubmitHandler=()=>{
+       if(validateAll()){
+
+        let generateFormData = new FormData();
+        // generateFormData.append('name',formData['name'])
+        for (let type  in formData){
+            console.log('formData44434',type,formData )
+            if(type!='subcategory_id' || type!='subcategory_id')
+             generateFormData.append(type,formData[type])
+        }
+        generateFormData.append('subcategory_id',formData['subcategory_id'].value)
+        generateFormData.append('category_id',formData['category_id'].value)
+
+         console.log('generateFormData333', generateFormData)
+         
+            if(data?.id){
+                // props.UpdateCategory(data.id,generateFormData)
+                toggleEvent()
+                // edit api call
+            }else{
+                // props.AddCategory(generateFormData)
+                props.AddPostAction(generateFormData)
+                toggleEvent()
+                //add call
+            }
+       }else{
+        console.log('form has error')
+       }
     }
 
     console.log('data={isOpenDetail.data}', data)
@@ -75,6 +208,13 @@ const PostAdd = ({toggleEvent,showModalEvent,data={}}) => {
        }
        console.log('values', values)
     }
+    const onChangeHandler=(e)=>{
+        console.log('dsgfdsvgfsd', e)
+        let errors= {...formError}
+        delete errors[e.target.name]
+        setFormError({...errors})
+        setFormData({...formData,[e.target.name]:e.target.value})
+    }
 
     return (
         <div>
@@ -91,7 +231,7 @@ const PostAdd = ({toggleEvent,showModalEvent,data={}}) => {
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
-                  <Formik
+                  {/* <Formik
                     initialValues={{
                         title:data?.title ? data.title :'',
                         multiple_image:data?.multiple_image ? data.multiple_image :'',
@@ -110,75 +250,105 @@ const PostAdd = ({toggleEvent,showModalEvent,data={}}) => {
                     }}
                     >
                     {({ errors, touched }) => (
-                        <Form>
+                        <Form> */}
                         <div className='p-3'>
                             <p className="form-label-title">Title </p>
-                            <Field name="title" className="form-control"/>
-                            {errors.title && touched.title ? (
-                                <div className='text-danger'>{errors.title}</div>
+                            <Input name="title" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                            {formError.title ? (
+                                <div className='text-danger'>{formError.title}</div>
                             ) : null}
                        </div>
 
                        <div className='p-3'>
                         <p className="form-label-title">Description</p>
-                        <Field name="description" type="text" className="form-control"/>
-                        {errors.description && touched.description ? <div className='text-danger'>{errors.description}</div> : null}
+                        <Input name="description" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {formError.description ? <div className='text-danger'>{formError.description}</div> : null}
                         </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Media</p>
-                        <Field name="media" type="text" className="form-control"/>
-                        {errors.media && touched.media ? <div className='text-danger'>{errors.media}</div> : null}
+                        <Input name="media" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {formError.media ? <div className='text-danger'>{formError.media}</div> : null}
                         </div>
 
                        <div className='p-3'>
                       <p className="form-label-title">multiple_Image </p>
-                        <Field name="multiple_image" className="form-control" />
-                        {errors.multiple_image && touched.multiple_image ? (
-                            <div className='text-danger'>{errors.multiple_image}</div>
+                        <Input name="multiple_image" className="form-control" />
+                        {formError.multiple_image ? (
+                            <div className='text-danger'>{formError.multiple_image}</div>
                         ) : null}
                       </div>
                         <div className='p-3'>
-                      <p className="form-label-title">City </p>
-                        <Field name="city" type="text" className="form-control"/>
-                        {errors.city && touched.city ? <div className='text-danger'>{errors.city}</div> : null}
+                          <p className="form-label-title" >City </p>
+                          <Select
+                            value={formData?.city }
+                            onChange={handleSelectOption}
+                            options={getCategory}
+                            name="city"
+                        />
+                       
+
+                        {formError.city ? <div className='text-danger'>{formError.city}</div> : null}
                         </div>
 
 
                         <div className='p-3'>
                         <p className="form-label-title">Map Links</p>
-                        <Field name="map_link" type="text" className="form-control"/>
-                        {errors.map_link && touched.map_link ? <div className='text-danger'>{errors.map_link}</div> : null}
+                        <Input name="map_link" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {formError.map_link ? <div className='text-danger'>{formError.map_link}</div> : null}
                         </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Travel Awaits</p>
-                        <Field name="travel_awaits" type="text" className="form-control"/>
-                        {errors.travel_awaits && touched.travel_awaits ? <div className='text-danger'>{errors.travel_awaits}</div> : null}
+                        <Input name="travel_awaits" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {formError.travel_awaits ? <div className='text-danger'>{formError.travel_awaits}</div> : null}
                         </div>
 
-                        
                         <div className='p-3'>
                         <p className="form-label-title">Category</p>
-                        <Field name="category_id" type="text" className="form-control"/>
-                        {errors.category_id && touched.category_id ? <div className='text-danger'>{errors.category_id}</div> : null}
+                        <Select
+                            value={formData?.category_id }
+                            onChange={handleCategory}
+                            options={getCategory}
+                            name="category_id"
+                        />
+                        {formError?.category_id ? <div className='text-danger'>{formError?.category_id}</div> : null}
+
+                       </div>
+                        
+                       <div className='p-3'>
+                        <p className="form-label-title">Subcategory</p>
+                        
+                        <Select
+                            value={formData?.subcategory_id }
+                            onChange={handleSubCategory     }
+                            options={getCategory}
+                            name="subcategory_id"
+                        />
+                        {formError?.subcategory_id ? <div className='text-danger'>{formError?.subcategory_id}</div> : null}
+
+                       </div>
+                        {/* <div className='p-3'>
+                        <p className="form-label-title">Category</p>
+                        <Input name="category_id" type="text" className="form-control"/>
+                        {formError.category_id ? <div className='text-danger'>{formError.category_id}</div> : null}
                         </div>
                         <div className='p-3'>
                         <p className="form-label-title">sub Category</p>
-                        <Field name="subcategory_id" type="text" className="form-control"/>
-                        {errors.subcategory_id && touched.subcategory_id ? <div className='text-danger'>{errors.subcategory_id}</div> : null}
-                        </div>
+                        <Input name="subcategory_id" type="text" className="form-control"/>
+                        {formError.subcategory_id ? <div className='text-danger'>{formError.subcategory_id}</div> : null}
+                        </div> */}
                         
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
-                            <Button type='submit'> {false ? (
+                            <Button type='submit' onClick={formSubmitHandler}> {loader ? (
                                 <div style={{ padding: '0px 6px' }}><Spinner color="light" size="sm" /></div>
                             ) : "Submit"}
                             </Button>
                         </div>
-                        </Form>
+                        {/* </Form>
                     )}
-                    </Formik>
+                    </Formik> */}
                     </div>
                   
              
@@ -190,4 +360,11 @@ const PostAdd = ({toggleEvent,showModalEvent,data={}}) => {
       );
 }
 
-export default PostAdd
+
+const mapStateToProps = state =>{
+   
+    const {loader,categoryList}  = state.categoryReducer;
+    return {categoryList};
+  }
+  export default connect(mapStateToProps,{AddPostAction})(PostAdd);
+  

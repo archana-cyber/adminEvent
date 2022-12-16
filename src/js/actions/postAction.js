@@ -1,8 +1,9 @@
 import axios from "axios";
 import { POST_REQUEST,POST_FAIL,POST_SUCCESS} from "../types";
+import {BASE_URL} from "../../config"
 
 
-export const PostCategory = (payload)=>{
+export const AddPostAction = (payload)=>{
    
     return async(dispatch)=>{
         dispatch({ type: POST_REQUEST });
@@ -22,7 +23,7 @@ export const PostCategory = (payload)=>{
 }
 
 
-export const RecentPostCategory = (payload)=>{
+export const RecentPostAction = (payload)=>{
    
     return async(dispatch)=>{
         dispatch({ type: POST_REQUEST });
