@@ -561,7 +561,7 @@ const Post = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab,
                  <h1 class="Profiles-title">Post Details</h1>
                  </div>
                  <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                 <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Sub Category</button>
+                 <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Post</button>
                  </div>
               </div>
               <Table bordered={false} hover size="sm" responsive {...getTableProps()} className="partnerList">

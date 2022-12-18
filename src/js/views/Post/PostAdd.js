@@ -6,6 +6,7 @@ import Select from 'react-select';
 import FormData from "form-data"
 import { AddPostAction } from '../../actions/postAction'; 
 import { connect } from 'react-redux'
+import UploadLogo from '../../components/UploadLogo';
 
 
 const errorMsgs = {
@@ -93,7 +94,7 @@ const PostAdd = (props) => {
         let fileds={...formData}
         for (let type  in fileds){
             console.log('filedsif',fileds, formData[type])
-           if(!fileds[type]){
+           if(!fileds[type] && (type=='media' || type=='title')){
             console.log('fileds[type]',type,fileds, fileds[type])
             isFormValid=false
               errors[type]=errorMsgs[type]
@@ -156,6 +157,12 @@ const PostAdd = (props) => {
         console.log('form has error')
        }
     }
+    const handleImage=(value)=>{
+        let errors= {...formError}
+        delete errors['image']
+        setFormError({...errors})
+        setFormData({...formData,image:value}) 
+    }
 
     console.log('data={isOpenDetail.data}', data)
     const SignupSchema = Yup.object().shape({
@@ -216,6 +223,7 @@ const PostAdd = (props) => {
         setFormData({...formData,[e.target.name]:e.target.value})
     }
 
+    console.log('formdata555', formData)
     return (
         <div>
           {/* <Button color="danger" onClick={toggle}>{props.buttonLabel}</Button> */}
@@ -227,7 +235,7 @@ const PostAdd = (props) => {
             
             <ModalBody>
                  <div className='event-header'>
-                  <h5 class="modal-title">{Object.keys(data).length > 0 ? 'Sub Category' : 'Add New Sub Category'}</h5>
+                  <h5 class="modal-title">{Object.keys(data).length > 0 ? 'Sub Category' : 'Add New Post'}</h5>
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
@@ -267,7 +275,16 @@ const PostAdd = (props) => {
 
                         <div className='p-3'>
                         <p className="form-label-title">Media</p>
-                        <Input name="media" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        <Input name="media" type="file" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        <div>
+                            <UploadLogo
+                                id={'image'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) =>handleImage(value) }
+                                // disabled={field.disabled}
+                                name='media'
+                            />
+                        </div>
                         {formError.media ? <div className='text-danger'>{formError.media}</div> : null}
                         </div>
 
