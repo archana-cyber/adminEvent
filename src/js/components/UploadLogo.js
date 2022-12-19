@@ -55,9 +55,10 @@ class UploadLogo extends Component {
                     }, () => {
                         //this.handleUploadLogo();
                         console.log('this.state.selectedImage',event.target, this.state.selectedImage)
-                        this.props.setSelectedLogoImage(event.target.value)
+                        // this.props.setSelectedLogoImage(event.target.value)
                     });
                 }
+                this.props.setSelectedLogoImage(event.target.value)
             } else {
                 this.setState({ logoUpdateSuccessfully: false, logoUpdateError: true, logoUploading: false })
 
@@ -67,34 +68,7 @@ class UploadLogo extends Component {
 
         }
     }
-    onImgSelect(event, field) {
-        this.setState({ logoUploading: true, logoUpdateError: false })
-        let fsize = event.target.files[0].size;
-        let file_size = 0;
-        if (fsize >= 1024) {
-            file_size = Math.round((fsize / 1024));
-
-            if (file_size <= 150) {
-                event.preventDefault();
-                this.setState({
-                    selectedImage: event.target.value,
-                    showLogoPreview: true
-                }, () => {
-                    //this.handleUploadLogo();
-                    console.log('this.state.selectedImage', this.state.selectedImage)
-                    this.props.setSelectedLogoImage(this.state.selectedImage)
-                });
-            
-            } else {
-                this.setState({ logoUpdateSuccessfully: false, logoUpdateError: true, logoUploading: false })
-
-            }
-        } else {
-            this.setState({ logoUpdateSuccessfully: false, logoUpdateError: true, logoUploading: false })
-
-        }
-    }
-
+   
     render() {
         const { agentData, updateLogoStatus, logoUrl, id } = this.props;
         const { logoUpdateSuccessfully, logoUpdateError, logoUploading, selectedImage, showLogoPreview } = this.state;

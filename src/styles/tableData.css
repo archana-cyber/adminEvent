@@ -1083,3 +1083,7 @@ body  .confirmModal{
 .view-img-wrp{
     padding-left: 20px;
 }
+.status-wrp{
+    position: relative;
+    z-index: 99;
+}

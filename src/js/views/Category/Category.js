@@ -202,7 +202,7 @@ const dummydata=[{
 const Category = (props) => {
 
    const  { categoryList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }= props
-   const profileData=dummydata 
+   const profileData=categoryList 
    const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -278,7 +278,16 @@ const Category = (props) => {
   useEffect(()=>{
     
     if(deleteValue=='yes'){
-        props.DeleteCategory(getDeleteId)
+        props.DeleteCategory(getDeleteId,(res)=>{
+            if(res.status==500){
+                // setErrorMsg(res.message)
+             }else{
+                eventDeleteToggle()
+             }
+        })
+    }
+    if(deleteValue=='no'){
+        eventDeleteToggle()
     }
   },[deleteValue])
 
@@ -679,14 +688,14 @@ const Category = (props) => {
                 {
                     Header:"Status",
                     accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.status==true ? 'Active' : 'Not Active' }
+                        {originalRow.status==true ? 'True' : 'False' }
                       </div>),
                   disableFilters: true
                   },
                   {
                     Header:"Is Subcategory",
                     accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.isSubCategory==true ? 'Yes' : 'No' }
+                        {originalRow.isSubCategory==true ? 'True' : 'False' }
                       </div>),
                   disableFilters: true
                   },

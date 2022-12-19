@@ -14,7 +14,7 @@ export default (state = INITIAL_STATE, action) => {
         case ADD_CATEGORY_REQUEST:
             return {  ...state , loader:true };
         case ADD_CATEGORY_SUCCESS:
-            return {  ...state , loader:false };
+            return {  ...state , loader:false,categoryList:[...state.categoryList,...action.payload] };
         case ADD_CATEGORY_FAIL:
             return {  ...state , loader:false};
         case GET_CATEGORY_REQUEST:
@@ -32,7 +32,7 @@ export default (state = INITIAL_STATE, action) => {
         case DELETE_CATEGORY_REQUEST:
             return {  ...state , loader:true };
         case DELETE_CATEGORY_SUCCESS:
-            return {  ...state , loader:false };
+            return {  ...state , loader:false,categoryList:action.payload  };
         case DELETE_CATEGORY_FAIL:
             return {  ...state , loader:false};    
         default:

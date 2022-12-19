@@ -275,7 +275,7 @@ const PostAdd = (props) => {
 
                         <div className='p-3'>
                         <p className="form-label-title">Media</p>
-                        <Input name="media" type="file" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {/* <Input name="media" type="file" className="form-control" onChange={(e)=>onChangeHandler(e)}/> */}
                         <div>
                             <UploadLogo
                                 id={'image'}

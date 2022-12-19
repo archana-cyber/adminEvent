@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import UploadVideo from '../../components/UploadVideo';
 import UploadLogo from '../../components/UploadLogo';
 
+import { AddCategory,GetCategory,DeleteCategory } from "../../actions/categoryAction";
 import Select from 'react-select';
 
 const errorMsgs = {
@@ -16,7 +17,10 @@ const errorMsgs = {
     "video":"Please upload video",
     "category_id":"Please select anyone from the above"
     }
-
+const options = [
+    { value: 'true', label: 'True' },
+    { value: 'false', label: 'False' },
+    ];
 const dumData=[{
     "id": 1,
     "name": "Peter",
@@ -65,13 +69,22 @@ const SubCategoryAdd = (props) => {
     })
    
     useEffect(()=>{
-        let arrayData=[];
-        // let listdata=props.categoryList || dumData
-        let listdata=dumData
-        Object.keys(listdata).length>0 && listdata.map((item,index)=>{
-           arrayData.push({label:item.name,value:item.id})
-        })
-        setGetCategory(arrayData)
+       if(props.categoryList.length){
+            let arrayData=[];
+            let listdata=props.categoryList 
+            // let listdata=dumData
+            Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+            arrayData.push({label:item.name,value:item.id})
+            })
+            setGetCategory(arrayData)
+       }
+       
+    },[props.categoryList])
+    
+    useEffect(()=>{
+    //  if(!props.categoryList){
+        props.GetCategory();
+    //  }
     },[])
 
     const toggle=() =>{
@@ -79,7 +92,7 @@ const SubCategoryAdd = (props) => {
        
     }
 
-    console.log('data={isOpenDetail.data}', data)
+    console.log('data={isOpenDetail.data}',formData, data)
   
     
     const submitHandler=(values)=>{
@@ -113,7 +126,13 @@ const SubCategoryAdd = (props) => {
             setFormError({...errors})
           setFormData({...formData,category_id:selectedOption})
     } 
-
+    const handleStatus=(selectedOption)=>{
+        //   formData()
+            let errors= {...formError}
+            delete errors['status']
+            setFormError({...errors})
+          setFormData({...formData,status:selectedOption})
+    }
     const onChangeHandler=(e)=>{
         console.log('dsgfdsvgfsd', e)
         let errors= {...formError}
@@ -189,7 +208,30 @@ const SubCategoryAdd = (props) => {
                             ) : null}
                        </div>
 
-                       <div className='p-3'>
+                      
+                        <div className='p-3 status-wrp' style={{zIndex:999}}>
+                      <p className="form-label-title">Status </p>
+                        {/* <Input name="status" type="text" className="form-control" onChange={onChangeHandler}/> */}
+                        <Select
+                            value={formData?.status }
+                            onChange={handleStatus}
+                            options={options}
+                            name="status"
+                        />
+                        {formError.status ? <div className='text-danger'>{formError.status}</div> : null}
+                        </div>
+                        <div className='p-3 status-wrp' >
+                        <p className="form-label-title">Category</p>
+                        <Select
+                            value={formData?.category_id }
+                            onChange={handleSubcategory}
+                            options={getCategory}
+                            name="category_id"
+                        />
+                        {/* <Input name="category_id" type="text" className="form-control"/> */}
+                        {formError.category_id ? <div className='text-danger'>{formError.category_id}</div> : null}
+                        </div>
+                        <div className='p-3'>
                       <p className="form-label-title">Image </p>
                       <div>
                             <UploadLogo
@@ -205,11 +247,6 @@ const SubCategoryAdd = (props) => {
                             <div className='text-danger'>{formError.image}</div>
                         ) : null}
                       </div>
-                        <div className='p-3'>
-                      <p className="form-label-title">Status </p>
-                        <Input name="status" type="text" className="form-control" onChange={onChangeHandler}/>
-                        {formError.status ? <div className='text-danger'>{formError.status}</div> : null}
-                        </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Is Video</p>
@@ -225,17 +262,7 @@ const SubCategoryAdd = (props) => {
                         {formError.is_video ? <div className='text-danger'>{formError.is_video}</div> : null}
                         </div>
                         
-                        <div className='p-3'>
-                        <p className="form-label-title">Category</p>
-                        <Select
-                            value={formData?.category_id }
-                            onChange={handleSubcategory}
-                            options={getCategory}
-                            name="category_id"
-                        />
-                        {/* <Input name="category_id" type="text" className="form-control"/> */}
-                        {formError.category_id ? <div className='text-danger'>{formError.category_id}</div> : null}
-                        </div>
+                      
                         
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
@@ -265,5 +292,5 @@ const mapStateToProps = state =>{
     const {loader,categoryList,subcategoryList}  = state.categoryReducer;
     return {subcategoryList,categoryList,loader};
   }
-export default connect(mapStateToProps,{AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
+export default connect(mapStateToProps,{GetCategory,AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
   
