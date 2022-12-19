@@ -6,7 +6,7 @@ import { ADD_CATEGORY_FAIL,ADD_CATEGORY_SUCCESS,ADD_CATEGORY_REQUEST,
 
 const INITIAL_STATE = {
     loader:false,
-    categoryList:{}
+    categoryList:[]
 }
 
 export default (state = INITIAL_STATE, action) => {

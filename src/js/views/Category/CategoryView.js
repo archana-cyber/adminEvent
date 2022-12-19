@@ -63,7 +63,7 @@ const CategoryView = ({data,closeDetails}) => {
                     <div className="view-img-wrp">
                         <p className='form-label-title'>image</p>
                         <div className='label-detail'>
-                            <img src={imageholder}/>
+                            <img src={original.image ? original.image :imageholder}/>
                         </div>
                     </div>
                     

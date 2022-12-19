@@ -59,7 +59,7 @@ export const AddSubCategory = (payload)=>{
     }
 }
 
-export const  GetSubCategory   = ()=>{
+export const  GetSubCategoryAction   = ()=>{
     return async(dispatch)=>{
         dispatch({ type: GET_SUB_CATEGORY_REQUEST });
         axios.get(`${BASE_URL}/sub-category/all`)

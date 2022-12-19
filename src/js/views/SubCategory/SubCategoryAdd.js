@@ -6,9 +6,9 @@ import { AddSubCategory,UpdateSubCategory } from '../../actions/subcategoryActio
 import { connect } from 'react-redux'
 import UploadVideo from '../../components/UploadVideo';
 import UploadLogo from '../../components/UploadLogo';
-
-import { AddCategory,GetCategory,DeleteCategory } from "../../actions/categoryAction";
+import { AddCategory,GetCategoryAction,DeleteCategory } from "../../actions/categoryAction";
 import Select from 'react-select';
+import _ from 'lodash';
 
 const errorMsgs = {
     "name":"Please enter a valid name",
@@ -61,11 +61,11 @@ const SubCategoryAdd = (props) => {
     const [modal, setmodal] = useState(false)
     const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
-        name:"",
-        image:"",
-        status:"",
-        is_video:"",
-        category_id:""
+        name:data.name,
+        image:data.image,
+        status:data.status,
+        is_video:data.is_video,
+        category_id:data.category_id
     })
    
     useEffect(()=>{
@@ -81,11 +81,35 @@ const SubCategoryAdd = (props) => {
        
     },[props.categoryList])
     
-    useEffect(()=>{
-    //  if(!props.categoryList){
-        props.GetCategory();
-    //  }
-    },[])
+   console.log('data subcategory==>', data)
+
+   useEffect(()=>{
+    if(Object.keys(data).length){
+      console.log('data8899', data)
+      let categoryData,statusData
+      if(data?.category_id){
+        let categoryInfo = props.categoryList.length>0 ? props.categoryList : [];
+
+        let updatedList = _.find(categoryInfo, function(item) { return item.id == 12});
+         console.log('updatedList444', updatedList)
+        categoryData={ value: updatedList.id, label: updatedList.name }
+          
+      }
+      //  setFormData({...formData,isSubCategory: { value: 'true', label: 'True' }})
+     
+
+      if(data?.status==true || data?.status=='true')
+         statusData={ value: 'true', label: 'True' }
+      //   setFormData({...formData,status: { value: 'true', label: 'True' }})
+      else{
+      //    setFormData({...formData,status: { value: 'false', label: 'False' }}) 
+         statusData= { value: 'false', label: 'False' }
+     } 
+
+     setFormData({...formData,status:statusData,category_id:categoryData })
+
+    }
+  },[data])
 
     const toggle=() =>{
         setmodal(!modal)
@@ -160,14 +184,19 @@ const SubCategoryAdd = (props) => {
     const formSubmitHandler=()=>{
        if(validateAll()){
 
-        let generateFormData = new FormData();
-        // generateFormData.append('name',formData['name'])
-        for (let type  in formData){
-            console.log('formData44434',type,formData )
-            if(type!='category_id')
-             generateFormData.append(type,formData[type])
-        }
-        generateFormData.append('category_id',formData['category_id'].value)
+        let generateFormData={...formData,status:formData.status.value,category_id:formData.category_id.value}
+        
+
+        // let generateFormData = new FormData();
+        // // generateFormData.append('name',formData['name'])
+        // for (let type  in formData){
+        //     console.log('formData44434',type,formData )
+        //     if(type!='category_id' && type!='status')
+        //      generateFormData.append(type,formData[type])
+        // }
+        // generateFormData.append('category_id',formData['category_id'].value)
+        // generateFormData.append('status',formData['status'].value)
+
 
          console.log('generateFormData333', generateFormData)
          
@@ -202,7 +231,7 @@ const SubCategoryAdd = (props) => {
                  
                         <div className='p-3'>
                             <p className="form-label-title">Name </p>
-                            <Input name="name" className="form-control" onChange={onChangeHandler}/>
+                            <Input name="name" className="form-control" onChange={onChangeHandler} value={formData.name}/>
                             {formError.name  ? (
                                 <div className='text-danger'>{formError.name}</div>
                             ) : null}
@@ -251,7 +280,7 @@ const SubCategoryAdd = (props) => {
                         <div className='p-3'>
                         <p className="form-label-title">Is Video</p>
                         <div>
-                            <UploadVideo
+                            <UploadLogo
                                 id={'video'}
                                 logoUrl={''}
                                 setSelectedLogoImage={(value) =>handleVideo(value) }
@@ -292,5 +321,5 @@ const mapStateToProps = state =>{
     const {loader,categoryList,subcategoryList}  = state.categoryReducer;
     return {subcategoryList,categoryList,loader};
   }
-export default connect(mapStateToProps,{GetCategory,AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
+export default connect(mapStateToProps,{GetCategoryAction,AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
   

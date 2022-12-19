@@ -79,7 +79,7 @@ class UploadVideo extends Component {
                 <div>
                 
                     <CustomInput key={id} type="file" id="agencyLogoFileBrowser" name="agencyLogo" label="Upload your Logo"
-                        onChange={(e) => this.onFileImgSelect(e, 'agencyLogo')} onClick={e => (e.target.value = null)} accept=".mp4" />
+                        onChange={(e) => this.onFileImgSelect(e, 'agencyLogo')} onClick={e => (e.target.value = null)} accept=".jpeg, .png, .jpg" />
                    
                     <div style={{ marginTop: '3px' }}>
                         {/*logoUploading ? <div><Spinner color="secondary" style={{width:'15px',height:'15px'}} /> Uploding...</div> : null*/}

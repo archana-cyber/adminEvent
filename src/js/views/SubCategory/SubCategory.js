@@ -13,6 +13,11 @@ import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import SubCategoryView from "./SubCategoryView";
 import imageholder from "../../../images/imageholder.png"
+import { AddCategory,GetCategoryAction,DeleteCategory } from "../../actions/categoryAction";
+import { GetSubCategoryAction } from "../../actions/subcategoryAction";
+
+import { connect } from 'react-redux'
+
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -217,8 +222,8 @@ const dummydata=[{
     "category_id": "75eec67d-b0f4-4fa2-827a-abc1bd3eab4d",
     "is_video": "Zieme-Hahn"
   }]
-const Category = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }) => {
-
+const SubCategory = (props) => {
+  const { profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }=props
   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -241,6 +246,18 @@ const Category = ({ profileData=dummydata, tableClass,updateScheduleList, toggle
 
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
+  useEffect(()=>{
+    if(!props.categoryList.length){
+       props.GetCategoryAction();
+    }
+
+    if(!props.subcategoryList.length){
+        props.GetSubCategoryAction();
+     }
+    
+   },[])
+
+   console.log('props.categoryList', props.categoryList)
   // useEffect(() => {
   //     if (isOpenDetail.isOpen && profileData.length) {
   //         const payload = isOpenDetail.data.key ? isOpenDetail.data.key : profileData[profileData.length - 1].key
@@ -358,7 +375,7 @@ const Category = ({ profileData=dummydata, tableClass,updateScheduleList, toggle
   //         }
   //    // }
   // }
-
+  
   function DefaultColumnFilter({
       column: { filterValue, preFilteredRows, setFilter },
   }) {
@@ -761,4 +778,15 @@ const Category = ({ profileData=dummydata, tableClass,updateScheduleList, toggle
   )
 }
 
-export default Category
+// export default SubCategory
+
+
+const mapStateToProps = state =>{
+   
+    const {categoryList,loader}  = state.categoryReducer;
+    const {subcategoryList,subLoader}  = state.subcategoryReducer;
+
+    return {categoryList,loader,subcategoryList,subLoader};
+  }
+  export default connect(mapStateToProps,{AddCategory,DeleteCategory,GetSubCategoryAction,GetCategoryAction})(SubCategory);
+  

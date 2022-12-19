@@ -12,7 +12,7 @@ import CategoryAdd from "./CategoryAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import CategoryView from "./CategoryView";
-import { AddCategory,GetCategory,DeleteCategory } from "../../actions/categoryAction";
+import { AddCategory,GetCategoryAction,DeleteCategory } from "../../actions/categoryAction";
 import { connect } from 'react-redux'
 import imageholder from "../../../images/imageholder.png"
 
@@ -272,7 +272,8 @@ const Category = (props) => {
    console.log('categoryList000', props.categoryList)
   useEffect(()=>{
     // props.AddCategory()
-    props.GetCategory()
+    if(!props.categoryList.length)
+    props.GetCategoryAction()
   },[])
 
   useEffect(()=>{
@@ -667,7 +668,7 @@ const Category = (props) => {
                     Header:"Image",
                     accessor: (originalRow) => (<div className="image-wrapper">
                         {originalRow.image ? <div>
-                            <img src={imageholder}/>
+                            <img src={originalRow.image}/>
                         </div> :
                         <div><img src={imageholder}/></div>}
                       </div>),
@@ -795,5 +796,5 @@ const mapStateToProps = state =>{
     const {categoryList,loader}  = state.categoryReducer;
     return {categoryList,loader};
   }
-  export default connect(mapStateToProps,{AddCategory,DeleteCategory,GetCategory})(Category);
+  export default connect(mapStateToProps,{AddCategory,DeleteCategory,GetCategoryAction})(Category);
   
