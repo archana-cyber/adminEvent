@@ -3,7 +3,6 @@ import { Container, Row, Col, Table, Button, Modal, ModalBody, ModalFooter } fro
 import moment from "moment";
 
 
-
 const PostView = ({data,closeDetails}) => {
 
     const {original}=data

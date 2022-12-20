@@ -12,6 +12,9 @@ import PostAdd from "./PostAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import PostView from "./PostView";
+import { RecentPostAction } from "../../actions/postAction";
+import { connect } from 'react-redux'
+
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -296,8 +299,9 @@ const dummydata=[{
     "travel_awaits": "Feedmix",
     "multiple_image": "Jaloo"
   }]
-const Post = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }) => {
+const Post = (props) => {
 
+  const { profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading } = props
   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -362,6 +366,12 @@ const Post = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab,
   //            });
          
   // },[updateScheduler,updateList])
+
+  useEffect(()=>{
+    // props.AddCategory()
+    if(!props.postList.length)
+    props.RecentPostAction()
+  },[])
 
   const editModalHandler=(rowData)=>{
     // e.preventDefault()
@@ -833,4 +843,12 @@ const Post = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab,
   )
 }
 
-export default Post
+// export default Post
+
+const mapStateToProps = state =>{
+   
+    const {postList,postLoader}  = state.postReducer;
+    return {postList,postLoader};
+  }
+  export default connect(mapStateToProps,{RecentPostAction})(Post);
+  

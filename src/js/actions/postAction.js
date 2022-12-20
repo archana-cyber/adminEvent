@@ -1,42 +1,45 @@
 import axios from "axios";
-import { POST_REQUEST,POST_FAIL,POST_SUCCESS} from "../types";
+import { ADD_POST_REQUEST,ADD_POST_FAIL,ADD_POST_SUCCESS,GET_POST_REQUEST,GET_POST_FAIL,GET_POST_SUCCESS} from "../types";
 import {BASE_URL} from "../../config"
 
 
-export const AddPostAction = (payload)=>{
+export const AddPostAction = (payload,callback=()=>{})=>{
    
     return async(dispatch)=>{
-        dispatch({ type: POST_REQUEST });
+        dispatch({ type: ADD_POST_REQUEST });
         axios.post(`${BASE_URL}/post/create`, payload)
         .then(res=>{
             console.log("/post/create Res ===>",res.data) 
             if(res.data)
-            
-            dispatch({ type: POST_SUCCESS });
+             dispatch({ type: ADD_POST_SUCCESS });
+
+             callback(res.data)  
         })
         .catch(err=>{
             console.log("/post/create Error ===>",err)
-            dispatch({ type: POST_FAIL });
+            dispatch({ type: ADD_POST_FAIL });
+            
+            callback()  
             //CustomException(err)
         })
     }
 }
 
 
-export const RecentPostAction = (payload)=>{
+export const RecentPostAction = ()=>{
    
     return async(dispatch)=>{
-        dispatch({ type: POST_REQUEST });
-        axios.post(`${BASE_URL}/post/recent`, payload)
+        dispatch({ type: GET_POST_REQUEST });
+        axios.get(`${BASE_URL}/post/recent`)
         .then(res=>{
             console.log("/post/recent Res ===>",res.data) 
             if(res.data)
             
-            dispatch({ type: POST_SUCCESS });
+            dispatch({ type: GET_POST_SUCCESS });
         })
         .catch(err=>{
             console.log("/post/recent Error ===>",err)
-            dispatch({ type: POST_FAIL });
+            dispatch({ type: GET_POST_FAIL });
             //CustomException(err)
         })
     }

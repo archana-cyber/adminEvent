@@ -58,6 +58,7 @@ const PostAdd = (props) => {
     const {toggleEvent,showModalEvent,data={},loader=false} =props
     const [modal, setmodal] = useState(false)
     const [getCategory, setGetCategory] = useState([])
+    const [errorMsg, setErrorMsg] = useState('')
 
     const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
@@ -94,7 +95,7 @@ const PostAdd = (props) => {
         let fileds={...formData}
         for (let type  in fileds){
             console.log('filedsif',fileds, formData[type])
-           if(!fileds[type] && (type=='media' || type=='title')){
+           if(!fileds[type] && type=='media' && type=='title'){
             console.log('fileds[type]',type,fileds, fileds[type])
             isFormValid=false
               errors[type]=errorMsgs[type]
@@ -135,7 +136,7 @@ const PostAdd = (props) => {
         // generateFormData.append('name',formData['name'])
         for (let type  in formData){
             console.log('formData44434',type,formData )
-            if(type!='subcategory_id' || type!='subcategory_id')
+            if(type!='subcategory_id' && type!='category_id')
              generateFormData.append(type,formData[type])
         }
         generateFormData.append('subcategory_id',formData['subcategory_id'].value)
@@ -148,9 +149,17 @@ const PostAdd = (props) => {
                 toggleEvent()
                 // edit api call
             }else{
+                props.AddPostAction(generateFormData,(res)=>{
+                    console.log('res44', res)
+                 if(res.status==500){
+                    setErrorMsg(res.message)
+                 }else{
+                    toggleEvent()
+                 }
+                })
                 // props.AddCategory(generateFormData)
-                props.AddPostAction(generateFormData)
-                toggleEvent()
+                // props.AddPostAction(generateFormData)
+                // toggleEvent()
                 //add call
             }
        }else{
@@ -162,6 +171,12 @@ const PostAdd = (props) => {
         delete errors['image']
         setFormError({...errors})
         setFormData({...formData,image:value}) 
+    }
+    const handleMultiImage=(value)=>{
+        let errors= {...formError}
+        delete errors['multiple_image']
+        setFormError({...errors})
+        setFormData({...formData,multiple_image:value}) 
     }
 
     console.log('data={isOpenDetail.data}', data)
@@ -289,8 +304,15 @@ const PostAdd = (props) => {
                         </div>
 
                        <div className='p-3'>
-                      <p className="form-label-title">multiple_Image </p>
-                        <Input name="multiple_image" className="form-control" />
+                      <p className="form-label-title">Multiple Image </p>
+                            <UploadLogo
+                                id={'media'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) =>handleMultiImage(value) }
+                                // disabled={field.disabled}
+                                name='multiple_image'
+                            />
+                        {/* <Input name="multiple_image" className="form-control" /> */}
                         {formError.multiple_image ? (
                             <div className='text-danger'>{formError.multiple_image}</div>
                         ) : null}
@@ -355,7 +377,7 @@ const PostAdd = (props) => {
                         <Input name="subcategory_id" type="text" className="form-control"/>
                         {formError.subcategory_id ? <div className='text-danger'>{formError.subcategory_id}</div> : null}
                         </div> */}
-                        
+                         {errorMsg ? <div className='text-danger pl-3'>{errorMsg}</div> : null}
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
                             <Button type='submit' onClick={formSubmitHandler}> {loader ? (

@@ -76,7 +76,7 @@ export const AddCategory = (payload,callback=()=>{})=>{
     }
 }
 
-export const  GetCategoryAction   = ()=>{
+export const  GetCategoryAction = ()=>{
     return async(dispatch)=>{
         dispatch({ type: GET_CATEGORY_REQUEST });
         axios.get(`${BASE_URL}/category/all`)
