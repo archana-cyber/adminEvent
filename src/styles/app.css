@@ -72,6 +72,9 @@ body {
   float: right;
   padding-right: 8px;
 }
+.dropdown-wrp{
+  background: #ced4da;
+}
 .sidebar .dropdown-btn {
   padding: 6px 8px 6px 16px;
   text-decoration: none;

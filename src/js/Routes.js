@@ -23,6 +23,7 @@ const Routes = () => {
            <Route exact path='/verify-email' component={VerifyEmail}/>
            <Route exact path='/forget-password' component={ForgetPwd}/>
 
+
            <PrivateRoute  path="/" component={EventDashbard} />
 
           
