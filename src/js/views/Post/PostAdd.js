@@ -58,6 +58,8 @@ const PostAdd = (props) => {
     const {toggleEvent,showModalEvent,data={},loader=false} =props
     const [modal, setmodal] = useState(false)
     const [getCategory, setGetCategory] = useState([])
+    const [subCategoryList, setSubCategoryList] = useState([])
+
     const [errorMsg, setErrorMsg] = useState('')
 
     const [formError, setFormError] = useState({})
@@ -80,15 +82,41 @@ const PostAdd = (props) => {
         setmodal(!modal)
        
     }
-    useEffect(()=>{
-        let arrayData=[];
-        // let listdata=props.categoryList || dumData
-        let listdata=dumData
-        Object.keys(listdata).length>0 && listdata.map((item,index)=>{
-           arrayData.push({label:item.name,value:item.id})
-        })
-        setGetCategory(arrayData)
-    },[])
+    // useEffect(()=>{
+    //     let arrayData=[];
+    //     // let listdata=props.categoryList || dumData
+    //     let listdata=dumData
+    //     Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+    //        arrayData.push({label:item.name,value:item.id})
+    //     })
+    //     setGetCategory(arrayData)
+    // },[])
+
+    // useEffect(()=>{
+    //     if(props.subcategoryList.length){
+    //          let arrayData=[];
+    //          let listdata=props.subcategoryList 
+    //          // let listdata=dumData
+    //          Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+    //          arrayData.push({label:item.name,value:item.id})
+    //          })
+    //          setSubCategoryList(arrayData)
+    //     }
+        
+    //  },[props.subcategoryList])
+
+     useEffect(()=>{
+        if(props.categoryList.length){
+             let arrayData=[];
+             let listdata=props.categoryList 
+             // let listdata=dumData
+             Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+             arrayData.push({label:item.name,value:item.id})
+             })
+             setGetCategory(arrayData)
+        }
+        
+     },[props.categoryList])
 
     const validateAll=()=>{
         let errors={},isFormValid=true;
@@ -402,8 +430,10 @@ const PostAdd = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {loader,categoryList}  = state.categoryReducer;
-    return {categoryList};
+    const {categoryList}  = state.categoryReducer;
+    const {subcategoryList}  = state.subcategoryReducer;
+
+    return {categoryList,subcategoryList};
   }
   export default connect(mapStateToProps,{AddPostAction})(PostAdd);
   

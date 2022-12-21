@@ -13,6 +13,8 @@ import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import PostView from "./PostView";
 import { RecentPostAction } from "../../actions/postAction";
+import { GetCategoryAction } from "../../actions/categoryAction";
+import { GetSubCategoryAction } from "../../actions/subcategoryAction";
 import { connect } from 'react-redux'
 
 
@@ -369,8 +371,15 @@ const Post = (props) => {
 
   useEffect(()=>{
     // props.AddCategory()
-    if(!props.postList.length)
+    if(!props?.postList?.length)
     props.RecentPostAction()
+
+    if(!props.categoryList.length)
+    props.GetCategoryAction()
+
+    if(!props.subcategoryList.length){
+        props.GetSubCategoryAction();
+     }
   },[])
 
   const editModalHandler=(rowData)=>{
@@ -848,7 +857,9 @@ const Post = (props) => {
 const mapStateToProps = state =>{
    
     const {postList,postLoader}  = state.postReducer;
-    return {postList,postLoader};
+    const {categoryList}  = state.categoryReducer;
+    const {subcategoryList}  = state.subcategoryReducer;
+    return {postList,postLoader,subcategoryList,categoryList};
   }
-  export default connect(mapStateToProps,{RecentPostAction})(Post);
+  export default connect(mapStateToProps,{RecentPostAction,GetCategoryAction,GetSubCategoryAction})(Post);
   
