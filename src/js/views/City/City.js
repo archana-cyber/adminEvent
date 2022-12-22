@@ -273,7 +273,8 @@ const City = (props) => {
    console.log('CountryList000', props.CountryList)
   useEffect(()=>{
     // props.AddCountry()
-    if(!props?.countryList?.length)
+    
+    if(!props?.cityList?.length)
     props.GetCityAction()
   },[])
 
