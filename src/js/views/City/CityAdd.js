@@ -5,12 +5,15 @@ import { connect } from 'react-redux'
 import Select from 'react-select';
 import { GetCountryAction} from '../../actions/countryAction';
 import { GetStateAction} from '../../actions/stateAction';
+import UploadLogo from '../../components/UploadLogo';
 
 
 
 const errorMsgs = {
-    "name":"Please enter a valid country name",
-   
+    name:"Please enter a valid country name",
+    countryId:'Please select one country',
+    stateId:'Please select one state',
+    isPopular:'Please select popularity'
     }
    
 const options = [
@@ -31,7 +34,9 @@ const CityAdd = (props) => {
     const [formData, setFormData] = useState({
         name:data.label,
         countryId:'',
-        stateId:''
+        stateId:'',
+        image:'',
+        isPopular:''
     })
 
  
@@ -79,12 +84,19 @@ const CityAdd = (props) => {
     
     },[props.stateList])  
    
+    const handleImage=(value)=>{
+        // let errors= {...formError}
+        // delete errors['image']
+        // setFormError({...errors})
+        setFormData({...formData,image:value}) 
+    }
+
     const validateAll=()=>{
         let errors={},isFormValid=true;
         let fileds={...formData}
         for (let type  in fileds){
             console.log('filedsif',fileds, formData[type])
-           if(!fileds[type]){
+           if(!fileds[type] && fileds[type]!='image'){
             console.log('fileds[type]',type,fileds, fileds[type])
             isFormValid=false
               errors[type]=errorMsgs[type]
@@ -98,7 +110,7 @@ const CityAdd = (props) => {
     const formSubmitHandler=()=>{
        if(validateAll()){
        let finalData;
-       finalData={...formData}
+       finalData={...formData,stateId:formData.stateId.value,countryId:formData.countryId.value,isPopular:formData.isPopular.value}
         
             if(data?.value){
                 props.UpdateCityAction(data.value,finalData,(res)=>{
@@ -170,16 +182,9 @@ const CityAdd = (props) => {
                 </div>
                   <div >
                   
-                        <div className='p-3'>
-                            <p className="form-label-title">City Name </p>
-                            <Input name="name" onChange={(e)=>onChangeHandler(e)} value={formData.name}/>
-                            {formError?.name ? <div className='text-danger'>
-                              {formError?.name}
-                            </div> : null}
-
-                       </div>
                       
-                       <div className='p-3'>
+                      
+                       <div className='p-3 '>
                         <p className="form-label-title">Country</p>
                         
                         <Select
@@ -192,7 +197,7 @@ const CityAdd = (props) => {
 
                        </div>
                     
-                       <div className='p-3'>
+                       <div className='p-3 '>
                         <p className="form-label-title">State</p>
                         
                         <Select
@@ -202,6 +207,15 @@ const CityAdd = (props) => {
                             name="stateId"
                         />
                         {formError?.stateId ? <div className='text-danger'>{formError?.stateId}</div> : null}
+
+                       </div>
+
+                       <div className='p-3'>
+                            <p className="form-label-title">City Name </p>
+                            <Input name="name" onChange={(e)=>onChangeHandler(e)} value={formData.name}/>
+                            {formError?.name ? <div className='text-danger'>
+                              {formError?.name}
+                            </div> : null}
 
                        </div>
                         
@@ -215,6 +229,26 @@ const CityAdd = (props) => {
                         />
                         {formError.isPopular ? <div className='text-danger'>{formError.isPopular}</div> : null}
                         </div>
+
+                        <div className='p-3'>
+                      <p className="form-label-title">Image </p>
+                        {/* <Field name="image" className="form-control" /> */}
+                        {/* setImageData(value) */}
+                        <div>
+                            <UploadLogo
+                                id={'image'}
+                                logoUrl={formData.image}
+                                setSelectedLogoImage={(value) =>handleImage(value) }
+                                // disabled={field.disabled}
+                                name='image'
+                            />
+                        </div>
+                        {formError?.image ? (
+                            <div className='text-danger'>{formError?.image}</div>
+                        ) : null}
+                        {/* {errors.image && touched.image  ? <div className='text-danger'>{errors.image}</div> : null} */}
+
+                      </div>
 
                        {errorMsg ? <div className='text-danger pl-3'>{errorMsg}</div> : null}
                        

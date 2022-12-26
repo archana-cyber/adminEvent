@@ -69,7 +69,7 @@ export const AddCityAction = (payload,callback=()=>{})=>{
         .then(res=>{
             console.log("location/create/city Res ===>",res.data) 
             if(res.data)
-              dispatch({ type: ADD_CITY_SUCCESS,payload :[{value:res.data.data.id,label:res.data.data.name}] });
+              dispatch({ type: ADD_CITY_SUCCESS,payload :[ res.data.data] });
 
             callback(res.data)  
         })

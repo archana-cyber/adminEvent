@@ -13,8 +13,11 @@ import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 // import CategoryView from "./CategoryView";
 import { GetCityAction,DeleteCityAction } from "../../actions/cityAction";
+import { GetStateAction } from "../../actions/stateAction";
+import { GetCountryAction } from "../../actions/countryAction";
 import { connect } from 'react-redux'
 import imageholder from "../../../images/imageholder.png"
+import _ from "lodash";
 
 
 const todosPerPage = 5;
@@ -276,6 +279,12 @@ const City = (props) => {
     
     if(!props?.cityList?.length)
     props.GetCityAction()
+
+    if(!props?.countryList?.length)
+    props.GetCountryAction()
+
+    if(!props?.stateList?.length)
+    props.GetStateAction()
   },[])
 
   useEffect(()=>{
@@ -331,6 +340,14 @@ const City = (props) => {
                   setToggleLoader(false);
      
   }
+  const findCountry=(countryId)=>{
+    let countryInfo = props?.countryList?.length>0 ? props.countryList : [];
+
+    let updatedList = _.filter(countryInfo, function(item) { return item.value == countryId; });
+    console.log('countryInfo',props?.countryList,countryInfo, updatedList)
+  }
+  console.log('countryInfo 33', props?.countryList)
+
   // const showDetails = () => {
 
   //         const searchData = {
@@ -664,7 +681,23 @@ const City = (props) => {
           {
               Header: "Profile List",
               columns: [
-                
+                {
+                    Header:"Image",
+                    accessor: (originalRow) => (<div className="image-wrapper">
+                        {originalRow.image ? <div>
+                            <img src={originalRow.image}/>
+                        </div> :
+                        <div><img src={imageholder}/></div>}
+                      </div>),
+                  disableFilters: true
+                  },
+                  {
+                    Header:"Country",
+                    accessor: (originalRow) => (<div>
+                        {originalRow.countryId?findCountry(originalRow.countryId):null}
+                      </div>),
+                  disableFilters: true
+                  },
                 {
                     Header: "Name",
                     accessor: "name",
@@ -693,10 +726,10 @@ const City = (props) => {
   return (
       <div className={tableClass}>
          
-          {toggleLoader ? <div className="loader-style" > loading... </div> : null}
+          {/* {toggleLoader ? <div className="loader-style" > loading... </div> : null} */}
          
           
-          {(props.loader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {(props.countryLoader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
              
             <>
                   
@@ -763,8 +796,10 @@ const City = (props) => {
 
 const mapStateToProps = state =>{
     const {cityLoader,cityList}  = state.cityReducer;
+    const {countryList,countryLoader}  = state.countryReducer;
+    const {stateList}  = state.stateReducer;
     
-    return {cityList,cityLoader};
+    return {cityList,countryList,stateList,cityLoader,countryLoader};
   }
-  export default connect(mapStateToProps,{GetCityAction,DeleteCityAction})(City);
+  export default connect(mapStateToProps,{GetCityAction,GetStateAction,GetCountryAction,DeleteCityAction})(City);
   
