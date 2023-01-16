@@ -1,0 +1,243 @@
+.getStarted-page {
+    display: flex;
+    align-items: flex-start;
+    background-color: #F5F2FC;
+    height: 100vh;
+
+}
+
+.getStarted-details {
+    width: 50%;
+    /* background-color: #774AD9; */
+    max-height: 509.88px;
+    padding: 0 !important;
+}
+
+.getStarted-contactform {
+    width: 50%;
+    background-color: #F5F2FC;
+    padding: 15px;
+    /* height: 187.5vh; */
+}
+
+.getStarted-logo img {
+    width: 127px;
+}
+
+.getStarted-logo {
+    margin-bottom: 127px;
+}
+
+.getStarted-heading h1 {
+    text-align: center;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    font-size: 64px;
+    line-height: 100%;
+    max-width: 471px;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    color: #ffffff;
+}
+.about-text {
+    text-align: center;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 25px;
+}
+.getStarted-form{
+    padding-top: 115px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.getStarted-heading p {
+    text-align: center;
+    letter-spacing: -0.02em;
+    color: #D6C9F4;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 140%;
+    max-width: 389px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.getStarted-heading {
+    margin-bottom: 47px;
+}
+
+.getStarted-img img {
+    width: 100%;
+}
+
+.getStarted-form h2 {
+    color: #292C4E;
+    text-align: center;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.get-form {
+    max-width: 485px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.your-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.get-form input {
+    background: #FFFFFF;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 100px;
+    height: 64px;
+    width: 100%;
+    padding: 0 32px;
+    margin-bottom: 10px;
+    border: none;
+}
+
+.get-form input::placeholder {
+    color: #9092A9;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 140%;
+}
+
+select {
+    background: #FFFFFF !important;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 100px !important;
+    height: 64px !important;
+    width: 100% !important;
+    padding: 0 32px !important;
+    margin-bottom: 10px !important;
+    border: none !important;
+    color: #9092A9 !important;
+    font-weight: 400 !important;
+    font-size: 17px !important;
+    line-height: 140% !important;
+}
+
+.next-btn {
+    background: #FD7350;
+    border-radius: 100px;
+    padding: 22px 60px;
+    margin-top: 30px;
+    color: #FFFFFF;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    width: 50%;
+    text-align: center;
+    border: none;
+}
+
+@media (max-width:991px) {
+    .getStarted-page {
+        display: block;
+    }
+
+    .getStarted-details {
+        width: 100%;
+    }
+
+    .getStarted-contactform {
+        width: 100%;
+        padding-top: 60px;
+    }
+
+    .form-tabs {
+        margin-top: 0 !important;
+    }
+}
+
+@media (max-width:575px) {
+    .your-name {
+        display: block;
+    }
+}
+
+@media (max-width:425px) {
+    .get-form {
+        padding: 0 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+import React from 'react'
+import "./GetStarted.css"
+import ProgressBar from '../ProgressBar/ProgressBar'
+import HcmLandingData from '../../../../constant/HcmLandingData.json'
+import Config from 'Config';
+
+
+let profileCreateUrl = "https://agency-preprod.avibra.com/partner/smb-signup/?iframe=true&partnersignup=SSXNLdyJ9";
+if (Config.NODE_ENV == "production") {
+    profileCreateUrl = "https://reports.avibra.com/partner/smb-signup/?iframe=true&partnersignup=SSXNLdyJ9";
+}
+
+const GetStarted = (props) => {
+  const {GetStartedContent={}}=  HcmLandingData;
+  const {title='',subTitle='',bgImage=''}=GetStartedContent
+  const progressBarData={applyOnFirst:true}
+
+  return (
+    <div className='getStarted-page'>
+        <div className='getStarted-details'>
+            
+            {/* <div className='getStarted-heading'>
+                <h1>{title}</h1>
+                <p>{subTitle}</p>
+            </div>
+            <div className='getStarted-img'>
+            <img src={bgImage}/>
+            </div> */}
+            {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/9xwazD5SyVg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
+            <video height="512.88px" width='100%' muted loop playsinline autoplay data-src="https://cdn.dribbble.com/users/10716723/screenshots/20390995/media/25a6c9bd37a66496b4e0d3e4756eed97.mp4" data-video-small="https://cdn.dribbble.com/users/10716723/screenshots/20390995/media/83e06f51897ff963e785115e7b9089bc.mp4" data-video-medium="https://cdn.dribbble.com/users/10716723/screenshots/20390995/media/28d2dd1daa3baffb33f850f2050fc85d.mp4" data-video-large="https://cdn.dribbble.com/users/10716723/screenshots/20390995/media/25a6c9bd37a66496b4e0d3e4756eed97.mp4" src="https://cdn.dribbble.com/users/10716723/screenshots/20390995/media/25a6c9bd37a66496b4e0d3e4756eed97.mp4"></video>
+        </div>
+        <div className='getStarted-contactform'>
+        <div className='getStarted-logo'>
+            <img src="images/avibra-logo.svg" alt="Avibra logo"/>
+            </div>
+           <p className='about-text'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+              unknown printer took a galley of type and scrambled it to
+             make a type specimen book. It has survived not only five centuries</p>
+            
+            <div className='getStarted-form'>
+                <h2>Tell us about your company</h2>
+                <button className='next-btn'>Download</button>
+            </div>
+        </div>
+    </div>
+  )
+}
+
+export default GetStarted
