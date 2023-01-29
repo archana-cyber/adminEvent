@@ -14,7 +14,7 @@ const errorMsgs = {
     "name":"Please enter a valid name",
     "status":"Please enter a valid status",
     "image":"Please upload image",
-    "video":"Please upload video",
+    "is_video":"Please upload video",
     "category_id":"Please select anyone from the above"
     }
 const options = [
@@ -60,6 +60,7 @@ const SubCategoryAdd = (props) => {
     const [getCategory, setGetCategory] = useState([])
     const [modal, setmodal] = useState(false)
     const [formError, setFormError] = useState({})
+    const [errorMsg, setErrorMsg] = useState('')
     const [formData, setFormData] = useState({
         name:data.name,
         image:data.image,
@@ -78,6 +79,7 @@ const SubCategoryAdd = (props) => {
             })
             setGetCategory(arrayData)
        }
+       console.log('props.categoryList', props.categoryList)
        
     },[props.categoryList])
     
@@ -90,7 +92,7 @@ const SubCategoryAdd = (props) => {
       if(data?.category_id){
         let categoryInfo = props.categoryList.length>0 ? props.categoryList : [];
 
-        let updatedList = _.find(categoryInfo, function(item) { return item.id == 12});
+        let updatedList = _.find(categoryInfo, function(item) { return item.id == data?.category_id});
          console.log('updatedList444', updatedList)
         categoryData={ value: updatedList.id, label: updatedList.name }
           
@@ -184,35 +186,65 @@ const SubCategoryAdd = (props) => {
     const formSubmitHandler=()=>{
        if(validateAll()){
 
-        let generateFormData={...formData,status:formData.status.value,category_id:formData.category_id.value}
+        // let generateFormData={...formData,status:formData.status.value,category_id:formData.category_id.value}
         
 
-        // let generateFormData = new FormData();
-        // // generateFormData.append('name',formData['name'])
-        // for (let type  in formData){
-        //     console.log('formData44434',type,formData )
-        //     if(type!='category_id' && type!='status')
-        //      generateFormData.append(type,formData[type])
-        // }
-        // generateFormData.append('category_id',formData['category_id'].value)
-        // generateFormData.append('status',formData['status'].value)
+        let generateFormData = new FormData();
+        // generateFormData.append('name',formData['name'])
+        for (let type  in formData){
+            console.log('formData44434',type,formData )
+            if(type!='category_id' && type!='status')
+             generateFormData.append(type,formData[type])
+        }
+        generateFormData.append('category_id',formData['category_id'].value)
+        generateFormData.append('status',formData['status'].value)
 
 
          console.log('generateFormData333', generateFormData)
          
+            // if(data?.id){
+            //     props.UpdateSubCategory(data.id,generateFormData)
+            //     toggleEvent()
+            //     // edit api call
+            // }else{
+            //     props.AddSubCategory(generateFormData)
+            //     toggleEvent()
+            //     //add call
+            // }
             if(data?.id){
-                props.UpdateSubCategory(data.id,generateFormData)
-                toggleEvent()
-                // edit api call
-            }else{
-                props.AddSubCategory(generateFormData)
-                toggleEvent()
-                //add call
-            }
+              props.UpdateSubCategory(data.id,generateFormData,(res)=>{
+               if(res.status==500){
+                  if(typeof res.message == 'object')
+                   setFormError({...res.message})
+                  else
+                   setErrorMsg(res.message)
+               }else{
+                  toggleEvent()
+               }
+              })
+              // toggleEvent()
+              // edit api call
+          }else{
+              props.AddSubCategory(generateFormData,(res)=>{
+                  console.log('res44', res)
+               if(res.status==500){
+               
+                  if(typeof res.message == 'object'){
+                    setFormError({...res.message})
+                  }
+                else
+                  setErrorMsg(res.message)
+               }else{
+                  toggleEvent()
+               }
+              })
+              //add call
+          }
        }else{
         console.log('form has error')
        }
     }
+    console.log('FormError90', formError)
     return (
         <div>
           {/* <Button color="danger" onClick={toggle}>{props.buttonLabel}</Button> */}
@@ -280,7 +312,7 @@ const SubCategoryAdd = (props) => {
                         <div className='p-3'>
                         <p className="form-label-title">Is Video</p>
                         <div>
-                            <UploadLogo
+                            <UploadVideo
                                 id={'video'}
                                 logoUrl={''}
                                 setSelectedLogoImage={(value) =>handleVideo(value) }
@@ -292,6 +324,7 @@ const SubCategoryAdd = (props) => {
                         </div>
                         
                       
+                       {errorMsg ? <div className='text-danger pl-3'>{errorMsg}</div> : null}
                         
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
@@ -318,8 +351,8 @@ const SubCategoryAdd = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {loader,categoryList,subcategoryList}  = state.categoryReducer;
-    return {subcategoryList,categoryList,loader};
+    const {loader,categoryList}  = state.categoryReducer;
+    return {categoryList,loader};
   }
 export default connect(mapStateToProps,{GetCategoryAction,AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
   

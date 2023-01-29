@@ -12,12 +12,10 @@ import SubCategoryAdd from "./SubCategoryAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import SubCategoryView from "./SubCategoryView";
-import imageholder from "../../../images/imageholder.png"
-import { AddCategory,GetCategoryAction,DeleteCategory } from "../../actions/categoryAction";
-import { GetSubCategoryAction } from "../../actions/subcategoryAction";
-
+import { AddSubCategory,DeleteSubCategory,GetSubCategoryAction } from "../../actions/subcategoryAction";
+import { GetCategoryAction } from "../../actions/categoryAction";
 import { connect } from 'react-redux'
-
+import imageholder from "../../../images/imageholder.png"
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -223,8 +221,10 @@ const dummydata=[{
     "is_video": "Zieme-Hahn"
   }]
 const SubCategory = (props) => {
-  const { profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }=props
-  const [currentPage, setCurrentPage] = useState(0)
+
+   const  { subcategoryList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }= props
+   const profileData=subcategoryList 
+   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
       data: null,
@@ -243,21 +243,10 @@ const SubCategory = (props) => {
   const [updateList, setUpdateList] = useState('')
   const [eventModal, setEventModal] = useState(false)
   const [eventDeleteModal, setEventDeleteModal] = useState(false)
-
+  const [deleteValue, setDeleteValue] = useState('')
+  const [getDeleteId, setGetDeleteId] = useState('')
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
-  useEffect(()=>{
-    if(!props.categoryList.length){
-       props.GetCategoryAction();
-    }
-
-    if(!props.subcategoryList.length){
-        props.GetSubCategoryAction();
-     }
-    
-   },[])
-
-   console.log('props.categoryList', props.categoryList)
   // useEffect(() => {
   //     if (isOpenDetail.isOpen && profileData.length) {
   //         const payload = isOpenDetail.data.key ? isOpenDetail.data.key : profileData[profileData.length - 1].key
@@ -301,19 +290,51 @@ const SubCategory = (props) => {
          
   // },[updateScheduler,updateList])
 
-  const editModalHandler=(rowData)=>{
-    // e.preventDefault()
-    // e.stopPropagation();
+   console.log('categoryList000', props.categoryList)
+  useEffect(()=>{
+    // props.AddCategory()
+    if(!props.subcategoryList.length)
+    props.GetSubCategoryAction()
+
+    if(!props.categoryList.length)
+    props.GetCategoryAction()
+  },[])
+
+  useEffect(()=>{
+    
+    if(deleteValue=='yes'){
+        props.DeleteSubCategory(getDeleteId,(res)=>{
+            if(res.status==500){
+                // setErrorMsg(res.message)
+             }else{
+                eventDeleteToggle()
+             }
+        })
+    }
+    if(deleteValue=='no'){
+        eventDeleteToggle()
+    }
+  },[deleteValue])
+
+  const editModalHandler=(e,rowData)=>{
+    console.log('rowData', rowData,rowData.status)
+    e.preventDefault()
+    e.stopPropagation();
     setEditModal(rowData)
     setEventModal(!eventModal)
   }
-  const deleteModalHandler=(e)=>{
+  const deleteModalHandler=(e,rowData)=>{
     e.preventDefault()
-    e.stopPropagation();
+    e.stopPropagation()
     eventDeleteToggle()
+    setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
     setEventModal(!eventModal)
+  }
+  const createSubCategoryHandler=()=>{
+    eventToggle();
+    setEditModal({})
   }
   const eventDeleteToggle=()=>{
     setEventDeleteModal(!eventDeleteModal)
@@ -375,7 +396,7 @@ const SubCategory = (props) => {
   //         }
   //    // }
   // }
-  
+
   function DefaultColumnFilter({
       column: { filterValue, preFilteredRows, setFilter },
   }) {
@@ -416,7 +437,7 @@ const SubCategory = (props) => {
               // Or, override the default text filter to use
               // "startWith"
               text: (rows, id, filterValue) => {
-                  return rows.filter(row => {
+                  return rows?.filter(row => {
                       const rowValue = row.values[id]
                       return rowValue !== undefined
                           ? String(rowValue)
@@ -460,7 +481,7 @@ const SubCategory = (props) => {
       } = useTable(
           {
               columns,
-              data,
+              data  ,
               defaultColumn, // Be sure to pass the defaultColumn option
               filterTypes,
               autoResetRowState: false,
@@ -493,15 +514,7 @@ const SubCategory = (props) => {
           <div>
            
              
-              <div className="row">
-
-                 <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                 <h1 class="Profiles-title">Sub Category Details</h1>
-                 </div>
-                 <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                 <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Sub Category</button>
-                 </div>
-              </div>
+            
               <Table bordered={false} hover size="sm" responsive {...getTableProps()} className="partnerList">
                   <thead>
                       {headerGroups.filter((data, index) => index > 0).map(headerGroup => (
@@ -552,9 +565,10 @@ const SubCategory = (props) => {
                               })}
                           </tbody>
                           : <tbody>
-                              <Card style={{ width: '130%', border:"none" }}>
-                                  <h5>No results found</h5>
-                              </Card>
+                             <tr>
+                                <td colSpan={headerGroups[1].headers.length} style={{textAlign:"center"}}>No data found </td>
+                             </tr>
+                             
                           </tbody>
 
                   }
@@ -640,12 +654,12 @@ const SubCategory = (props) => {
   // Logic for pagination
   const indexOfLastTodo = currentPage * todosPerPage;
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-  let scheduleList=[...profileData]
-  let scheduleLists=[];
-  scheduleList.map((e)=>{
-  scheduleLists.push({...e,['scheduledAt']:moment(e.scheduledAt).format('MMMM Do YYYY, h:mm:ss a')})})
-   console.log('scheduleData@@@' ,scheduleLists)
-  const currentProfileList = scheduleLists;
+//   let scheduleList=[...profileData]
+//   let scheduleLists=[];
+//   scheduleList.map((e)=>{
+//   scheduleLists.push({...e,['scheduledAt']:moment(e.scheduledAt).format('MMMM Do YYYY, h:mm:ss a')})})
+//    console.log('scheduleData@@@' ,scheduleLists)
+//   const currentProfileList = scheduleLists;
   // Logic for displaying page numbers
   const pageNumbers = []; 
 
@@ -673,17 +687,17 @@ const SubCategory = (props) => {
               Header: "Profile List",
               columns: [
                  
+                
                 {
                     Header:"Image",
                     accessor: (originalRow) => (<div className="image-wrapper">
                         {originalRow.image ? <div>
-                            <img src={imageholder}/>
+                            <img src={originalRow.image}/>
                         </div> :
                         <div><img src={imageholder}/></div>}
                       </div>),
                   disableFilters: true
                   },
-                  
                   {
                       Header: "Name",
                       accessor: "name",
@@ -695,20 +709,28 @@ const SubCategory = (props) => {
                 //       filter: "fuzzyText"
                      
                 //   },
+                 
                 {
                     Header:"Status",
                     accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.status==true ? 'Active' : 'Not Active' }
+                        {originalRow.status==true ? 'True' : 'False' }
                       </div>),
                   disableFilters: true
                   },
-                
+                  {
+                    Header:"Is Subcategory",
+                    accessor: (originalRow) => (<div className="action-wrp">
+                        {originalRow.isSubCategory==true ? 'True' : 'False' }
+                      </div>),
+                  disableFilters: true
+                  },
+
               {
                 Header:"Action",
                 accessor: (originalRow) => (<div className="action-wrp">
-                  <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
+                  <div className='trash-btn'><i className="fa fa-edit" onClick={(e)=>editModalHandler(e,originalRow)}></i></div>
                   <div onClick={(e) => {
-                    deleteModalHandler(e)
+                    deleteModalHandler(e,originalRow)
                   //e.stopPropagation();
                  // toggleModal(!modal);
                  // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
@@ -728,37 +750,50 @@ const SubCategory = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(loader || isLoading) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
-              <Row>
+          {(props.subLoader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+             
+            <>
+                  
+                  <div className="row">
 
-                  <Col>
-                      {(currentProfileList.length)
-                          ? <OptimizedComponent
-                              columns={columns}
-                              data={currentProfileList}
-                              currentPage={currentPage}
-                              setCurrentPage={setCurrentPage}
-                              filterVal={filterVal}
-                              setFilterVal={setFilterVal} />
-                          : <Card className="empty-box">
-                              <h5>No results found</h5>
-                          </Card>}
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                    <h1 class="Profiles-title">SubCategory Details</h1>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <button type="button" class="secondary-btn btn btn-secondary" onClick={createSubCategoryHandler}>Create SubCategory</button>
+                    </div>
+                    </div>
+                        <Row>  
+                        <Col>
+                            {(profileData.length) ?
+                                <OptimizedComponent
+                                    columns={columns}
+                                    data={profileData}
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                    filterVal={filterVal}
+                                    setFilterVal={setFilterVal} />
+                              : <Card className="empty-box">
+                                  <h5>No results found</h5>
+                              </Card>
+                                   } 
 
-                  </Col>
-              </Row>
+                        </Col>
+                    </Row>
+              </>
           }
          
           <Row>
               <Col>
                   <Table>
                      { console.log('isOpenDetail@@',isOpenDetail )}
-                      {isOpenDetail.isOpen && isOpenDetail.data ?
+                      {isOpenDetail.isOpen && isOpenDetail?.data  ?
                           <tbody>
                               <tr className="detail-box">
                                   <td colSpan="6" className="details-div">
                                       <Collapse isOpen={isOpenDetail.isOpen}>
                                           <Fragment>
-                                          <SubCategoryView data={isOpenDetail.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})}/>
+                                          <SubCategoryView data={isOpenDetail?.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})}/>
                                                   {/* <ScheduleDetails data={isOpenDetail.data} closeDetails={() => setIsOpenDetail({...isOpenDetail, isOpen: false})} allData={profileData} updateData={(data)=>setUpdateList(data)}/> */}
                                           </Fragment>
                                       </Collapse>
@@ -772,21 +807,19 @@ const SubCategory = (props) => {
           </Row>
 
           {eventModal && <SubCategoryAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
-          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle}/>}
+          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle} setDeleteValue={(value)=>setDeleteValue(value)}/>}
 
       </div>
   )
 }
 
-// export default SubCategory
-
+// export default Category
 
 const mapStateToProps = state =>{
    
-    const {categoryList,loader}  = state.categoryReducer;
+    const {categoryList}  = state.categoryReducer;
     const {subcategoryList,subLoader}  = state.subcategoryReducer;
-
-    return {categoryList,loader,subcategoryList,subLoader};
+    return {categoryList,subcategoryList,subLoader};
   }
-  export default connect(mapStateToProps,{AddCategory,DeleteCategory,GetSubCategoryAction,GetCategoryAction})(SubCategory);
+export default connect(mapStateToProps,{AddSubCategory,DeleteSubCategory,GetCategoryAction,GetSubCategoryAction})(SubCategory);
   

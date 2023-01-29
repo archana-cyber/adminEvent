@@ -38,9 +38,11 @@ export const UpdateCategory = (profileid, payload={},callback=()=>{})=>{
         axios.put(`${BASE_URL}/category/update/${profileid}`, payload)
         .then(res=>{
             console.log("SaveTransactionPayload Res ===>",profileid,payload,res.data) 
-            if(res.data)
-            dispatch({ type: UPDATE_CATEGORY_SUCCESS});
-            callback(res.data)
+            if(res.data){
+                dispatch({ type: UPDATE_CATEGORY_SUCCESS,payload :[ res.data.data] });
+                callback(res.data)
+            }
+           
         })
         .catch(err=>{
             console.log("SaveTransactionPayload Error ===>",err)
