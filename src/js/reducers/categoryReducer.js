@@ -26,7 +26,7 @@ export default (state = INITIAL_STATE, action) => {
         case UPDATE_CATEGORY_REQUEST:
             return {  ...state , loader:true };
         case UPDATE_CATEGORY_SUCCESS:
-            return {  ...state , loader:false };
+            return {  ...state , loader:false,categoryList:action.payload };
         case UPDATE_CATEGORY_FAIL:
             return {  ...state , loader:false};    
         case DELETE_CATEGORY_REQUEST:

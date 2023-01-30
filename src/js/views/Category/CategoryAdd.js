@@ -136,21 +136,21 @@ const CategoryAdd = (props) => {
     const formSubmitHandler=()=>{
        if(validateAll()){
        let finalData;
-       finalData={...formData,isSubCategory:formData['isSubCategory'].value,status:formData['status'].value}
-    //    if(!formData.image){
-    //    }else{
-    //         let generateFormData = new FormData();
-    //         // generateFormData.append('name',formData['name'])
-    //         for (let type  in formData){
-    //             console.log('formData44434',type,formData )
-    //             if(type!='isSubCategory' && type!='status')
-    //             generateFormData.append(type,formData[type])
-    //         }
-    //         generateFormData.append('isSubCategory',formData['isSubCategory'].value)
-    //         generateFormData.append('status',formData['status'].value)
-    //         console.log('generateFormData333', generateFormData)
-    //        finalData=generateFormData
-    //    } 
+       if(!formData.image){
+           finalData={...formData,isSubCategory:formData['isSubCategory'].value,status:formData['status'].value}
+       }else{
+            let generateFormData = new FormData();
+            // generateFormData.append('name',formData['name'])
+            for (let type  in formData){
+                console.log('formData44434',type,formData )
+                if(type!='isSubCategory' && type!='status')
+                generateFormData.append(type,formData[type])
+            }
+            generateFormData.append('isSubCategory',formData['isSubCategory'].value)
+            generateFormData.append('status',formData['status'].value)
+            console.log('generateFormData333', generateFormData)
+           finalData=generateFormData
+       } 
         
             if(data?.id){
                 props.UpdateCategory(data.id,finalData,(res)=>{

@@ -55,9 +55,11 @@ class UploadVideo extends Component {
                     }, () => {
                         //this.handleUploadLogo();
                         console.log('this.state.selectedImage', this.state.selectedImage)
-                        this.props.setSelectedLogoImage(this.state.selectedImage)
+                        // this.props.setSelectedLogoImage(this.state.selectedImage)
                     });
                 }
+                this.props.setSelectedLogoImage(event.target.value)
+
             } else {
                 this.setState({ logoUpdateSuccessfully: false, logoUpdateError: true, logoUploading: false })
 
@@ -79,7 +81,7 @@ class UploadVideo extends Component {
                 <div>
                 
                     <CustomInput key={id} type="file" id="agencyLogoFileBrowser" name="agencyLogo" label="Upload your Logo"
-                        onChange={(e) => this.onFileImgSelect(e, 'agencyLogo')} onClick={e => (e.target.value = null)} accept=".jpeg, .png, .jpg" />
+                        onChange={(e) => this.onFileImgSelect(e, 'agencyLogo')} onClick={e => (e.target.value = null)} accept="video/*" />
                    
                     <div style={{ marginTop: '3px' }}>
                         {/*logoUploading ? <div><Spinner color="secondary" style={{width:'15px',height:'15px'}} /> Uploding...</div> : null*/}
