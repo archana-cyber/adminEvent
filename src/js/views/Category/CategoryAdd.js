@@ -26,7 +26,6 @@ const CategoryAdd = (props) => {
     const [formData, setFormData] = useState({
         name:data.name,
         status:'',
-        image:data.image,
         isSubCategory: '',
     })
 
@@ -136,21 +135,22 @@ const CategoryAdd = (props) => {
     const formSubmitHandler=()=>{
        if(validateAll()){
        let finalData;
-       if(!formData.image){
+    //    if(!formData.image){
            finalData={...formData,isSubCategory:formData['isSubCategory'].value,status:formData['status'].value}
-       }else{
-            let generateFormData = new FormData();
-            // generateFormData.append('name',formData['name'])
-            for (let type  in formData){
-                console.log('formData44434',type,formData )
-                if(type!='isSubCategory' && type!='status')
-                generateFormData.append(type,formData[type])
-            }
-            generateFormData.append('isSubCategory',formData['isSubCategory'].value)
-            generateFormData.append('status',formData['status'].value)
-            console.log('generateFormData333', generateFormData)
-           finalData=generateFormData
-       } 
+       
+    //    else{
+    //         let generateFormData = new FormData();
+    //         // generateFormData.append('name',formData['name'])
+    //         for (let type  in formData){
+    //             console.log('formData44434',type,formData )
+    //             if(type!='isSubCategory' && type!='status')
+    //             generateFormData.append(type,formData[type])
+    //         }
+    //         generateFormData.append('isSubCategory',formData['isSubCategory'].value)
+    //         generateFormData.append('status',formData['status'].value)
+    //         console.log('generateFormData333', generateFormData)
+    //        finalData=generateFormData
+    //    } 
         
             if(data?.id){
                 props.UpdateCategory(data.id,finalData,(res)=>{
@@ -256,10 +256,8 @@ const CategoryAdd = (props) => {
 
                        </div>
 
-                       <div className='p-3'>
+                       {/* <div className='p-3'>
                       <p className="form-label-title">Image </p>
-                        {/* <Field name="image" className="form-control" /> */}
-                        {/* setImageData(value) */}
                         <div>
                             <UploadLogo
                                 id={'image'}
@@ -272,9 +270,8 @@ const CategoryAdd = (props) => {
                         {formError?.image ? (
                             <div className='text-danger'>{formError?.image}</div>
                         ) : null}
-                        {/* {errors.image && touched.image  ? <div className='text-danger'>{errors.image}</div> : null} */}
 
-                      </div>
+                      </div> */}
                         <div className='p-3'>
                       <p className="form-label-title">Status </p>
                         {/* <Input name="status" type="text" className="form-control" onChange={onChangeHandler} value={formData.status}/> */}

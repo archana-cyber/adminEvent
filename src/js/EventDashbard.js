@@ -14,6 +14,8 @@ import Subscriber from "./views/Subscriber/Subscriber"
 import UserManagement from "./views/UserManagement/UserManagement";
 import State from './views/State/State';
 import City from './views/City/City';
+import UpdatePassword from './views/Profile/UpdatePassword';
+import Profile from './views/Profile/Profile';
 
 const EventDashbard = () => {
   return (
@@ -22,9 +24,9 @@ const EventDashbard = () => {
           <Header/>
           <div class="content">
            <PrivateRoute exact path='/' component={Home}/>
-           <PrivateRoute exact path='/contact' component={ContactUs}/>
-           <PrivateRoute exact path='/about' component={AboutUs}/>
-           <PrivateRoute exact path='/book-mark' component={BookMark}/>
+           {/* <PrivateRoute exact path='/contact' component={ContactUs}/>
+           <PrivateRoute exact path='/about' component={AboutUs}/> */}
+           {/* <PrivateRoute exact path='/book-mark' component={BookMark}/> */}
            <PrivateRoute exact path='/category' component={Category}/>
            <PrivateRoute exact path='/post' component={Post}/>
            <PrivateRoute exact path='/sub-category' component={SubCategory}/>
@@ -32,8 +34,12 @@ const EventDashbard = () => {
            <PrivateRoute exact path='/country' component={Country}/>
            <PrivateRoute exact path='/state' component={State}/>
            <PrivateRoute exact path='/city' component={City}/>
+           <PrivateRoute exact path='/updatepassword' component={UpdatePassword}/>
+           <PrivateRoute exact path='/profile' component={Profile}/>
 
-           <PrivateRoute exact path='/subscriber' component={Subscriber}/>
+
+
+           {/* <PrivateRoute exact path='/subscriber' component={Subscriber}/> */}
            <PrivateRoute exact path='/user-management' component={UserManagement}/>
           </div> 
     </div>

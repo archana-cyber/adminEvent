@@ -283,12 +283,13 @@ const Category = (props) => {
             if(res.status==500){
                 // setErrorMsg(res.message)
              }else{
-                eventDeleteToggle()
+               setEventDeleteModal(false)
              }
         })
     }
     if(deleteValue=='no'){
-        eventDeleteToggle()
+        setEventDeleteModal(false)
+
     }
   },[deleteValue])
 
@@ -302,7 +303,8 @@ const Category = (props) => {
   const deleteModalHandler=(e,rowData)=>{
     e.preventDefault()
     e.stopPropagation()
-    eventDeleteToggle()
+    setEventDeleteModal(true)
+
     setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
@@ -313,7 +315,7 @@ const Category = (props) => {
     setEditModal({})
   }
   const eventDeleteToggle=()=>{
-    setEventDeleteModal(!eventDeleteModal)
+    setEventDeleteModal(false)
   }
   const toggle = (data, index) => {
       console.log('data@@', data)
@@ -485,7 +487,7 @@ const Category = (props) => {
       // it for this use case
 
       // const firstPageRows = rows.slice(currentPage * 5 - 5, currentPage * 5);
-
+        console.log('page lenght', page)
       return (
           <div>
            
@@ -625,7 +627,7 @@ const Category = (props) => {
           setCurrentPage(count)
       }
   }
-
+   console.log('profileData category', profileData)
 
   // Logic for pagination
   const indexOfLastTodo = currentPage * todosPerPage;
@@ -783,7 +785,7 @@ const Category = (props) => {
           </Row>
 
           {eventModal && <CategoryAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
-          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle} setDeleteValue={(value)=>setDeleteValue(value)}/>}
+          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteModal} toggleEvent={eventDeleteToggle} setDeleteValue={(value)=>setDeleteValue(value)}/>}
 
       </div>
   )

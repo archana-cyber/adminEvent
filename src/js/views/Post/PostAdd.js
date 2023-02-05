@@ -12,12 +12,12 @@ import UploadLogo from '../../components/UploadLogo';
 const errorMsgs = {
     title:"Please enter a valid title",
     description:"Please enter a valid description",
-    media:"Please enter a valid media",
+    image:"Please enter a valid image",
     multiple_image:"Please select image ",
     city:"Please enter a valid city",
-    map_link:"Please enter a valid link",
-    travel_awaits:"Please enter a valid tavel link",
-    category_id:"Please enter a valid category",
+    mapLink:"Please enter a valid link",
+    travelAwaits:"Please enter a valid tavel link",
+    categoryId:"Please enter a valid category",
     subcategory_id:"Please enter a valid sub category",
     }
 const dumData=[{
@@ -66,12 +66,12 @@ const PostAdd = (props) => {
     const [formData, setFormData] = useState({
         title:"",
         description:"",
-        media:"",
+        image:"",
         multiple_image:"",
         city:"",
-        map_link:"",
-        travel_awaits:"",
-        category_id:"",
+        mapLink:"",
+        travelAwaits:"",
+        categoryId:"",
         subcategory_id:"",
 
     })
@@ -123,7 +123,7 @@ const PostAdd = (props) => {
         let fileds={...formData}
         for (let type  in fileds){
             console.log('filedsif',fileds, formData[type])
-           if(!fileds[type] && type=='media' && type=='title'){
+           if(!fileds[type] && type=='multiple_image' && type=='subcategory_id'){
             console.log('fileds[type]',type,fileds, fileds[type])
             isFormValid=false
               errors[type]=errorMsgs[type]
@@ -145,9 +145,9 @@ const PostAdd = (props) => {
     const handleCategory=(selectedOption)=>{
         //   formData()
             let errors= {...formError}
-            delete errors['category_id']
+            delete errors['categoryId']
             setFormError({...errors})
-          setFormData({...formData,category_id:selectedOption})
+          setFormData({...formData,categoryId:selectedOption})
     } 
     const handleSelectOption=(selectedOption)=>{
         //   formData()
@@ -164,13 +164,17 @@ const PostAdd = (props) => {
         // generateFormData.append('name',formData['name'])
         for (let type  in formData){
             console.log('formData44434',type,formData )
-            if(type!='subcategory_id' && type!='category_id')
+            if(type!='subcategory_id' && type!='categoryId' && type!='city')
              generateFormData.append(type,formData[type])
         }
+        generateFormData.append('city',formData['city'].label)
+        
+        if(formData['subcategory_id'])
         generateFormData.append('subcategory_id',formData['subcategory_id'].value)
-        generateFormData.append('category_id',formData['category_id'].value)
+        
+        generateFormData.append('categoryId',formData['categoryId'].value)
 
-         console.log('generateFormData333', generateFormData)
+         console.log('generateFormData333',formData, generateFormData)
          
             if(data?.id){
                 // props.UpdateCategory(data.id,generateFormData)
@@ -208,47 +212,7 @@ const PostAdd = (props) => {
     }
 
     console.log('data={isOpenDetail.data}', data)
-    const SignupSchema = Yup.object().shape({
-    title: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    description: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    media: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    multiple_image :  Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-    city :  Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-    map_link :  Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-
-    travel_awaits: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-
-    subcategory_id: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-
-    category_id: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-    });
+  
     
     const submitHandler=(values)=>{
        if(data?.id){
@@ -282,26 +246,7 @@ const PostAdd = (props) => {
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
-                  {/* <Formik
-                    initialValues={{
-                        title:data?.title ? data.title :'',
-                        multiple_image:data?.multiple_image ? data.multiple_image :'',
-                        status:data?.status ? data.status :'',
-                        is_video:data?.is_video ? data.is_video :'',
-                        description:data?.description ? data.description :'',
-
-                        category_id:data?.category_id ? data.category_id :'',
-
-                    }}
-                    validationSchema={SignupSchema}
-                    onSubmit={values => {
-                        submitHandler(values)
-                        // same shape as initial values
-                        console.log(values);
-                    }}
-                    >
-                    {({ errors, touched }) => (
-                        <Form> */}
+                 
                         <div className='p-3'>
                             <p className="form-label-title">Title </p>
                             <Input name="title" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
@@ -317,35 +262,6 @@ const PostAdd = (props) => {
                         </div>
 
                         <div className='p-3'>
-                        <p className="form-label-title">Media</p>
-                        {/* <Input name="media" type="file" className="form-control" onChange={(e)=>onChangeHandler(e)}/> */}
-                        <div>
-                            <UploadLogo
-                                id={'image'}
-                                logoUrl={''}
-                                setSelectedLogoImage={(value) =>handleImage(value) }
-                                // disabled={field.disabled}
-                                name='media'
-                            />
-                        </div>
-                        {formError.media ? <div className='text-danger'>{formError.media}</div> : null}
-                        </div>
-
-                       <div className='p-3'>
-                      <p className="form-label-title">Multiple Image </p>
-                            <UploadLogo
-                                id={'media'}
-                                logoUrl={''}
-                                setSelectedLogoImage={(value) =>handleMultiImage(value) }
-                                // disabled={field.disabled}
-                                name='multiple_image'
-                            />
-                        {/* <Input name="multiple_image" className="form-control" /> */}
-                        {formError.multiple_image ? (
-                            <div className='text-danger'>{formError.multiple_image}</div>
-                        ) : null}
-                      </div>
-                        <div className='p-3'>
                           <p className="form-label-title" >City </p>
                           <Select
                             value={formData?.city }
@@ -353,7 +269,6 @@ const PostAdd = (props) => {
                             options={getCategory}
                             name="city"
                         />
-                       
 
                         {formError.city ? <div className='text-danger'>{formError.city}</div> : null}
                         </div>
@@ -361,25 +276,25 @@ const PostAdd = (props) => {
 
                         <div className='p-3'>
                         <p className="form-label-title">Map Links</p>
-                        <Input name="map_link" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
-                        {formError.map_link ? <div className='text-danger'>{formError.map_link}</div> : null}
+                        <Input name="mapLink" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {formError.mapLink ? <div className='text-danger'>{formError.mapLink}</div> : null}
                         </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Travel Awaits</p>
-                        <Input name="travel_awaits" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
-                        {formError.travel_awaits ? <div className='text-danger'>{formError.travel_awaits}</div> : null}
+                        <Input name="travelAwaits" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        {formError.travelAwaits ? <div className='text-danger'>{formError.travelAwaits}</div> : null}
                         </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Category</p>
                         <Select
-                            value={formData?.category_id }
+                            value={formData?.categoryId }
                             onChange={handleCategory}
                             options={getCategory}
-                            name="category_id"
+                            name="categoryId"
                         />
-                        {formError?.category_id ? <div className='text-danger'>{formError?.category_id}</div> : null}
+                        {formError?.categoryId ? <div className='text-danger'>{formError?.categoryId}</div> : null}
 
                        </div>
                         
@@ -395,10 +310,49 @@ const PostAdd = (props) => {
                         {formError?.subcategory_id ? <div className='text-danger'>{formError?.subcategory_id}</div> : null}
 
                        </div>
+
+                        <div className='p-3'>
+                        <p className="form-label-title">image</p>
+                        {/* <Input name="image" type="file" className="form-control" onChange={(e)=>onChangeHandler(e)}/> */}
+                        <div>
+                            <UploadLogo
+                                id={'image'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) =>handleImage(value) }
+                                // disabled={field.disabled}
+                                name='image'
+                            />
+                        </div>
+                        {formError.image ? <div className='text-danger'>{formError.image}</div> : null}
+                        </div>
+
+                        
+
+                       <div className='p-3'>
+                      <p className="form-label-title">Multiple Image </p>
+                            <UploadLogo
+                                id={'image'}
+                                logoUrl={''}
+                                setSelectedLogoImage={(value) =>handleMultiImage(value) }
+                                // disabled={field.disabled}
+                                name='multiple_image'
+                            />
+                        {/* <Input name="multiple_image" className="form-control" /> */}
+                        {formError.multiple_image ? (
+                            <div className='text-danger'>{formError.multiple_image}</div>
+                        ) : null}
+                      </div>
+                       
+
+
+
+                       
+
+                      
                         {/* <div className='p-3'>
                         <p className="form-label-title">Category</p>
-                        <Input name="category_id" type="text" className="form-control"/>
-                        {formError.category_id ? <div className='text-danger'>{formError.category_id}</div> : null}
+                        <Input name="categoryId" type="text" className="form-control"/>
+                        {formError.categoryId ? <div className='text-danger'>{formError.categoryId}</div> : null}
                         </div>
                         <div className='p-3'>
                         <p className="form-label-title">sub Category</p>

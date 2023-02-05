@@ -295,13 +295,14 @@ const SubCategoryAdd = (props) => {
                         <div className='p-3'>
                       <p className="form-label-title">Image </p>
                       <div>
-                            <UploadLogo
+                            {/* <UploadLogo
                                 id={'image'}
                                 logoUrl={''}
                                 setSelectedLogoImage={(value) =>handleImage(value) }
                                 // disabled={field.disabled}
                                 name='image'
-                            />
+                            /> */}
+                            <input type='file'  accept='image/*' onChange={(e)=>handleImage(e.target.value)}/>
                         </div>
                        
                         {formError.image ? (
@@ -312,13 +313,15 @@ const SubCategoryAdd = (props) => {
                         <div className='p-3'>
                         <p className="form-label-title">Is Video</p>
                         <div>
-                            <UploadVideo
+                        <input type='file'  accept='video/*' onChange={(e)=>handleVideo(e.target.value)}/>
+
+                            {/* <UploadVideo
                                 id={'video'}
                                 logoUrl={''}
                                 setSelectedLogoImage={(value) =>handleVideo(value) }
                                 // disabled={field.disabled}
                                 name='video'
-                            />
+                            /> */}
                         </div>
                         {formError.is_video ? <div className='text-danger'>{formError.is_video}</div> : null}
                         </div>

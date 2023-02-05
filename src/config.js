@@ -18,3 +18,21 @@ axios.interceptors.request.use(
           return Promise.reject(error);
       }
   );
+
+  axios.interceptors.response.use((response) => {
+    if((response.data.status == 500) && response.data.message=='Token expired') {
+        //  alert("You are not authorized");
+         localStorage.removeItem('authData');
+         console.log('Token expired')
+         const redirectLink=window.location.origin+'/login'
+         window.location.href=redirectLink
+    }
+    console.log('Token expired 1',response,localStorage.getItem('authData'))
+  
+    return response;
+}, (error) => {
+    if (error.response && error.response.data) {
+        return Promise.reject(error.response.data);
+    }
+    return Promise.reject(error.message);
+});
