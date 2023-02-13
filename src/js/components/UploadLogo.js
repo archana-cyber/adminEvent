@@ -58,7 +58,7 @@ class UploadLogo extends Component {
                         // this.props.setSelectedLogoImage(event.target.value)
                     });
                 }
-                this.props.setSelectedLogoImage(event.target.value)
+                this.props.setSelectedLogoImage(event.target.files[0])
             } else {
                 this.setState({ logoUpdateSuccessfully: false, logoUpdateError: true, logoUploading: false })
 
