@@ -38,8 +38,12 @@ export const UpdateCategory = (profileid, payload={},callback=()=>{})=>{
         axios.put(`${BASE_URL}/category/update/${profileid}`, payload)
         .then(res=>{
             console.log("SaveTransactionPayload Res ===>",profileid,payload,res.data) 
-            if(res.data){
-                dispatch({ type: UPDATE_CATEGORY_SUCCESS,payload :[ res.data.data] });
+           
+            if(res.data.data){
+                let categoryInfo = store.getState().categoryReducer.categoryList.length>0 ? store.getState().categoryReducer.categoryList : [];
+                let updatedList = _.filter(categoryInfo, function(item) { return item.id !== profileid; });
+                updatedList.push(res.data.data)
+                dispatch({ type: UPDATE_CATEGORY_SUCCESS,payload:updatedList});
                 callback(res.data)
             }
            
