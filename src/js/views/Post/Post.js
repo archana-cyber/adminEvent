@@ -15,7 +15,10 @@ import PostView from "./PostView";
 import { RecentPostAction } from "../../actions/postAction";
 import { GetCategoryAction } from "../../actions/categoryAction";
 import { GetSubCategoryAction } from "../../actions/subcategoryAction";
+import { GetCityAction } from "../../actions/cityAction";
+
 import { connect } from 'react-redux'
+import imageholder from "../../../images/imageholder.png"
 
 
 const todosPerPage = 5;
@@ -303,7 +306,7 @@ const dummydata=[{
   }]
 const Post = (props) => {
 
-  const { profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading } = props
+  const { profileData=props.postList, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading } = props
   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -379,6 +382,9 @@ const Post = (props) => {
 
     if(!props.subcategoryList.length){
         props.GetSubCategoryAction();
+     }
+     if(!props.cityList.length){
+        props.GetCityAction();
      }
   },[])
 
@@ -754,18 +760,27 @@ const Post = (props) => {
               Header: "Profile List",
               columns: [
                  
-                  
+                {
+                    Header:"Media",
+                    accessor: (originalRow) => (<div className="image-wrapper">
+                        {originalRow.media ? <div>
+                            <img src={originalRow.media}/>
+                        </div> :
+                        <div><img src={imageholder}/></div>}
+                      </div>),
+                  disableFilters: true
+                  },
                   {
                       Header: "Title",
                       accessor: "title",
                       filter: "fuzzyText"
                   },
-                  {
-                      Header: "Media",
-                      accessor: "media",
-                      filter: "fuzzyText"
+                //   {
+                //       Header: "Media",
+                //       accessor: "media",
+                //       filter: "fuzzyText"
                      
-                  },
+                //   },
                   {
                     Header: "City",
                     accessor: "city",
@@ -774,21 +789,26 @@ const Post = (props) => {
                 },
                 {
                   Header: "Map Link",
-                  accessor: "map_link",
+                  accessor: "mapLink",
                   filter: "fuzzyText"
                 },
-              {
-                Header:"Action",
-                accessor: (originalRow) => (<div className="action-wrp">
-                  <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
-                  <div onClick={(e) => {
-                    deleteModalHandler(e)
-                  //e.stopPropagation();
-                 // toggleModal(!modal);
-                 // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
-              }} className='trash-btn'><i className="fa fa-trash"></i></div></div>),
-              disableFilters: true
-              }
+                {
+                    Header: "Travel Awaits",
+                    accessor: "travelAwaits",
+                    filter: "fuzzyText"
+                  },
+            //   {
+            //     Header:"Action",
+            //     accessor: (originalRow) => (<div className="action-wrp">
+            //       <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
+            //       <div onClick={(e) => {
+            //         deleteModalHandler(e)
+            //       //e.stopPropagation();
+            //      // toggleModal(!modal);
+            //      // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
+            //   }} className='trash-btn'><i className="fa fa-trash"></i></div></div>),
+            //   disableFilters: true
+            //   }
                   
               ]
           }
@@ -858,8 +878,9 @@ const mapStateToProps = state =>{
    
     const {postList,postLoader}  = state.postReducer;
     const {categoryList}  = state.categoryReducer;
+    const {cityList}  = state.cityReducer;
     const {subcategoryList}  = state.subcategoryReducer;
-    return {postList,postLoader,subcategoryList,categoryList};
+    return {postList,postLoader,subcategoryList,categoryList,cityList};
   }
-  export default connect(mapStateToProps,{RecentPostAction,GetCategoryAction,GetSubCategoryAction})(Post);
+  export default connect(mapStateToProps,{RecentPostAction,GetCategoryAction,GetSubCategoryAction,GetCityAction})(Post);
   

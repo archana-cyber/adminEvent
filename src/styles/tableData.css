@@ -1087,3 +1087,30 @@ body  .confirmModal{
     position: relative;
     z-index: 99;
 }
+.zindex-for-select1{
+    z-index: 999;
+}
+.zindex-for-select2{
+    z-index: 998;
+}.zindex-for-select3{
+    z-index: 997;
+}
+.img-wrp img{
+  width: 120px;
+  object-fit: scale-down;
+
+}
+.multi-img-wrp{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.multi-img-wrp img{
+    width: 120px;
+    margin-bottom: 20px;
+    object-fit: scale-down;
+
+}
+.multi-img-outer{
+    padding: 16px;
+}

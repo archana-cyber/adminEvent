@@ -59,6 +59,7 @@ const PostAdd = (props) => {
     const [modal, setmodal] = useState(false)
     const [getCategory, setGetCategory] = useState([])
     const [subCategoryList, setSubCategoryList] = useState([])
+    const [cityList, setCityList] = useState([])
 
     const [errorMsg, setErrorMsg] = useState('')
 
@@ -82,28 +83,30 @@ const PostAdd = (props) => {
         setmodal(!modal)
        
     }
-    // useEffect(()=>{
-    //     let arrayData=[];
-    //     // let listdata=props.categoryList || dumData
-    //     let listdata=dumData
-    //     Object.keys(listdata).length>0 && listdata.map((item,index)=>{
-    //        arrayData.push({label:item.name,value:item.id})
-    //     })
-    //     setGetCategory(arrayData)
-    // },[])
+    useEffect(()=>{
+        if(props.cityList.length){
+            let arrayData=[];
+            let listdata=props.cityList 
+            // let listdata=dumData
+            Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+            arrayData.push({label:item.name,value:item.id})
+            })
+            setCityList(arrayData)
+       }
+    },[props.cityList])
 
-    // useEffect(()=>{
-    //     if(props.subcategoryList.length){
-    //          let arrayData=[];
-    //          let listdata=props.subcategoryList 
-    //          // let listdata=dumData
-    //          Object.keys(listdata).length>0 && listdata.map((item,index)=>{
-    //          arrayData.push({label:item.name,value:item.id})
-    //          })
-    //          setSubCategoryList(arrayData)
-    //     }
+    useEffect(()=>{
+        if(props.subcategoryList.length){
+             let arrayData=[];
+             let listdata=props.subcategoryList 
+             // let listdata=dumData
+             Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+             arrayData.push({label:item.label,value:item.value})
+             })
+             setSubCategoryList(arrayData)
+        }
         
-    //  },[props.subcategoryList])
+     },[props.subcategoryList])
 
      useEffect(()=>{
         if(props.categoryList.length){
@@ -117,18 +120,36 @@ const PostAdd = (props) => {
         }
         
      },[props.categoryList])
-
+    //  const validateAll=()=>{
+    //     let errors={},isFormValid=true;
+    //     let fileds={...formData}
+    //     for (let type  in fileds){
+    //         console.log('filedsif',fileds, formData[type])
+    //        if(!fileds[type] && type!='image' && type!='status'){
+    //         console.log('fileds[type]',type,fileds, fileds[type])
+    //         isFormValid=false
+    //           errors[type]=errorMsgs[type]
+    //        }
+    //     }
+    //     console.log('errors444', errors)
+    //     setFormError({...errors})
+    //     return isFormValid
+    // }
     const validateAll=()=>{
         let errors={},isFormValid=true;
         let fileds={...formData}
         for (let type  in fileds){
             console.log('filedsif',fileds, formData[type])
-           if(!fileds[type] && type=='multiple_image' && type=='subcategory_id'){
+           if(!fileds[type] ){
             console.log('fileds[type]',type,fileds, fileds[type])
             isFormValid=false
               errors[type]=errorMsgs[type]
            }
         }
+        // if(!fileds['multiple_image'] && errors['multiple_image']){
+        //     isFormValid=true
+        //     delete errors['multiple_image']
+        // }
         console.log('errors444', errors)
         setFormError({...errors})
         return isFormValid
@@ -158,6 +179,7 @@ const PostAdd = (props) => {
     } 
 
     const formSubmitHandler=()=>{
+        console.log('validateAll', validateAll(),formError)
        if(validateAll()){
 
         let generateFormData = new FormData();
@@ -178,9 +200,12 @@ const PostAdd = (props) => {
          
             if(data?.id){
                 // props.UpdateCategory(data.id,generateFormData)
+                console.log('if inside')
                 toggleEvent()
                 // edit api call
             }else{
+                console.log('if inside else')
+
                 props.AddPostAction(generateFormData,(res)=>{
                     console.log('res44', res)
                  if(res.status==500){
@@ -230,7 +255,7 @@ const PostAdd = (props) => {
         setFormData({...formData,[e.target.name]:e.target.value})
     }
 
-    console.log('formdata555', formData)
+    console.log('formdata555',subCategoryList,data, formData)
     return (
         <div>
           {/* <Button color="danger" onClick={toggle}>{props.buttonLabel}</Button> */}
@@ -266,8 +291,9 @@ const PostAdd = (props) => {
                           <Select
                             value={formData?.city }
                             onChange={handleSelectOption}
-                            options={getCategory}
+                            options={cityList}
                             name="city"
+                            className='zindex-for-select1'
                         />
 
                         {formError.city ? <div className='text-danger'>{formError.city}</div> : null}
@@ -293,6 +319,7 @@ const PostAdd = (props) => {
                             onChange={handleCategory}
                             options={getCategory}
                             name="categoryId"
+                            className='zindex-for-select2'
                         />
                         {formError?.categoryId ? <div className='text-danger'>{formError?.categoryId}</div> : null}
 
@@ -304,8 +331,9 @@ const PostAdd = (props) => {
                         <Select
                             value={formData?.subcategory_id }
                             onChange={handleSubCategory     }
-                            options={getCategory}
+                            options={subCategoryList}
                             name="subcategory_id"
+                            className='zindex-for-select3'
                         />
                         {formError?.subcategory_id ? <div className='text-danger'>{formError?.subcategory_id}</div> : null}
 
@@ -386,8 +414,10 @@ const mapStateToProps = state =>{
    
     const {categoryList}  = state.categoryReducer;
     const {subcategoryList}  = state.subcategoryReducer;
+    const {cityList}  = state.cityReducer;
 
-    return {categoryList,subcategoryList};
+
+    return {categoryList,subcategoryList,cityList};
   }
   export default connect(mapStateToProps,{AddPostAction})(PostAdd);
   

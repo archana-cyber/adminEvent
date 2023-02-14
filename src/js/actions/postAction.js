@@ -11,7 +11,7 @@ export const AddPostAction = (payload,callback=()=>{})=>{
         .then(res=>{
             console.log("/post/create Res ===>",res.data) 
             if(res.data)
-             dispatch({ type: ADD_POST_SUCCESS });
+             dispatch({ type: ADD_POST_SUCCESS,payload :[ res.data.data]  });
 
              callback(res.data)  
         })
@@ -35,7 +35,7 @@ export const RecentPostAction = ()=>{
             console.log("/post/recent Res ===>",res.data) 
             if(res.data)
             
-            dispatch({ type: GET_POST_SUCCESS });
+            dispatch({ type: GET_POST_SUCCESS,payload : res.data.data });
         })
         .catch(err=>{
             console.log("/post/recent Error ===>",err)

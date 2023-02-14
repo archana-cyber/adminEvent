@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { Container, Row, Col, Table, Button, Modal, ModalBody, ModalFooter } from "reactstrap"
 import moment from "moment";
+import { connect } from 'react-redux'
 
 
-const PostView = ({data,closeDetails}) => {
+const PostView = (props) => {
 
+    const {data,closeDetails}=props
     const {original}=data
     const renderValue = (value, isDate) => {
         console.log('value888', value)
@@ -17,6 +19,20 @@ const PostView = ({data,closeDetails}) => {
         }
         return value;
     }
+
+    const getDataFromApiCategory=(findData,list)=>{
+      let tempdata={}
+      console.log('list', list)
+      tempdata=list.find(item=>item.id==findData)
+      return tempdata.name
+    }
+    const getDataFromApiSubCategory=(findData,list)=>{
+        let tempdata={}
+      console.log('list1', list)
+
+        tempdata=list.find(item=>item.value==findData)
+        return tempdata.label
+      }
 
     console.log('data3333', data)
     return (
@@ -40,17 +56,9 @@ const PostView = ({data,closeDetails}) => {
                                     <p className='form-label-title'>description</p>
                                     <div className='label-detail'>{renderValue(original.description)}</div>
                                 </td>
-                            </tr><tr>
-                                <td>
-                                    <p className='form-label-title'>Media</p>
-                                    <div className='label-detail'>{renderValue(original.media)}</div>
-                                </td>
-                            </tr><tr>
-                                <td>
-                                    <p className='form-label-title'>multiple_image</p>
-                                    <div className='label-detail'>{renderValue(original.multiple_image)}</div>
-                                </td>
-                            </tr><tr>
+                            </tr>
+                           
+                            <tr>
                                 <td>
                                     <p className='form-label-title'>City</p>
                                     <div className='label-detail'>{renderValue(original.city)}</div>
@@ -58,24 +66,37 @@ const PostView = ({data,closeDetails}) => {
                             </tr><tr>
                                 <td>
                                     <p className='form-label-title'>travel_awaits</p>
-                                    <div className='label-detail'>{renderValue(original.travel_awaits)}</div>
+                                    <div className='label-detail'>{renderValue(original.travelAwaits)}</div>
                                 </td>
                             </tr><tr>
                                 <td>
                                     <p className='form-label-title'>map_link</p>
-                                    <div className='label-detail'>{renderValue(original.map_link)}</div>
+                                    <div className='label-detail'>{renderValue(original.mapLink)}</div>
                                 </td>
                             </tr><tr>
                                 <td>
                                     <p className='form-label-title'>category_id</p>
-                                    <div className='label-detail'>{renderValue(original.category_id)}</div>
+                                    <div className='label-detail'>{getDataFromApiCategory(original.categoryId,props.categoryList)}</div>
                                 </td>
                             </tr><tr>
                                 <td>
                                     <p className='form-label-title'>subcategory_id</p>
-                                    <div className='label-detail'>{renderValue(original.subcategory_id)}</div>
+                                    <div className='label-detail'>{getDataFromApiSubCategory(original.subcategoryId,props.subcategoryList)}</div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <p className='form-label-title'>Media</p>
+                                    <div className='label-detail img-wrp'>
+                                        <img src={original.media}/>
+                                    </div>
+                                </td>
+                            </tr>
+                            {/* <tr>
+                                <td>
+                                    
+                                </td>
+                            </tr> */}
                             {/* <tr>
                                 <td>
                                     <p className='form-label-title'>Job Key</p>
@@ -87,7 +108,17 @@ const PostView = ({data,closeDetails}) => {
                         </tbody>
                     </Table>
                    
-                 
+                     {typeof original.multipleImage=='object' && original.multipleImage.length>0 && 
+                     <div className="multi-img-outer">
+                     <p className='form-label-title'>multiple_image</p>
+                                    <div className='label-detail multi-img-wrp'>
+                                        {typeof original.multipleImage=='object' && original.multipleImage.length>0 &&
+                                        original.multipleImage.map((item,index)=>{
+                                            return <img src={original.multipleImage}/>
+                                  
+                                        })}
+                                    </div>
+                     </div>}
                     
                 </Col>
             </Row>
@@ -96,4 +127,15 @@ const PostView = ({data,closeDetails}) => {
     )
 }
 
-export default PostView
+// export default PostView
+
+const mapStateToProps = state =>{
+   
+    const {postList,postLoader}  = state.postReducer;
+    const {categoryList}  = state.categoryReducer;
+    const {cityList}  = state.cityReducer;
+    const {subcategoryList}  = state.subcategoryReducer;
+    return {postList,postLoader,subcategoryList,categoryList,cityList};
+  }
+  export default connect(mapStateToProps,{})(PostView);
+  
