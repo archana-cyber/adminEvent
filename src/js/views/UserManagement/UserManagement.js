@@ -12,6 +12,8 @@ import UserManagementAdd from "./UserManagementAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import UserManagementView from "./UserManagementView";
+import { GetUsersAction } from "../../actions/authAction";
+import { connect } from 'react-redux'
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -546,8 +548,9 @@ const dummydata=[{
     "gender": "Male",
     "social_media": "Blue"
   }]
-const UserManagement = ({ profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }) => {
+const UserManagement = (props) => {
 
+  const { profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }=props
   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -570,6 +573,12 @@ const UserManagement = ({ profileData=dummydata, tableClass,updateScheduleList, 
 
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
+  useEffect(()=>{
+    // props.AddCategory()
+    if(!props.userList.length)
+    props.GetUsersAction()
+  },[])
+
   // useEffect(() => {
   //     if (isOpenDetail.isOpen && profileData.length) {
   //         const payload = isOpenDetail.data.key ? isOpenDetail.data.key : profileData[profileData.length - 1].key
@@ -1083,4 +1092,12 @@ const UserManagement = ({ profileData=dummydata, tableClass,updateScheduleList, 
   )
 }
 
-export default UserManagement
+// export default UserManagement
+
+const mapStateToProps = state =>{
+   
+    const {userList,loader}  = state.authReducer;
+    return {userList,loader};
+  }
+  export default connect(mapStateToProps,{GetUsersAction})(UserManagement);
+  

@@ -1,7 +1,7 @@
 
 import { AUTH_LOGIN_FAIL,AUTH_LOGIN_SUCCESS,AUTH_LOGIN_REQUEST,
     AUTH_FORGOT_PASSWORD_FAIL,AUTH_FORGOT_PASSWORD_SUCCESS,AUTH_FORGOT_PASSWORD_REQUEST,
-    AUTH_PROFILE_REQUEST,AUTH_PROFILE_SUCCESS,AUTH_PROFILE_FAIL
+    AUTH_PROFILE_REQUEST,AUTH_PROFILE_SUCCESS,AUTH_PROFILE_FAIL,GET_USERS_REQUEST,GET_USERS_SUCCESS,GET_USERS_FAIL,
 } from "../types";
 import axios from "axios";
 import {BASE_URL} from "../../config"
@@ -103,3 +103,23 @@ export const  UpdateProfileDataAction = (payload,callBack=()=>{})=>{
         })
     }
 }
+
+
+export const  GetUsersAction = ()=>{
+    return async(dispatch)=>{
+        dispatch({ type: GET_USERS_REQUEST });
+        axios.get(`${BASE_URL}/user/all`)
+        .then(res=>{
+            console.log("users Res ===>",res.data) 
+            if(res.data)
+            
+            dispatch({ type: GET_USERS_SUCCESS,payload : res.data.data });
+        })
+        .catch(err=>{
+            console.log("users Error ===>",err)
+            dispatch({ type: GET_USERS_FAIL });
+            //CustomException(err)
+        })
+    }
+}
+
