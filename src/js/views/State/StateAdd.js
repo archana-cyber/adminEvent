@@ -2,11 +2,12 @@ import React,{useState,useEffect} from 'react'
 import { Spinner, Button, Modal, Input, ModalBody, ModalHeader,FormGroup ,Label,Table} from "reactstrap"
 import { AddStateAction,UpdateStateAction } from '../../actions/stateAction';
 import { connect } from 'react-redux'
+import Select from 'react-select';
 
 
 const errorMsgs = {
-    "name":"Please enter a valid country name",
-   
+    "name":"Please enter a valid state name",
+    "country":"Please select any country"
     }
 const StateAdd = (props) => {
 
@@ -14,9 +15,12 @@ const StateAdd = (props) => {
     const [modal, setmodal] = useState(false)
     // const [,] = useState(second)
     const [formError, setFormError] = useState({})
+    const [getCountry, setGetCountry] = useState([])
+
     const [errorMsg, setErrorMsg] = useState('')
     const [formData, setFormData] = useState({
-        name:data.label,
+        name:data.name,
+        country:''
     })
 
  
@@ -24,12 +28,46 @@ const StateAdd = (props) => {
         setmodal(!modal)
        
     }
+    useEffect(()=>{
+        if(props.countryList.length){
+            let arrayData=[];
+            let listdata=props.countryList 
+            // let listdata=dumData
+            Object.keys(listdata).length>0 && listdata.map((item,index)=>{
+            arrayData.push({label:item.label,value:item.value})
+            })
+            setGetCountry(arrayData)
+       }
+    },[props.countryList])
+
+
+    useEffect(()=>{
+        if(Object.keys(data).length){
+          console.log('data8899', data)
+          let countryData
+         
+          if(data?.country)
+          countryData={ value: data.country.id, label: data.country.name }
+          //   setFormData({...formData,status: { value: 'true', label: 'True' }})
+         
+  
+         setFormData({...formData,country:countryData })
+  
+        }
+      },[data])
+
 
     console.log('formData444',data,"formData", formData)
   
     console.log('data={isOpenDetail.data}',formData,"data",data)
     
-   
+    const handleCountry=(selectedOption)=>{
+        //   formData()
+            let errors= {...formError}
+            delete errors['country']
+            setFormError({...errors})
+          setFormData({...formData,country:selectedOption})
+    } 
     const validateAll=()=>{
         let errors={},isFormValid=true;
         let fileds={...formData}
@@ -49,10 +87,11 @@ const StateAdd = (props) => {
     const formSubmitHandler=()=>{
        if(validateAll()){
        let finalData;
-       finalData={...formData}
+       finalData={...formData,countryId:formData.country.value}
         
-            if(data?.value){
-                props.UpdateStateAction(data.value,finalData,(res)=>{
+
+            if(data?.id){
+                props.UpdateStateAction(data.id,finalData,(res)=>{
                  if(res.status==500){
                     setErrorMsg(res.message)
                  }else{
@@ -99,7 +138,19 @@ const StateAdd = (props) => {
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
-                  
+                        <div className='p-3'>
+                                <p className="form-label-title">Country</p>
+                                <Select
+                                    value={formData?.country }
+                                    onChange={handleCountry}
+                                    options={getCountry}
+                                    name="country"
+                                    className='zindex-for-select2'
+                                />
+                                {formError?.country ? <div className='text-danger'>{formError?.country}</div> : null}
+
+                        </div>
+
                         <div className='p-3'>
                             <p className="form-label-title">Name </p>
                             <Input name="name" onChange={(e)=>onChangeHandler(e)} value={formData.name}/>

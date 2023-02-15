@@ -13,6 +13,7 @@ import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 // import CategoryView from "./CategoryView";
 import { GetStateAction,DeleteStateAction } from "../../actions/stateAction";
+import {GetCountryAction} from "../../actions/countryAction"
 import { connect } from 'react-redux'
 import imageholder from "../../../images/imageholder.png"
 
@@ -275,6 +276,10 @@ const State = (props) => {
     // props.AddCountry()
     if(!props?.stateList?.length)
     props.GetStateAction()
+
+    if(!props.countryList.length)
+    props.GetCountryAction()
+
   },[])
 
   useEffect(()=>{
@@ -304,7 +309,7 @@ const State = (props) => {
     e.preventDefault()
     e.stopPropagation()
     eventDeleteToggle()
-    setGetDeleteId(rowData.value)
+    setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
     setEventModal(!eventModal)
@@ -666,8 +671,13 @@ const State = (props) => {
                 
                 {
                     Header: "Name",
-                    accessor: "label",
+                    accessor: "name",
                     filter: "fuzzyText"
+                },
+                {
+                    Header:"Country",
+                    accessor: (originalRow) => (<div className="action-wrp">{(originalRow.country && originalRow.country.name)?originalRow.country.name : ''}</div>),
+                  disableFilters: true
                 },
             
               {
@@ -763,7 +773,9 @@ const State = (props) => {
 const mapStateToProps = state =>{
    
     const {stateList}  = state.stateReducer;
-    return {stateList};
+    const {countryList}  = state.countryReducer;
+
+    return {stateList,countryList};
   }
-  export default connect(mapStateToProps,{GetStateAction,DeleteStateAction})(State);
+  export default connect(mapStateToProps,{GetCountryAction,GetStateAction,DeleteStateAction})(State);
   

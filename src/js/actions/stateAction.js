@@ -17,7 +17,7 @@ export const DeleteStateAction = (profileid,callback=()=>{})=>{
             console.log("SaveTransactionPayload Res ===>",profileid,res.data) 
             if(res.data){
                 let stateInfo = store.getState().stateReducer.stateList.length>0 ? store.getState().stateReducer.stateList : [];
-                let updatedList = _.filter(stateInfo, function(item) { return item.value !== profileid; });
+                let updatedList = _.filter(stateInfo, function(item) { return item.id !== profileid; });
                 console.log('updatedList55', updatedList)
                 dispatch({ type: DELETE_STATE_SUCCESS,payload:updatedList});
                 callback(res.data)
@@ -42,9 +42,10 @@ export const UpdateStateAction = (profileid, payload={},callback=()=>{})=>{
             console.log("SaveTransactionPayload Res ===>",profileid,payload,res.data) 
             if(res.data){
                 let stateInfo = store.getState().stateReducer.stateList.length>0 ? store.getState().stateReducer.stateList : [];
-                let updatedList = _.filter(stateInfo, function(item) { return item.value !== profileid; });
+                let updatedList = _.filter(stateInfo, function(item) { return item.id !== profileid; });
+                updatedList.push(res.data.data)
                 console.log('updatedList55', updatedList)
-                dispatch({ type: UPDATE_STATE_SUCCESS,payload:[{value:res.data.data.id,label:res.data.data.name},...updatedList]});
+                dispatch({ type: UPDATE_STATE_SUCCESS,payload:updatedList});
                 callback(res.data)
             }
             
@@ -69,7 +70,7 @@ export const AddStateAction = (payload,callback=()=>{})=>{
         .then(res=>{
             console.log("location/create/state Res ===>",res.data) 
             if(res.data)
-              dispatch({ type: ADD_STATE_SUCCESS,payload :[{value:res.data.data.id,label:res.data.data.name}] });
+              dispatch({ type: ADD_STATE_SUCCESS,payload :[ res.data.data] });
 
             callback(res.data)  
         })
