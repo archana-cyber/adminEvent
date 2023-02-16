@@ -6,14 +6,15 @@ import Select from 'react-select';
 import { GetCountryAction} from '../../actions/countryAction';
 import { GetStateAction} from '../../actions/stateAction';
 import UploadLogo from '../../components/UploadLogo';
-
+import { isEmpty } from '../../../constant/helper';
 
 
 const errorMsgs = {
     name:"Please enter a valid country name",
     countryId:'Please select one country',
     stateId:'Please select one state',
-    isPopular:'Please select popularity'
+    isPopular:'Please select popularity',
+    image:"Please select image"
     }
    
 const options = [
@@ -32,7 +33,7 @@ const CityAdd = (props) => {
     const [formError, setFormError] = useState({})
     const [errorMsg, setErrorMsg] = useState('')
     const [formData, setFormData] = useState({
-        name:data.label,
+        name:data.name,
         countryId:'',
         stateId:'',
         image:'',
@@ -48,7 +49,28 @@ const CityAdd = (props) => {
     console.log('formData444',data,"formData", formData)
   
     console.log('data={isOpenDetail.data}',formData,"data",data)
-    
+    useEffect(()=>{
+        if(Object.keys(data).length){
+          console.log('data8899', data)
+          let countryData,stateData,isPopularData
+         
+          if(data?.country)
+          countryData={ value: data.country.id, label: data.country.name }
+          //   setFormData({...formData,status: { value: 'true', label: 'True' }})
+          if(data?.state)
+          stateData={ value: data.state.id, label: data.state.name }
+
+          
+          if(data?.isPopular==true || data?.isPopular=='true')
+          isPopularData={ value: 'true', label: 'True' }
+          else
+           isPopularData= { value: 'false', label: 'False' }
+  
+         setFormData({...formData,countryId:countryData,stateId:stateData,isPopular:isPopularData,image:data.image })
+  
+        }
+    },[data])
+
     useEffect(()=>{
         // props.AddCountry()
         if(!props?.countryList?.length)
@@ -77,7 +99,7 @@ const CityAdd = (props) => {
                 let listdata=props.stateList 
                 // let listdata=dumData
                 Object.keys(listdata).length>0 && listdata.map((item,index)=>{
-                arrayData.push({label:item.label,value:item.value})
+                arrayData.push({label:item.name,value:item.id})
                 })
                 setGetState(arrayData)
         }
@@ -96,24 +118,38 @@ const CityAdd = (props) => {
         let fileds={...formData}
         for (let type  in fileds){
             console.log('filedsif',fileds, formData[type])
-           if(!fileds[type] && fileds[type]!='image'){
+           if(!fileds[type]){
             console.log('fileds[type]',type,fileds, fileds[type])
             isFormValid=false
               errors[type]=errorMsgs[type]
            }
         }
+        if(errors['image']){
+            delete errors['image']
+            isFormValid=true
+        }
         console.log('errors444', errors)
         setFormError({...errors})
-        return isFormValid
+        return isEmpty(errors) ? true : false;
     }
     console.log('formError',errorMsg, formError)
     const formSubmitHandler=()=>{
        if(validateAll()){
        let finalData;
        finalData={...formData,stateId:formData.stateId.value,countryId:formData.countryId.value,isPopular:formData.isPopular.value}
-        
-            if(data?.value){
-                props.UpdateCityAction(data.value,finalData,(res)=>{
+       let generateFormData = new FormData();
+       // generateFormData.append('name',formData['name'])
+       for (let type  in formData){
+           console.log('formData44434',type,formData )
+           if(type!='countryId' && type!='isPopular' && type!='stateId')
+            generateFormData.append(type,formData[type])
+       }
+       generateFormData.append('countryId',formData['countryId'].value)
+       generateFormData.append('stateId',formData['stateId'].value)
+       generateFormData.append('isPopular',formData['isPopular'].value)
+
+            if(data?.id){
+                props.UpdateCityAction(data.id,generateFormData,(res)=>{
                  if(res.status==500){
                     setErrorMsg(res.message)
                  }else{
@@ -123,7 +159,7 @@ const CityAdd = (props) => {
                 // toggleEvent()
                 // edit api call
             }else{
-                props.AddCityAction(finalData,(res)=>{
+                props.AddCityAction(generateFormData,(res)=>{
                     console.log('res44', res)
                  if(res.status==500){
                     setErrorMsg(res.message)
@@ -192,6 +228,7 @@ const CityAdd = (props) => {
                             onChange={handleCountry}
                             options={getCountry}
                             name="countryId"
+                            className='zindex-for-select1'
                         />
                         {formError?.countryId ? <div className='text-danger'>{formError?.countryId}</div> : null}
 
@@ -205,6 +242,7 @@ const CityAdd = (props) => {
                             onChange={handleState}
                             options={getState}
                             name="stateId"
+                            className='zindex-for-select2'
                         />
                         {formError?.stateId ? <div className='text-danger'>{formError?.stateId}</div> : null}
 
@@ -219,7 +257,7 @@ const CityAdd = (props) => {
 
                        </div>
                         
-                       <div className='p-3 status-wrp' style={{zIndex:999}}>
+                       <div className='p-3 status-wrp' >
                       <p className="form-label-title">Is Popular </p>
                         <Select
                             value={formData?.isPopular }

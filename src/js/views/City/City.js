@@ -314,7 +314,7 @@ const City = (props) => {
     e.preventDefault()
     e.stopPropagation()
     eventDeleteToggle()
-    setGetDeleteId(rowData.value)
+    setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
     setEventModal(!eventModal)
@@ -325,6 +325,7 @@ const City = (props) => {
   }
   const eventDeleteToggle=()=>{
     setEventDeleteModal(!eventDeleteModal)
+    setDeleteValue('')
   }
   const toggle = (data, index) => {
       console.log('data@@', data)
@@ -692,17 +693,26 @@ const City = (props) => {
                   disableFilters: true
                   },
                   {
-                    Header:"Country",
-                    accessor: (originalRow) => (<div>
-                        {originalRow.countryId?findCountry(originalRow.countryId):null}
-                      </div>),
-                  disableFilters: true
-                  },
-                {
-                    Header: "Name",
+                    Header: "City",
                     accessor: "name",
                     filter: "fuzzyText"
+                  },
+                  {
+                    Header:"Country",
+                    accessor: (originalRow) => (<div className="action-wrp">{(originalRow.country && originalRow.country.name)?originalRow.country.name : 'N/A'}</div>),
+                    disableFilters: true
+                  },
+                  {
+                    Header:"State",
+                    accessor: (originalRow) => (<div className="action-wrp">{(originalRow.state && originalRow.state.name)?originalRow.state.name : 'N/A'}</div>),
+                    disableFilters: true
+                  },
+                  {
+                    Header: "Is popular",
+                    accessor: (originalRow) => (<div className="action-wrp">{originalRow.isPopular==true ? "Yes" :"No"}</div>),
+                   disableFilters: true
                 },
+                
             
               {
                 Header:"Action",

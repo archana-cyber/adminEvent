@@ -31,7 +31,7 @@ const PostView = (props) => {
       console.log('list1', list)
 
         tempdata=list.find(item=>item.value==findData)
-        return tempdata.label
+        return typeof tempdata=='object' ? tempdata.label:"N/A"
       }
 
     console.log('data3333', data)
@@ -108,7 +108,7 @@ const PostView = (props) => {
                         </tbody>
                     </Table>
                    
-                     {typeof original.multipleImage=='object' && original.multipleImage.length>0 && 
+                     {original.multipleImage && original.multipleImage.length>0 && 
                      <div className="multi-img-outer">
                      <p className='form-label-title'>multiple_image</p>
                                     <div className='label-detail multi-img-wrp'>

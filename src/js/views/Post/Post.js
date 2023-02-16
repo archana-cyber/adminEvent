@@ -12,7 +12,7 @@ import PostAdd from "./PostAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import PostView from "./PostView";
-import { RecentPostAction } from "../../actions/postAction";
+import { RecentPostAction,DeletePostAction } from "../../actions/postAction";
 import { GetCategoryAction } from "../../actions/categoryAction";
 import { GetSubCategoryAction } from "../../actions/subcategoryAction";
 import { GetCityAction } from "../../actions/cityAction";
@@ -326,6 +326,8 @@ const Post = (props) => {
   const [updateList, setUpdateList] = useState('')
   const [eventModal, setEventModal] = useState(false)
   const [eventDeleteModal, setEventDeleteModal] = useState(false)
+  const [deleteValue, setDeleteValue] = useState('')
+  const [getDeleteId, setGetDeleteId] = useState('')
 
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
@@ -388,22 +390,26 @@ const Post = (props) => {
      }
   },[])
 
-  const editModalHandler=(rowData)=>{
-    // e.preventDefault()
-    // e.stopPropagation();
+  const editModalHandler=(e,rowData)=>{
+    console.log('rowData', rowData,rowData.status)
+    e.preventDefault()
+    e.stopPropagation();
     setEditModal(rowData)
     setEventModal(!eventModal)
   }
-  const deleteModalHandler=(e)=>{
+  const deleteModalHandler=(e,rowData)=>{
     e.preventDefault()
-    e.stopPropagation();
-    eventDeleteToggle()
+    e.stopPropagation()
+    setEventDeleteModal(true)
+
+    setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
     setEventModal(!eventModal)
   }
   const eventDeleteToggle=()=>{
     setEventDeleteModal(!eventDeleteModal)
+    setDeleteValue('')
   }
   const toggle = (data, index) => {
       console.log('data@@', data)
@@ -419,6 +425,22 @@ const Post = (props) => {
                   setToggleLoader(false);
      
   }
+  useEffect(()=>{
+    
+    if(deleteValue=='yes'){
+        props.DeletePostAction(getDeleteId,(res)=>{
+            if(res.status==500){
+                // setErrorMsg(res.message)
+             }else{
+               setEventDeleteModal(false)
+             }
+        })
+    }
+    if(deleteValue=='no'){
+        setEventDeleteModal(false)
+
+    }
+  },[deleteValue])
   // const showDetails = () => {
 
   //         const searchData = {
@@ -797,18 +819,18 @@ const Post = (props) => {
                     accessor: "travelAwaits",
                     filter: "fuzzyText"
                   },
-            //   {
-            //     Header:"Action",
-            //     accessor: (originalRow) => (<div className="action-wrp">
-            //       <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
-            //       <div onClick={(e) => {
-            //         deleteModalHandler(e)
-            //       //e.stopPropagation();
-            //      // toggleModal(!modal);
-            //      // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
-            //   }} className='trash-btn'><i className="fa fa-trash"></i></div></div>),
-            //   disableFilters: true
-            //   }
+                  {
+                    Header:"Action",
+                    accessor: (originalRow) => (<div className="action-wrp">
+                      <div className='trash-btn'><i className="fa fa-edit" onClick={(e)=>editModalHandler(e,originalRow)}></i></div>
+                      <div onClick={(e) => {
+                        deleteModalHandler(e,originalRow)
+                      //e.stopPropagation();
+                     // toggleModal(!modal);
+                     // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
+                  }} className='trash-btn'><i className="fa fa-trash"></i></div></div>),
+                  disableFilters: true
+                  }
                   
               ]
           }
@@ -866,7 +888,8 @@ const Post = (props) => {
           </Row>
 
           {eventModal && <PostAdd data={editModal} showModalEvent={eventModal} toggleEvent={eventToggle}/>}
-          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteToggle} toggleEvent={eventDeleteToggle}/>}
+          {eventDeleteModal && <DeleteConfirmModal showModalEvent={eventDeleteModal} toggleEvent={eventDeleteToggle} setDeleteValue={(value)=>setDeleteValue(value)}/>}
+
 
       </div>
   )
@@ -882,5 +905,5 @@ const mapStateToProps = state =>{
     const {subcategoryList}  = state.subcategoryReducer;
     return {postList,postLoader,subcategoryList,categoryList,cityList};
   }
-  export default connect(mapStateToProps,{RecentPostAction,GetCategoryAction,GetSubCategoryAction,GetCityAction})(Post);
+  export default connect(mapStateToProps,{DeletePostAction,RecentPostAction,GetCategoryAction,GetSubCategoryAction,GetCityAction})(Post);
   

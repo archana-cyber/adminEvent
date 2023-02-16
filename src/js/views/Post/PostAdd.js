@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Select from 'react-select';
 import FormData from "form-data"
-import { AddPostAction } from '../../actions/postAction'; 
+import { AddPostAction,UpdatePostAction } from '../../actions/postAction'; 
 import { connect } from 'react-redux'
 import UploadLogo from '../../components/UploadLogo';
 
@@ -18,7 +18,7 @@ const errorMsgs = {
     mapLink:"Please enter a valid link",
     travelAwaits:"Please enter a valid tavel link",
     categoryId:"Please enter a valid category",
-    subcategory_id:"Please enter a valid sub category",
+    subcategoryId:"Please enter a valid sub category",
     }
 const dumData=[{
     "id": 1,
@@ -65,19 +65,52 @@ const PostAdd = (props) => {
 
     const [formError, setFormError] = useState({})
     const [formData, setFormData] = useState({
-        title:"",
-        description:"",
-        image:"",
-        multiple_image:"",
-        city:"",
-        mapLink:"",
-        travelAwaits:"",
+        title:data.title,
+        description:data.description,
+        image:data.media,
+        multiple_image:data.multipleImage,
+        city:'',
+        mapLink:data.mapLink,
+        travelAwaits:data.travelAwaits,
         categoryId:"",
-        subcategory_id:"",
+        subcategoryId:"",
 
     })
    
-   
+    useEffect(()=>{
+        if(Object.keys(data).length){
+          console.log('data8899', data)
+          let categoryData,subCategoryData,cityData
+          if(data?.categoryId){
+              let tempdata=props.categoryList.find(item=>item.id==data.categoryId)
+             if(tempdata)
+              categoryData={ value: tempdata.id, label: tempdata.name }
+          }
+          if(data?.subcategoryId){
+            let tempdata=props.subcategoryList.find(item=>item.value==data.subcategoryId)
+            console.log('tempdata',props.subcategoryList, tempdata)
+            if(tempdata)
+             subCategoryData={ value: tempdata.value, label: tempdata.label }
+          }
+
+          if(data?.categoryId){
+            let tempdata=props.categoryList.find(item=>item.id==data.categoryId)
+           if(tempdata)
+            categoryData={ value: tempdata.id, label: tempdata.name }
+          }
+
+          if(data?.city){
+            let tempdata=props.cityList.find(item=>item.name==data.city)
+           if(tempdata)
+            cityData={ value: tempdata.id, label: tempdata.name }
+          }
+          //  setFormData({...formData,isSubCategory: { value: 'true', label: 'True' }})
+         
+  
+         setFormData({...formData,categoryId:categoryData,subcategoryId:subCategoryData,city:cityData })
+  
+        }
+      },[data])
 
     const toggle=() =>{
         setmodal(!modal)
@@ -159,9 +192,9 @@ const PostAdd = (props) => {
     const handleSubCategory=(selectedOption)=>{
         //   formData()
             let errors= {...formError}
-            delete errors['subcategory_id']
+            delete errors['subcategoryId']
             setFormError({...errors})
-            setFormData({...formData,subcategory_id:selectedOption})
+            setFormData({...formData,subcategoryId:selectedOption})
     } 
     const handleCategory=(selectedOption)=>{
         //   formData()
@@ -186,22 +219,26 @@ const PostAdd = (props) => {
         // generateFormData.append('name',formData['name'])
         for (let type  in formData){
             console.log('formData44434',type,formData )
-            if(type!='subcategory_id' && type!='categoryId' && type!='city')
+            if(type!='subcategoryId' && type!='categoryId' && type!='city')
              generateFormData.append(type,formData[type])
         }
         generateFormData.append('city',formData['city'].label)
         
-        if(formData['subcategory_id'])
-        generateFormData.append('subcategory_id',formData['subcategory_id'].value)
+        if(formData['subcategoryId'])
+        generateFormData.append('subcategoryId',formData['subcategoryId'].value)
         
         generateFormData.append('categoryId',formData['categoryId'].value)
 
          console.log('generateFormData333',formData, generateFormData)
          
             if(data?.id){
-                // props.UpdateCategory(data.id,generateFormData)
-                console.log('if inside')
-                toggleEvent()
+                props.UpdatePostAction(data.id,generateFormData,(res)=>{
+                    if(res.status==500){
+                       setErrorMsg(res.message)
+                    }else{
+                       toggleEvent()
+                    }
+                   })
                 // edit api call
             }else{
                 console.log('if inside else')
@@ -255,7 +292,7 @@ const PostAdd = (props) => {
         setFormData({...formData,[e.target.name]:e.target.value})
     }
 
-    console.log('formdata555',subCategoryList,data, formData)
+    console.log('formdata555444',subCategoryList,data, formData)
     return (
         <div>
           {/* <Button color="danger" onClick={toggle}>{props.buttonLabel}</Button> */}
@@ -267,14 +304,14 @@ const PostAdd = (props) => {
             
             <ModalBody>
                  <div className='event-header'>
-                  <h5 class="modal-title">{Object.keys(data).length > 0 ? 'Sub Category' : 'Add New Post'}</h5>
+                  <h5 class="modal-title">{Object.keys(data).length > 0 ? 'Update Post' : 'Add New Post'}</h5>
                   <p  class="modal-title" onClick={toggleEvent}>X</p>
                 </div>
                   <div >
                  
                         <div className='p-3'>
                             <p className="form-label-title">Title </p>
-                            <Input name="title" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                            <Input name="title" className="form-control" value={formData.title} onChange={(e)=>onChangeHandler(e)}/>
                             {formError.title ? (
                                 <div className='text-danger'>{formError.title}</div>
                             ) : null}
@@ -282,7 +319,7 @@ const PostAdd = (props) => {
 
                        <div className='p-3'>
                         <p className="form-label-title">Description</p>
-                        <Input name="description" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        <Input name="description" type="text" className="form-control" value={formData.description} onChange={(e)=>onChangeHandler(e)}/>
                         {formError.description ? <div className='text-danger'>{formError.description}</div> : null}
                         </div>
 
@@ -302,13 +339,13 @@ const PostAdd = (props) => {
 
                         <div className='p-3'>
                         <p className="form-label-title">Map Links</p>
-                        <Input name="mapLink" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        <Input name="mapLink" type="text" className="form-control" value={formData.mapLink} onChange={(e)=>onChangeHandler(e)}/>
                         {formError.mapLink ? <div className='text-danger'>{formError.mapLink}</div> : null}
                         </div>
 
                         <div className='p-3'>
                         <p className="form-label-title">Travel Awaits</p>
-                        <Input name="travelAwaits" type="text" className="form-control" onChange={(e)=>onChangeHandler(e)}/>
+                        <Input name="travelAwaits" type="text" className="form-control" value={formData.travelAwaits} onChange={(e)=>onChangeHandler(e)}/>
                         {formError.travelAwaits ? <div className='text-danger'>{formError.travelAwaits}</div> : null}
                         </div>
 
@@ -329,13 +366,13 @@ const PostAdd = (props) => {
                         <p className="form-label-title">Subcategory</p>
                         
                         <Select
-                            value={formData?.subcategory_id }
+                            value={formData?.subcategoryId }
                             onChange={handleSubCategory     }
                             options={subCategoryList}
-                            name="subcategory_id"
+                            name="subcategoryId"
                             className='zindex-for-select3'
                         />
-                        {formError?.subcategory_id ? <div className='text-danger'>{formError?.subcategory_id}</div> : null}
+                        {formError?.subcategoryId ? <div className='text-danger'>{formError?.subcategoryId}</div> : null}
 
                        </div>
 
@@ -345,7 +382,7 @@ const PostAdd = (props) => {
                         <div>
                             <UploadLogo
                                 id={'image'}
-                                logoUrl={''}
+                                logoUrl={formData.image}
                                 setSelectedLogoImage={(value) =>handleImage(value) }
                                 // disabled={field.disabled}
                                 name='image'
@@ -384,8 +421,8 @@ const PostAdd = (props) => {
                         </div>
                         <div className='p-3'>
                         <p className="form-label-title">sub Category</p>
-                        <Input name="subcategory_id" type="text" className="form-control"/>
-                        {formError.subcategory_id ? <div className='text-danger'>{formError.subcategory_id}</div> : null}
+                        <Input name="subcategoryId" type="text" className="form-control"/>
+                        {formError.subcategoryId ? <div className='text-danger'>{formError.subcategoryId}</div> : null}
                         </div> */}
                          {errorMsg ? <div className='text-danger pl-3'>{errorMsg}</div> : null}
                         {/* <button type="submit">Submit</button> */}
@@ -419,5 +456,5 @@ const mapStateToProps = state =>{
 
     return {categoryList,subcategoryList,cityList};
   }
-  export default connect(mapStateToProps,{AddPostAction})(PostAdd);
+  export default connect(mapStateToProps,{AddPostAction,UpdatePostAction})(PostAdd);
   

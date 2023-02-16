@@ -14,6 +14,7 @@ import ShowDetailsModal from "../../components/ShowDetailsModal";
 import UserManagementView from "./UserManagementView";
 import { GetUsersAction } from "../../actions/authAction";
 import { connect } from 'react-redux'
+import imageholder from "../../../images/imageholder.png"
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -550,7 +551,8 @@ const dummydata=[{
   }]
 const UserManagement = (props) => {
 
-  const { profileData=dummydata, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }=props
+  const { userList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }=props
+  const profileData=userList 
   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -994,18 +996,27 @@ const UserManagement = (props) => {
               Header: "Profile List",
               columns: [
                  
-                  
+                {
+                    Header:"Image",
+                    accessor: (originalRow) => (<div className="image-wrapper">
+                        {originalRow.profileImage ? <div>
+                            <img src={originalRow.profileImage}/>
+                        </div> :
+                        <div><img src={imageholder}/></div>}
+                      </div>),
+                  disableFilters: true
+                  },
                   {
                       Header: "Name",
                       accessor: "name",
                       filter: "fuzzyText"
                   },
                   {
-                      Header: "Profile Image",
-                      accessor: "profile_image",
-                      filter: "fuzzyText"
-                     
-                  },
+                    Header: "Status",
+                    accessor: (originalRow) => (<div className="action-wrp">{originalRow.status==true ? "Active" :"Deactive"}</div>),
+                   disableFilters: true
+                },
+                 
                   {
                     Header: "Email",
                     accessor: "email",
@@ -1013,22 +1024,10 @@ const UserManagement = (props) => {
                    
                 },
                 {
-                  Header: "Country",
-                  accessor: "country",
-                  filter: "fuzzyText"
-                },
-              {
-                Header:"Action",
-                accessor: (originalRow) => (<div className="action-wrp">
-                  <div className='trash-btn'><i className="fa fa-edit" onClick={()=>editModalHandler(originalRow)}></i></div>
-                  <div onClick={(e) => {
-                    deleteModalHandler(e)
-                  //e.stopPropagation();
-                 // toggleModal(!modal);
-                 // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
-              }} className='trash-btn'><i className="fa fa-trash"></i></div></div>),
-              disableFilters: true
-              }
+                    Header:"Country",
+                    accessor: (originalRow) => (<div className="action-wrp">{(originalRow.country && originalRow.country.name)?originalRow.country.name : 'N/A'}</div>),
+                    disableFilters: true
+                  },
                   
               ]
           }

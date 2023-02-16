@@ -16,8 +16,8 @@ export const DeleteCityAction = (profileid,callback=()=>{})=>{
         .then(res=>{
             console.log("SaveTransactionPayload Res ===>",profileid,res.data) 
             if(res.data){
-                let countryInfo = store.getState().countryReducer.countryList.length>0 ? store.getState().countryReducer.countryList : [];
-                let updatedList = _.filter(countryInfo, function(item) { return item.value !== profileid; });
+                let countryInfo = store.getState().cityReducer.cityList.length>0 ? store.getState().cityReducer.cityList : [];
+                let updatedList = _.filter(countryInfo, function(item) { return item.id !== profileid; });
                 console.log('updatedList55', updatedList)
                 dispatch({ type: DELETE_CITY_SUCCESS,payload:updatedList});
                 callback(res.data)
@@ -41,8 +41,8 @@ export const UpdateCityAction = (profileid, payload={},callback=()=>{})=>{
         .then(res=>{
             console.log("SaveTransactionPayload Res ===>",profileid,payload,res.data) 
             if(res.data){
-                let countryInfo = store.getState().countryReducer.countryList.length>0 ? store.getState().countryReducer.countryList : [];
-                let updatedList = _.filter(countryInfo, function(item) { return item.value !== profileid; });
+                let countryInfo = store.getState().cityReducer.countryList.length>0 ? store.getState().cityReducer.cityList : [];
+                let updatedList = _.filter(countryInfo, function(item) { return item.id !== profileid; });
                 console.log('updatedList55', updatedList)
                 dispatch({ type: UPDATE_CITY_SUCCESS,payload:[{value:res.data.data.id,label:res.data.data.name},...updatedList]});
                 callback(res.data)

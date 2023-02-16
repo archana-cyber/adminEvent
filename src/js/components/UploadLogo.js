@@ -24,11 +24,11 @@ class UploadLogo extends Component {
 
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.logoUrl && !nextProps.logoUrl.startsWith("data:")) {
-            this.setState({ selectedImage: "" })
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.logoUrl && !nextProps.logoUrl.startsWith("data:")) {
+    //         this.setState({ selectedImage: "" })
+    //     }
+    // }
 
     handleUploadLogo() {
         const { selectedImage } = this.state;
