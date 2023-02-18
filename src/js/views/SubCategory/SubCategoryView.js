@@ -3,10 +3,10 @@ import { Container, Row, Col, Table, Button, Modal, ModalBody, ModalFooter } fro
 import moment from "moment";
 import imageholder from "../../../images/imageholder.png"
 import VideoPlayModal from "../../components/VideoUpload/VideoPlayModal";
+import { connect } from "react-redux";
 
-
-const CategoryView = ({data,closeDetails}) => {
-    
+const CategoryView = (props) => {
+    const {data,closeDetails}=props
     const [modal, setModal] = useState(false);
     const videoToggle = () => setModal(!modal);
     const VideoData={
@@ -32,6 +32,16 @@ const CategoryView = ({data,closeDetails}) => {
         return value;
     }
 
+    const findCategoryHandler=(findId)=>{
+        let data={}
+        console.log('props.categoryList', props.categoryList)
+        if(props?.categoryList && props?.categoryList.length>0){
+             data=props.categoryList.find((item)=>item.id==findId)
+             console.log('data6777', data)
+       }
+        return data.name ? data.name : 'N/A'
+    }
+
     console.log('data3333', data)
     return (
         <div className="profileDetails-container partnerDetails">
@@ -52,7 +62,7 @@ const CategoryView = ({data,closeDetails}) => {
                             <tr>
                                 <td>
                                     <p className='form-label-title'>Category</p>
-                                    <div className='label-detail'>{renderValue(original.category_id)}</div>
+                                    <div className='label-detail'>{findCategoryHandler(original.categoryId)}</div>
                                 </td>
                             </tr>
                             {/* <tr>
@@ -64,7 +74,7 @@ const CategoryView = ({data,closeDetails}) => {
                             <tr>
                                 <td>
                                     <p className='form-label-title'>status</p>
-                                    <div className='label-detail'>{renderValue(original.status)}</div>
+                                    <div className='label-detail'>{original.status==true ? 'Active' :'Deactive' }</div>
                                 </td>
                             </tr> 
                             {/* <tr>
@@ -94,17 +104,25 @@ const CategoryView = ({data,closeDetails}) => {
                     <div className="view-img-wrp">
                         <p className='form-label-title'>image</p>
                         <div className='label-detail'>
-                            <img src={imageholder}/>
+                           {original.image ?
+                           <img src={original.image} width='100px' style={{objectFit:"scale-down"}}/> :
+                            <img src={imageholder}/>}
                         </div>
                     </div>
                  
                     
                 </Col>
             </Row>
-            {modal && <VideoPlayModal toggle={videoToggle} modal={modal} videoLink={videoLink} videoPoster={videoPoster}/>}
+            {modal && original.isVideo && <VideoPlayModal toggle={videoToggle} modal={modal} videoLink={original.isVideo} videoPoster={videoPoster}/>}
           
         </div>
     )
 }
 
-export default CategoryView
+const mapStateToProps = state =>{
+   
+    const {loader,categoryList}  = state.categoryReducer;
+    return {categoryList,loader};
+  }
+export default connect(mapStateToProps,{})(CategoryView);
+  

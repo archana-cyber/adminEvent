@@ -65,8 +65,8 @@ const SubCategoryAdd = (props) => {
         name:data.name,
         image:data.image,
         status:data.status,
-        is_video:data.is_video,
-        category_id:data.category_id
+        is_video:data.isVideo,
+        category_id:data.categoryId
     })
    
     useEffect(()=>{
@@ -89,10 +89,10 @@ const SubCategoryAdd = (props) => {
     if(Object.keys(data).length){
       console.log('data8899', data)
       let categoryData,statusData
-      if(data?.category_id){
+      if(data?.categoryId){
         let categoryInfo = props.categoryList.length>0 ? props.categoryList : [];
 
-        let updatedList = _.find(categoryInfo, function(item) { return item.id == data?.category_id});
+        let updatedList = _.find(categoryInfo, function(item) { return item.id == data?.categoryId});
          console.log('updatedList444', updatedList)
         categoryData={ value: updatedList.id, label: updatedList.name }
           
@@ -297,7 +297,7 @@ const SubCategoryAdd = (props) => {
                       <div>
                             <UploadLogo
                                 id={'image'}
-                                logoUrl={''}
+                                logoUrl={formData.image}
                                 setSelectedLogoImage={(value) =>handleImage(value) }
                                 // disabled={field.disabled}
                                 name='image'

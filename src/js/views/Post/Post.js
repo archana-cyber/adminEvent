@@ -405,6 +405,7 @@ const Post = (props) => {
     setGetDeleteId(rowData.id)
   }
   const eventToggle=()=>{
+    setEditModal({})
     setEventModal(!eventModal)
   }
   const eventDeleteToggle=()=>{
@@ -602,15 +603,7 @@ const Post = (props) => {
           <div>
            
              
-              <div className="row">
-
-                 <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
-                 <h1 class="Profiles-title">Post Details</h1>
-                 </div>
-                 <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                 <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Post</button>
-                 </div>
-              </div>
+             
               <Table bordered={false} hover size="sm" responsive {...getTableProps()} className="partnerList">
                   <thead>
                       {headerGroups.filter((data, index) => index > 0).map(headerGroup => (
@@ -662,7 +655,7 @@ const Post = (props) => {
                           </tbody>
                           : <tbody>
                               <Card style={{ width: '130%', border:"none" }}>
-                                  <h5>No results found</h5>
+                                  <h5>No data found</h5>
                               </Card>
                           </tbody>
 
@@ -841,17 +834,27 @@ const Post = (props) => {
   return (
       <div className={tableClass}>
          
-          {toggleLoader ? <div className="loader-style" > loading... </div> : null}
+          {/* {toggleLoader ? <div className="loader-style" > loading... </div> : null} */}
          
           
           {(loader || isLoading) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
-              <Row>
+          <>
+          <div className="row">
+
+              <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+              <h1 class="Profiles-title">Post Details</h1>
+              </div>
+              <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+              <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create Post</button>
+              </div>
+           </div>
+             <Row>
 
                   <Col>
-                      {(currentProfileList.length)
+                      {(profileData.length)
                           ? <OptimizedComponent
                               columns={columns}
-                              data={currentProfileList}
+                              data={profileData}
                               currentPage={currentPage}
                               setCurrentPage={setCurrentPage}
                               filterVal={filterVal}
@@ -862,6 +865,7 @@ const Post = (props) => {
 
                   </Col>
               </Row>
+             </> 
           }
          
           <Row>

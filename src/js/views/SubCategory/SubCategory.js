@@ -293,11 +293,13 @@ const SubCategory = (props) => {
    console.log('categoryList000', props.categoryList)
   useEffect(()=>{
     // props.AddCategory()
+    if(!props.categoryList.length)
+    props.GetCategoryAction()
+
     if(!props.subcategoryList.length)
     props.GetSubCategoryAction()
 
-    if(!props.categoryList.length)
-    props.GetCategoryAction()
+   
   },[])
 
   useEffect(()=>{
@@ -323,6 +325,14 @@ const SubCategory = (props) => {
     setEditModal(rowData)
     setEventModal(!eventModal)
   }
+  const findCategoryHandler=(findId)=>{
+    let data={}
+    if(props.categoryList.length>0){
+         data=props.categoryList.find((item)=>item.id==findId)
+         console.log('data6777', data)
+   }
+    return data.name ? data.name : 'N/A'
+}
   const deleteModalHandler=(e,rowData)=>{
     e.preventDefault()
     e.stopPropagation()
@@ -504,6 +514,8 @@ const SubCategory = (props) => {
               });
           }
       }, [])
+
+     
    
       // We don't want to render all of the rows for this example, so cap
       // it for this use case
@@ -713,14 +725,14 @@ const SubCategory = (props) => {
                 {
                     Header:"Status",
                     accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.status==true ? 'True' : 'False' }
+                        {originalRow.status==true ? 'Active' : 'Deactive' }
                       </div>),
                   disableFilters: true
                   },
                   {
-                    Header:"Is Subcategory",
+                    Header:"Category",
                     accessor: (originalRow) => (<div className="action-wrp">
-                        {originalRow.isSubCategory==true ? 'True' : 'False' }
+                        {originalRow.categoryId ?findCategoryHandler(originalRow.categoryId):'N/A' }
                       </div>),
                   disableFilters: true
                   },
@@ -729,12 +741,7 @@ const SubCategory = (props) => {
                 Header:"Action",
                 accessor: (originalRow) => (<div className="action-wrp">
                   <div className='trash-btn'><i className="fa fa-edit" onClick={(e)=>editModalHandler(e,originalRow)}></i></div>
-                  <div onClick={(e) => {
-                    deleteModalHandler(e,originalRow)
-                  //e.stopPropagation();
-                 // toggleModal(!modal);
-                 // setDeletePayload({ ...deletePayload, key: [originalRow.key] });
-              }} className='trash-btn'><i className="fa fa-trash"></i></div></div>),
+                 </div>),
               disableFilters: true
               }
                   

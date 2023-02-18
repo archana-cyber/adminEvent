@@ -134,7 +134,7 @@ const PostAdd = (props) => {
              let listdata=props.subcategoryList 
              // let listdata=dumData
              Object.keys(listdata).length>0 && listdata.map((item,index)=>{
-             arrayData.push({label:item.label,value:item.value})
+             arrayData.push({label:item.name,value:item.id})
              })
              setSubCategoryList(arrayData)
         }
