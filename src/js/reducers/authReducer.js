@@ -1,4 +1,4 @@
-import { AUTH_LOGIN_FAIL,AUTH_LOGIN_SUCCESS,AUTH_LOGIN_REQUEST, 
+import { AUTH_LOGIN_FAIL,AUTH_LOGIN_SUCCESS,AUTH_LOGIN_REQUEST,UPDATE_EVENT_INFO, 
     AUTH_FORGOT_PASSWORD_FAIL,AUTH_FORGOT_PASSWORD_SUCCESS,AUTH_FORGOT_PASSWORD_REQUEST,
     AUTH_PROFILE_REQUEST,AUTH_PROFILE_SUCCESS,AUTH_PROFILE_FAIL,GET_USERS_REQUEST,GET_USERS_SUCCESS,GET_USERS_FAIL,
 } from "../types";
@@ -37,6 +37,8 @@ export default (state = INITIAL_STATE, action) => {
             return {  ...state , loader:false,userList:action.payload };
         case GET_USERS_FAIL:
             return {  ...state , loader:false}; 
+        case UPDATE_EVENT_INFO:
+            return {  ...state , [action.payload.prop]: action.payload.value  };
         default:
             return state;
     }

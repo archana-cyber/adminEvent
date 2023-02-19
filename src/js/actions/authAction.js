@@ -1,6 +1,6 @@
 
 import { AUTH_LOGIN_FAIL,AUTH_LOGIN_SUCCESS,AUTH_LOGIN_REQUEST,
-    AUTH_FORGOT_PASSWORD_FAIL,AUTH_FORGOT_PASSWORD_SUCCESS,AUTH_FORGOT_PASSWORD_REQUEST,
+    AUTH_FORGOT_PASSWORD_FAIL,AUTH_FORGOT_PASSWORD_SUCCESS,AUTH_FORGOT_PASSWORD_REQUEST,UPDATE_EVENT_INFO,
     AUTH_PROFILE_REQUEST,AUTH_PROFILE_SUCCESS,AUTH_PROFILE_FAIL,GET_USERS_REQUEST,GET_USERS_SUCCESS,GET_USERS_FAIL,
 } from "../types";
 import axios from "axios";
@@ -123,3 +123,51 @@ export const  GetUsersAction = ()=>{
     }
 }
 
+
+export const UpdateEventInfo = ({ prop, value}) => {
+    return{
+        type: UPDATE_EVENT_INFO,
+        payload: {prop, value}
+    }
+}
+
+export const DashboardAction=()=>{
+    return async(dispatch)=>{
+        axios.get(`${BASE_URL}/admin/dashboard`)
+        .then(res=>{
+            console.log("DashboardAction Res ===>",res.data) 
+            if(res.data)
+            dispatch({
+                type: UPDATE_EVENT_INFO,
+                payload: { prop: 'dashboardInfo', value: res.data.data }
+            });
+        })
+        .catch(err=>{
+            console.log("DashboardAction Error ===>",err)
+           
+            //CustomException(err)
+        })
+    }
+}
+
+export const ChangeUserStatusAction=(profileid, payload,callback=()=>{})=>{
+    return async(dispatch)=>{
+        axios.patch(`http://18.183.25.39:3000/user/change/status/${profileid}?status=${payload}`)
+        .then(res=>{
+            console.log("ChangeUserStatusAction Res ===>",res.data) 
+            if(res.data){
+                // dispatch({
+                //     type: UPDATE_EVENT_INFO,
+                //     payload: { prop: 'dashboardInfo', value: res.data.data }
+                // });
+                callback(res.data.data)
+            }
+           
+        })
+        .catch(err=>{
+            console.log("ChangeUserStatusAction Error ===>",err)
+           
+            //CustomException(err)
+        })
+    } 
+}

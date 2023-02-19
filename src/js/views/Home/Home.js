@@ -1,6 +1,9 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
+import { DashboardAction } from '../../actions/authAction';
 
 const genderOptions = {
     chart: {
@@ -304,30 +307,44 @@ const genderOptions = {
       }]
     }
   }
-  
-const Home = () => {
+   
+ 
+
+const Home = (props) => {
+
+  useEffect(()=>{
+    
+    if(isEmpty(props?.dashboardInfo))
+    props.DashboardAction()
+  },[])
+
+    const {dashboardInfo={}}=props
   return (
     <div>
          
             <div className="event-card-wrp">
                 <div className="event-card">
-                    <h3>4,567</h3>
-                    <p>Total Event</p>
+                    <h3>{dashboardInfo.totalUser}</h3>
+                    <p>Users</p>
                 </div>
                 <div className="event-card">
-                    <h3>4,567</h3>
-                    <p>Total Revenue Earning</p>
+                    <h3>{dashboardInfo.androidDownload}</h3>
+                    <p>Android Downloads</p>
                 </div>
                 <div className="event-card">
-                    <h3>4,567</h3>
-                    <p>Total Ticket Sold</p>
+                    <h3>{dashboardInfo.iosDownload}</h3>
+                    <p>Ios Downloads</p>
                 </div>
                 <div className="event-card">
-                    <h3>4,567</h3>
-                    <p>Total Engagement</p>
+                    <h3>{dashboardInfo.totalPost}</h3>
+                    <p>Total Post</p>
+                </div>
+                <div className="event-card">
+                    <h3>{dashboardInfo.totalCity}</h3>
+                    <p>Total city</p>
                 </div>
             </div>
-            <div className="chart-wrp">
+            {/* <div className="chart-wrp">
             <HighchartsReact highcharts={Highcharts} options={genderOptions} />
             <HighchartsReact highcharts={Highcharts} options={userOptions} />
             </div>
@@ -335,9 +352,17 @@ const Home = () => {
             
              <HighchartsReact highcharts={Highcharts} options={options} />
 
-            </div>
+            </div> */}
     </div>
   )
 }
 
-export default Home
+
+const mapStateToProps = state =>{
+   
+  const {dashboardInfo}  = state.authReducer;
+  return {dashboardInfo};
+}
+export default connect(mapStateToProps,{DashboardAction})(Home);
+
+

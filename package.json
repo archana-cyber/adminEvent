@@ -1,6 +1,5 @@
 {
   "name": "eventdashboard",
-  "homepage": "https://archana-cyber.github.io/adminEvent",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

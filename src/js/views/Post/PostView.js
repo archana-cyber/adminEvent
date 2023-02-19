@@ -30,8 +30,8 @@ const PostView = (props) => {
         let tempdata={}
       console.log('list1', list)
 
-        tempdata=list.find(item=>item.value==findData)
-        return typeof tempdata=='object' ? tempdata.label:"N/A"
+        tempdata=list.find(item=>item.id==findData)
+        return typeof tempdata=='object' ? tempdata.name:"N/A"
       }
 
     console.log('data3333', data)
@@ -75,12 +75,12 @@ const PostView = (props) => {
                                 </td>
                             </tr><tr>
                                 <td>
-                                    <p className='form-label-title'>category_id</p>
+                                    <p className='form-label-title'>Category</p>
                                     <div className='label-detail'>{getDataFromApiCategory(original.categoryId,props.categoryList)}</div>
                                 </td>
                             </tr><tr>
                                 <td>
-                                    <p className='form-label-title'>subcategory_id</p>
+                                    <p className='form-label-title'>Sub Category</p>
                                     <div className='label-detail'>{getDataFromApiSubCategory(original.subcategoryId,props.subcategoryList)}</div>
                                 </td>
                             </tr>
@@ -110,7 +110,7 @@ const PostView = (props) => {
                    
                      {original.multipleImage && original.multipleImage.length>0 && 
                      <div className="multi-img-outer">
-                     <p className='form-label-title'>multiple_image</p>
+                     <p className='form-label-title'>Multiple Image</p>
                                     <div className='label-detail multi-img-wrp'>
                                         {typeof original.multipleImage=='object' && original.multipleImage.length>0 &&
                                         original.multipleImage.map((item,index)=>{
@@ -131,11 +131,11 @@ const PostView = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {postList,postLoader}  = state.postReducer;
+    const {postList,loader}  = state.postReducer;
     const {categoryList}  = state.categoryReducer;
     const {cityList}  = state.cityReducer;
     const {subcategoryList}  = state.subcategoryReducer;
-    return {postList,postLoader,subcategoryList,categoryList,cityList};
+    return {postList,loader,subcategoryList,categoryList,cityList};
   }
   export default connect(mapStateToProps,{})(PostView);
   

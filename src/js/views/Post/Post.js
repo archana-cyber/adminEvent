@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -306,7 +306,8 @@ const dummydata=[{
   }]
 const Post = (props) => {
 
-  const { profileData=props.postList, tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading } = props
+  const { postList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading } = props
+  const profileData=postList
   const [currentPage, setCurrentPage] = useState(0)
   const [isOpenDetail, setIsOpenDetail] = useState({
       isOpen: false,
@@ -439,7 +440,7 @@ const Post = (props) => {
     }
     if(deleteValue=='no'){
         setEventDeleteModal(false)
-
+        setDeleteValue('')
     }
   },[deleteValue])
   // const showDetails = () => {
@@ -837,7 +838,10 @@ const Post = (props) => {
           {/* {toggleLoader ? <div className="loader-style" > loading... </div> : null} */}
          
           
-          {(loader || isLoading) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {props.loader ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
           <>
           <div className="row">
 
@@ -903,11 +907,11 @@ const Post = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {postList,postLoader}  = state.postReducer;
+    const {postList,loader}  = state.postReducer;
     const {categoryList}  = state.categoryReducer;
     const {cityList}  = state.cityReducer;
     const {subcategoryList}  = state.subcategoryReducer;
-    return {postList,postLoader,subcategoryList,categoryList,cityList};
+    return {postList,loader,subcategoryList,categoryList,cityList};
   }
   export default connect(mapStateToProps,{DeletePostAction,RecentPostAction,GetCategoryAction,GetSubCategoryAction,GetCityAction})(Post);
   

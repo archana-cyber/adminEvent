@@ -149,14 +149,18 @@ const CityAdd = (props) => {
        generateFormData.append('isPopular',formData['isPopular'].value)
 
             if(data?.id){
+                if(typeof formData['image'] !='object'){
+                    generateFormData.delete('image')
+                }
                 props.UpdateCityAction(data.id,generateFormData,(res)=>{
                  if(res.status==500){
                     setErrorMsg(res.message)
                  }else{
                     toggleEvent()
+                    window.location.reload()
                  }
                 })
-                // toggleEvent()
+                // toggleEvent()P
                 // edit api call
             }else{
                 props.AddCityAction(generateFormData,(res)=>{
@@ -165,6 +169,8 @@ const CityAdd = (props) => {
                     setErrorMsg(res.message)
                  }else{
                     toggleEvent()
+                    window.location.reload()
+
                  }
                 })
                 //add call

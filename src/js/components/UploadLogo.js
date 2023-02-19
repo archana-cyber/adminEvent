@@ -43,7 +43,7 @@ class UploadLogo extends Component {
         if (fsize >= 1024) {
             file_size = Math.round((fsize / 1024));
 
-            if (file_size <= 150) {
+            if (file_size <= 9000) {
                 event.preventDefault();
                 let file = event.target.files[0];
                 let reader = new FileReader();
@@ -97,7 +97,7 @@ class UploadLogo extends Component {
                         {/*logoUploading ? <div><Spinner color="secondary" style={{width:'15px',height:'15px'}} /> Uploding...</div> : null*/}
                         {/* {updateLogoStatus == 'updated' && logoUpdateSuccessfully ? <div style={{ color: 'green' }}>Logo updated Successfully.</div> : null}
                         {updateLogoStatus == 'failed' && logoUpdateSuccessfully ? <div style={{ color: 'red' }}>Logo upload failed.</div> : null} */}
-                        {logoUpdateError ? <div style={{ color: 'red' }}>Image file size must be less than 150kb.</div> : null}
+                        {logoUpdateError ? <div style={{ color: 'red' }}>Image file size must be less than 9mb.</div> : null}
                     </div>
                    
                 </div>

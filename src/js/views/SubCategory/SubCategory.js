@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -315,6 +315,7 @@ const SubCategory = (props) => {
     }
     if(deleteValue=='no'){
         eventDeleteToggle()
+        setDeleteValue('')
     }
   },[deleteValue])
 
@@ -757,7 +758,10 @@ const SubCategory = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(props.subLoader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {(props.subLoader) ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
              
             <>
                   

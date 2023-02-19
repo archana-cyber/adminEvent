@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -290,11 +290,13 @@ const State = (props) => {
                 // setErrorMsg(res.message)
              }else{
                 eventDeleteToggle()
+                window.location.reload()
              }
         })
     }
     if(deleteValue=='no'){
         eventDeleteToggle()
+        setDeleteValue('')
     }
   },[deleteValue])
 
@@ -670,7 +672,7 @@ const State = (props) => {
               columns: [
                 
                 {
-                    Header: "Name",
+                    Header: "State",
                     accessor: "name",
                     filter: "fuzzyText"
                 },
@@ -705,7 +707,10 @@ const State = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(props.loader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {(props.stateLoader) ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
              
             <>
                   
@@ -772,10 +777,10 @@ const State = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {stateList}  = state.stateReducer;
+    const {stateList,stateLoader}  = state.stateReducer;
     const {countryList}  = state.countryReducer;
 
-    return {stateList,countryList};
+    return {stateList,countryList,stateLoader};
   }
   export default connect(mapStateToProps,{GetCountryAction,GetStateAction,DeleteStateAction})(State);
   

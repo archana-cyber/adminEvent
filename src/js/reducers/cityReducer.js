@@ -12,29 +12,29 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch(action.type){
         case ADD_CITY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , cityLoader:true };
         case ADD_CITY_SUCCESS:
-            return {  ...state , loader:false,cityList:[...action.payload,...state.cityList] };
+            return {  ...state , cityLoader:false,cityList:[...action.payload,...state.cityList] };
         case ADD_CITY_FAIL:
-            return {  ...state , loader:false};
+            return {  ...state , cityLoader:false};
         case GET_CITY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , cityLoader:true };
         case GET_CITY_SUCCESS:
-            return {  ...state , loader:false,cityList:action.payload };
+            return {  ...state , cityLoader:false,cityList:action.payload };
         case GET_CITY_FAIL:
-            return {  ...state , loader:false};
+            return {  ...state , cityLoader:false};
         case UPDATE_CITY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , cityLoader:true };
         case UPDATE_CITY_SUCCESS:
-            return {  ...state , loader:false,cityList:action.payload };
+            return {  ...state , cityLoader:false,cityList:action.payload };
         case UPDATE_CITY_FAIL:
-            return {  ...state , loader:false};    
+            return {  ...state , cityLoader:false};    
         case DELETE_CITY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , cityLoader:true };
         case DELETE_CITY_SUCCESS:
-            return {  ...state , loader:false,cityList:action.payload  };
+            return {  ...state , cityLoader:false,cityList:action.payload  };
         case DELETE_CITY_FAIL:
-            return {  ...state , loader:false};    
+            return {  ...state , cityLoader:false};    
         default:
             return state;
     }

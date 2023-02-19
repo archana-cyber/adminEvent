@@ -20,39 +20,7 @@ const errorMsgs = {
     categoryId:"Please enter a valid category",
     subcategoryId:"Please enter a valid sub category",
     }
-const dumData=[{
-    "id": 1,
-    "name": "Peter",
-    "image": "Delgaty",
-    "status": "true",
-    "is_subcategory": true,
-    "created_at": "5/22/2022",
-    "updated_at": "8/8/2022"
-    }, {
-    "id": 2,
-    "name": "Cchaddie",
-    "image": "Corser",
-    "status": true,
-    "is_subcategory": false,
-    "created_at": "6/4/2022",
-    "updated_at": "6/7/2022"
-    }, {
-    "id": 3,
-    "name": "Hortense",
-    "image": "Broadnicke",
-    "status": false,
-    "is_subcategory": false,
-    "created_at": "3/17/2022",
-    "updated_at": "6/20/2022"
-    }, {
-    "id": 4,
-    "name": "Bamby",
-    "image": "Ewols",
-    "status": false,
-    "is_subcategory": true,
-    "created_at": "2/23/2022",
-    "updated_at": "9/4/2022"
-    }]
+
 const PostAdd = (props) => {
  
     const {toggleEvent,showModalEvent,data={},loader=false} =props
@@ -87,10 +55,10 @@ const PostAdd = (props) => {
               categoryData={ value: tempdata.id, label: tempdata.name }
           }
           if(data?.subcategoryId){
-            let tempdata=props.subcategoryList.find(item=>item.value==data.subcategoryId)
+            let tempdata=props.subcategoryList.find(item=>item.id==data.subcategoryId)
             console.log('tempdata',props.subcategoryList, tempdata)
             if(tempdata)
-             subCategoryData={ value: tempdata.value, label: tempdata.label }
+             subCategoryData={ value: tempdata.id, label: tempdata.name }
           }
 
           if(data?.categoryId){
@@ -232,6 +200,15 @@ const PostAdd = (props) => {
          console.log('generateFormData333',formData, generateFormData)
          
             if(data?.id){
+                
+
+                if(typeof formData.image !='object'){
+                    generateFormData.delete('image')
+                }
+                console.log("formData.multiple_image", typeof formData.multiple_image ,formData.multiple_image.name)
+                if(typeof formData.multiple_image && !formData.multiple_image.name){
+                    generateFormData.delete('multiple_image')
+                }
                 props.UpdatePostAction(data.id,generateFormData,(res)=>{
                     if(res.status==500){
                        setErrorMsg(res.message)

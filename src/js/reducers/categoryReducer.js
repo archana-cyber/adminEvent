@@ -14,7 +14,7 @@ export default (state = INITIAL_STATE, action) => {
         case ADD_CATEGORY_REQUEST:
             return {  ...state , loader:true };
         case ADD_CATEGORY_SUCCESS:
-            return {  ...state , loader:false,categoryList:[...state.categoryList,...action.payload] };
+            return {  ...state , loader:false,categoryList:[...action.payload,...state.categoryList] };
         case ADD_CATEGORY_FAIL:
             return {  ...state , loader:false};
         case GET_CATEGORY_REQUEST:

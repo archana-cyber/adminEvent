@@ -19,6 +19,7 @@ body {
     font-weight: 600;
     padding: 16px;
     text-decoration: none;
+    font-size: 14px;
 }
    
   .sidebar a.active {
@@ -87,6 +88,7 @@ body {
   text-align: left;
   cursor: pointer;
   outline: none;
+  font-size: 14px;
 }
   @media screen and (max-width: 700px) {
     .sidebar {

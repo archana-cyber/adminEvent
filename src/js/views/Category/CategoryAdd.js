@@ -158,6 +158,7 @@ const CategoryAdd = (props) => {
                     setErrorMsg(res.message)
                  }else{
                     toggleEvent()
+                    window.location.reload()
                  }
                 })
                 // toggleEvent()
@@ -169,6 +170,7 @@ const CategoryAdd = (props) => {
                     setErrorMsg(res.message)
                  }else{
                     toggleEvent()
+                    window.location.reload()
                  }
                 })
                 //add call

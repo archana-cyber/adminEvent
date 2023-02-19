@@ -41,10 +41,10 @@ export const UpdateCityAction = (profileid, payload={},callback=()=>{})=>{
         .then(res=>{
             console.log("SaveTransactionPayload Res ===>",profileid,payload,res.data) 
             if(res.data){
-                let countryInfo = store.getState().cityReducer.countryList.length>0 ? store.getState().cityReducer.cityList : [];
-                let updatedList = _.filter(countryInfo, function(item) { return item.id !== profileid; });
-                console.log('updatedList55', updatedList)
-                dispatch({ type: UPDATE_CITY_SUCCESS,payload:[{value:res.data.data.id,label:res.data.data.name},...updatedList]});
+                // let countryInfo = store.getState().cityReducer.cityList.length>0 ? store.getState().cityReducer.cityList : [];
+                // let updatedList = _.filter(countryInfo, function(item) { return item.id !== profileid; });
+                // console.log('updatedList55', updatedList)
+                dispatch({ type: UPDATE_CITY_SUCCESS});
                 callback(res.data)
             }
             

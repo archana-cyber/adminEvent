@@ -56,7 +56,7 @@ const dumData=[{
   }]
 const SubCategoryAdd = (props) => {
 
-    const {toggleEvent,showModalEvent,data={},loader=false}=props
+    const {toggleEvent,showModalEvent,data={},subLoader=false}=props
     const [getCategory, setGetCategory] = useState([])
     const [modal, setmodal] = useState(false)
     const [formError, setFormError] = useState({})
@@ -220,6 +220,7 @@ const SubCategoryAdd = (props) => {
                    setErrorMsg(res.message)
                }else{
                   toggleEvent()
+                  window.location.reload()
                }
               })
               // toggleEvent()
@@ -236,6 +237,7 @@ const SubCategoryAdd = (props) => {
                   setErrorMsg(res.message)
                }else{
                   toggleEvent()
+                  window.location.reload()
                }
               })
               //add call
@@ -331,7 +333,7 @@ const SubCategoryAdd = (props) => {
                         
                         {/* <button type="submit">Submit</button> */}
                         <div className="text-right mt-2 ml-2">
-                            <Button type='submit' onClick={formSubmitHandler}> {false ? (
+                            <Button type='submit' onClick={formSubmitHandler}> {subLoader ? (
                                 <div style={{ padding: '0px 6px' }}><Spinner color="light" size="sm" /></div>
                             ) : "Submit"}
                             </Button>
@@ -355,7 +357,8 @@ const SubCategoryAdd = (props) => {
 const mapStateToProps = state =>{
    
     const {loader,categoryList}  = state.categoryReducer;
-    return {categoryList,loader};
+    const {subLoader}=state.subcategoryReducer
+    return {categoryList,subLoader,loader};
   }
 export default connect(mapStateToProps,{GetCategoryAction,AddSubCategory,UpdateSubCategory})(SubCategoryAdd);
   

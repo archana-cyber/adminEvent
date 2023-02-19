@@ -96,6 +96,7 @@ const StateAdd = (props) => {
                     setErrorMsg(res.message)
                  }else{
                     toggleEvent()
+                    window.location.reload()
                  }
                 })
                 // toggleEvent()
@@ -107,6 +108,8 @@ const StateAdd = (props) => {
                     setErrorMsg(res.message)
                  }else{
                     toggleEvent()
+                    window.location.reload()
+
                  }
                 })
                 //add call
@@ -152,7 +155,7 @@ const StateAdd = (props) => {
                         </div>
 
                         <div className='p-3'>
-                            <p className="form-label-title">Name </p>
+                            <p className="form-label-title">State Name </p>
                             <Input name="name" onChange={(e)=>onChangeHandler(e)} value={formData.name}/>
                             {formError?.name ? <div className='text-danger'>
                               {formError?.name}

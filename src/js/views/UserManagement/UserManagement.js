@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink,Input,FormGroup, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -12,7 +12,7 @@ import UserManagementAdd from "./UserManagementAdd";
 import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 import ShowDetailsModal from "../../components/ShowDetailsModal";
 import UserManagementView from "./UserManagementView";
-import { GetUsersAction } from "../../actions/authAction";
+import { GetUsersAction,ChangeUserStatusAction } from "../../actions/authAction";
 import { connect } from 'react-redux'
 import imageholder from "../../../images/imageholder.png"
 
@@ -572,7 +572,7 @@ const UserManagement = (props) => {
   const [updateList, setUpdateList] = useState('')
   const [eventModal, setEventModal] = useState(false)
   const [eventDeleteModal, setEventDeleteModal] = useState(false)
-
+ const [toggleValue, setToggleValue] = useState(false)
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
  
   useEffect(()=>{
@@ -623,7 +623,20 @@ const UserManagement = (props) => {
   //            });
          
   // },[updateScheduler,updateList])
+  const toggleHandlerData=(e,data)=>{
+    e.preventDefault()
+    e.stopPropagation();
+    // e.stopPropagation();
+    props.ChangeUserStatusAction(data.id,!data.status,(data)=>{
+        if(data){
+            window.location.reload()
+        }
+    })
+    console.log('toggllennnsnsn',e.target, data)
+    setToggleValue(!data);
+  }
 
+  console.log('toggleValue', toggleValue)
   const editModalHandler=(rowData)=>{
     // e.preventDefault()
     // e.stopPropagation();
@@ -821,9 +834,9 @@ const UserManagement = (props) => {
                  <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                  <h1 class="Profiles-title">User Details</h1>
                  </div>
-                 <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                 {/* <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                  <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create User</button>
-                 </div>
+                 </div> */}
               </div>
               <Table bordered={false} hover size="sm" responsive {...getTableProps()} className="partnerList">
                   <thead>
@@ -1011,11 +1024,24 @@ const UserManagement = (props) => {
                       accessor: "name",
                       filter: "fuzzyText"
                   },
+                //   {
+                //     Header: "Status",
+                //     accessor: (originalRow) => (<div className="action-wrp">{originalRow.status==true ? "Active" :"Deactive"}</div>),
+                //    disableFilters: true
+                //   },
                   {
                     Header: "Status",
-                    accessor: (originalRow) => (<div className="action-wrp">{originalRow.status==true ? "Active" :"Deactive"}</div>),
+                    accessor: (originalRow) => (<div className="action-wrp toggle-wrp" onClick={(e) => toggleHandlerData(e,originalRow)}>
+                                              {/* <FormGroup switch> <Input type="switch" checked={toggleValue} onClick={() => toggleHandler(originalRow.status)} /></FormGroup> */}
+                                              {/* <input type="checkbox" checked={toggleValue}  onClick={(e) => toggleHandlerData(e,originalRow.status)}/> */}
+
+                        <label class="switch">
+                            <input type="checkbox" checked={originalRow.status==true?true:false}  />
+                            <span class="slider round"></span>
+                        </label>
+                     </div>),
                    disableFilters: true
-                },
+                  },
                  
                   {
                     Header: "Email",
@@ -1041,7 +1067,10 @@ const UserManagement = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(loader || isLoading) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {props.loader ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
               <Row>
 
                   <Col>
@@ -1098,5 +1127,5 @@ const mapStateToProps = state =>{
     const {userList,loader}  = state.authReducer;
     return {userList,loader};
   }
-  export default connect(mapStateToProps,{GetUsersAction})(UserManagement);
+  export default connect(mapStateToProps,{GetUsersAction,ChangeUserStatusAction})(UserManagement);
   

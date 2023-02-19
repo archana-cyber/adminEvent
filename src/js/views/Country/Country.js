@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -285,11 +285,13 @@ const Country = (props) => {
                 // setErrorMsg(res.message)
              }else{
                 eventDeleteToggle()
+                window.location.reload()
              }
         })
     }
     if(deleteValue=='no'){
         eventDeleteToggle()
+        setDeleteValue('')
     }
   },[deleteValue])
 
@@ -665,7 +667,7 @@ const Country = (props) => {
               columns: [
                 
                 {
-                    Header: "Name",
+                    Header: "Country",
                     accessor: "label",
                     filter: "fuzzyText"
                 },
@@ -695,7 +697,10 @@ const Country = (props) => {
           {toggleLoader ? <div className="loader-style" > loading... </div> : null}
          
           
-          {(props.loader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {(props.countryLoader) ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
              
             <>
                   
@@ -762,8 +767,8 @@ const Country = (props) => {
 
 const mapStateToProps = state =>{
    
-    const {countryList}  = state.countryReducer;
-    return {countryList};
+    const {countryList,countryLoader}  = state.countryReducer;
+    return {countryList,countryLoader};
   }
   export default connect(mapStateToProps,{GetCountryAction,DeleteCountryAction})(Country);
   

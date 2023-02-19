@@ -12,29 +12,29 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch(action.type){
         case ADD_COUNTRY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , countryLoader:true };
         case ADD_COUNTRY_SUCCESS:
-            return {  ...state , loader:false,countryList:[...action.payload,...state.countryList] };
+            return {  ...state , countryLoader:false,countryList:[...action.payload,...state.countryList] };
         case ADD_COUNTRY_FAIL:
-            return {  ...state , loader:false};
+            return {  ...state , countryLoader:false};
         case GET_COUNTRY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , countryLoader:true };
         case GET_COUNTRY_SUCCESS:
-            return {  ...state , loader:false,countryList:action.payload };
+            return {  ...state , countryLoader:false,countryList:action.payload };
         case GET_COUNTRY_FAIL:
-            return {  ...state , loader:false};
+            return {  ...state , countryLoader:false};
         case UPDATE_COUNTRY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , countryLoader:true };
         case UPDATE_COUNTRY_SUCCESS:
-            return {  ...state , loader:false,countryList:action.payload };
+            return {  ...state , countryLoader:false,countryList:action.payload };
         case UPDATE_COUNTRY_FAIL:
-            return {  ...state , loader:false};    
+            return {  ...state , countryLoader:false};    
         case DELETE_COUNTRY_REQUEST:
-            return {  ...state , loader:true };
+            return {  ...state , countryLoader:true };
         case DELETE_COUNTRY_SUCCESS:
-            return {  ...state , loader:false,countryList:action.payload  };
+            return {  ...state , countryLoader:false,countryList:action.payload  };
         case DELETE_COUNTRY_FAIL:
-            return {  ...state , loader:false};    
+            return {  ...state , countryLoader:false};    
         default:
             return state;
     }

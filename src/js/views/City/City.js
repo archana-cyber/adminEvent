@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -295,11 +295,13 @@ const City = (props) => {
                 // setErrorMsg(res.message)
              }else{
                 eventDeleteToggle()
+                window.location.reload()
              }
         })
     }
     if(deleteValue=='no'){
         eventDeleteToggle()
+        setDeleteValue('')
     }
   },[deleteValue])
 
@@ -739,7 +741,10 @@ const City = (props) => {
           {/* {toggleLoader ? <div className="loader-style" > loading... </div> : null} */}
          
           
-          {(props.countryLoader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {(props.countryLoader) ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
              
             <>
                   

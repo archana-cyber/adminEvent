@@ -1,6 +1,6 @@
 
 import React, { useState, Fragment, useEffect, memo } from "react"
-import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button } from "reactstrap"
+import { Row, Col, Table, Card, Pagination, PaginationItem, PaginationLink, Button,Spinner } from "reactstrap"
 import { createUltimatePagination } from "react-ultimate-pagination";
 import { Collapse } from 'reactstrap';
 import { useTable, useFilters, useSortBy, usePagination } from 'react-table';
@@ -284,11 +284,14 @@ const Category = (props) => {
                 // setErrorMsg(res.message)
              }else{
                setEventDeleteModal(false)
+               window.location.reload()
+
              }
         })
     }
     if(deleteValue=='no'){
         setEventDeleteModal(false)
+        setDeleteValue('')
 
     }
   },[deleteValue])
@@ -725,10 +728,16 @@ const Category = (props) => {
   return (
       <div className={tableClass}>
          
-          {toggleLoader ? <div className="loader-style" > loading... </div> : null}
+          {toggleLoader ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> : null}
          
           
-          {(props.loader) ? <div className="loader-style" style={{ position: 'relative' }}> loading... </div> :
+          {(props.loader) ? <div className='col-12'>
+        <div style={{ display:"flex",justifyContent:"center" }}><Spinner color="red" size="sm" /></div>
+
+        </div> :
              
             <>
                   
