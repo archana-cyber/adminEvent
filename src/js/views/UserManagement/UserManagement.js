@@ -15,6 +15,7 @@ import UserManagementView from "./UserManagementView";
 import { GetUsersAction,ChangeUserStatusAction } from "../../actions/authAction";
 import { connect } from 'react-redux'
 import imageholder from "../../../images/imageholder.png"
+import { CSVLink } from "react-csv";
 
 const todosPerPage = 5;
 const setlectOption = ["created by","partner key"]
@@ -549,6 +550,23 @@ const dummydata=[{
     "gender": "Male",
     "social_media": "Blue"
   }]
+   
+const dataHeaders = [
+    { label: "Name", key: "name" },
+    { label: "Email", key: "email" },
+    { label: "Status", key: "status" },
+    { label: "Gender", key: "gender" },
+    { label: "Country", key: "country" },
+    { label: "City", key: "city" },
+    { label: "Google Id", key: "googleId" },
+    { label: "Apple Id", key: "appleId" },
+    { label: "Facebook Id", key: "facebookId" },
+    { label: "Social Media", key: "socialMedia" },
+    { label: "Email Verified", key: "emailVerified" },
+    { label: "Profile Image", key: "profileImage" },
+  ];
+   
+ 
 const UserManagement = (props) => {
 
   const { userList=[], tableClass,updateScheduleList, toggleTab, updatePartnerCampaginList,updateScheduler, permissions, isLoading }=props
@@ -574,7 +592,11 @@ const UserManagement = (props) => {
   const [eventDeleteModal, setEventDeleteModal] = useState(false)
  const [toggleValue, setToggleValue] = useState(false)
   const toggleDatePickerModal = () => setDatePickerModal(!datePickerModal);
- 
+  const csvReport = {
+    data: profileData,
+    headers: dataHeaders,
+    filename: 'User_Report.csv'
+  };
   useEffect(()=>{
     // props.AddCategory()
     if(!props.userList.length)
@@ -834,6 +856,13 @@ const UserManagement = (props) => {
                  <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                  <h1 class="Profiles-title">User Details</h1>
                  </div>
+                 <div classname="App">
+                    {/* <h3>Export data to CSV  <a href="https://cluemediator.com" target="_blank" rel="noopener noreferrer">Clue Mediator</a></h3> */}
+                   
+                    <CSVLink {...csvReport}>
+                        <button type="button" class="secondary-btn btn btn-secondary"><i className="fa fa-download"/> Export User Data</button>
+                    </CSVLink>
+                </div>
                  {/* <div className="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                  <button type="button" class="secondary-btn btn btn-secondary" onClick={eventToggle}>Create User</button>
                  </div> */}

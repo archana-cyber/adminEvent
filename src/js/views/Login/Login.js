@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import "../../../styles/login.css"
 import "../../../styles/col.css"
-import logo from "../../../../src/images/tabLogo1.png"
+// import logo from "../../../../src/images/tabLogo1.png"
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { AuthLogin } from '../../actions/authAction'
 import { connect } from 'react-redux'
 import ReactLoading from "react-loading"
+import logo from "../../../../src/images/eventlogo1.png"
 
 class Login extends Component {
     state = {
